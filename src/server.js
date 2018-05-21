@@ -1,6 +1,6 @@
 var fs = require('fs'); 
 var https = require('https'); 
-const crypto = require('crypto');
+const utils = require('./utils');
 
 var CN = "fridge"
 
@@ -17,8 +17,10 @@ https.createServer(options, function (req, res) {
         req.connection.remoteAddress+' '+ 
         req.socket.getPeerCertificate().subject.CN+' '+ 
         req.method+' '+req.url); 
+    
+    //We will verify client's modulus
+    console.log(utils.sha256(req.socket.getPeerCertificate().modulus));
 
-    console.log(req.socket.getPeerCertificate());
     res.writeHead(200); 
     res.end("Mutual SSL, OK. \n"); 
 }).listen(4433);

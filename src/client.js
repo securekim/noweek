@@ -1,5 +1,6 @@
 var fs = require('fs'); 
 var https = require('https'); 
+var utils = require('./utils');
 
 var CN = "washer";
 
@@ -34,11 +35,14 @@ var options = {
 options.agent = new https.Agent(options);
 var req = https.request(options, function(res) {
     
-    console.log(res.socket.getPeerCertificate());
+    //We will verify server's modulus
     
-    res.on('data', function(data) { 
+    console.log(utils.sha256(res.socket.getPeerCertificate().modulus));
+
+    res.on('data', function(data) {
         process.stdout.write(data); 
     }); 
+    
 }); 
 
 req.end(); 

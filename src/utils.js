@@ -1,8 +1,14 @@
 var exec = require( "child_process" ).exec;
+var crypto = require('crypto');
 
- createCert("washer",(result)=>{
-     console.log(result);
- });
+function sha256(content){
+    crypto.createHash('sha256').update(content).digest('base64');
+}
+
+
+ //createCert("washer",(result)=>{
+ //    console.log(result);
+ //});
 
 function createCert(CN,callback){
     result = {fail:1,result:"none"};
@@ -24,8 +30,16 @@ function createCert(CN,callback){
                             result.result = error;
                             callback(result);
                         } else {
-                            result.fail=0;
-                            callback(result);
+                            exec('openssl x509 -noout -modulus -in '+CN+'.pem | openssl sha256 > '+CN+'.m', function(error, stdout, stderr) {
+                                if(error !== null) {
+                                    console.log("Create Modulus in Certificate : " + error);
+                                    result.result = error;
+                                    callback(result);
+                                } else {
+                                    result.fail=0;
+                                    callback(result);
+                                }
+                            });
                         }
                     });     
                 }
@@ -33,3 +47,6 @@ function createCert(CN,callback){
         }
     });
 }
+
+
+module.exports = {createCert,sha256};
