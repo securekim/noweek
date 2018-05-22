@@ -1,7 +1,7 @@
 var fs = require('fs'); 
 var https = require('https'); 
 var utils = require('./utils');
-
+//const {sha256} = utils;
 var CN = "washer";
 
 var options = { 
@@ -37,6 +37,8 @@ var req = https.request(options, function(res) {
     
     //We will verify server's modulus
     
+    console.log(new Date()+' [CLIENT] Server Is :'+res.socket.getPeerCertificate().subject.CN+'');
+    //console.log(res.socket.getPeerCertificate().modulus);
     console.log(utils.sha256(res.socket.getPeerCertificate().modulus));
 
     res.on('data', function(data) {

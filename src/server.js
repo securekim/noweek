@@ -13,12 +13,15 @@ var options = {
 }; 
 
 https.createServer(options, function (req, res) { 
-    console.log(new Date()+' '+ 
-        req.connection.remoteAddress+' '+ 
-        req.socket.getPeerCertificate().subject.CN+' '+ 
-        req.method+' '+req.url); 
+    console.log(new Date()+' [SERVER] Client Is :'+ 
+        //req.connection.remoteAddress+' '+ 
+        req.socket.getPeerCertificate().subject.CN+' ' 
+    //    req.method+' '+req.url
+    ); 
     
     //We will verify client's modulus
+
+    console.log(req.socket.getPeerCertificate().modulus);
     console.log(utils.sha256(req.socket.getPeerCertificate().modulus));
 
     res.writeHead(200); 
