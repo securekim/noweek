@@ -2,7 +2,8 @@ var fs = require('fs');
 var https = require('https'); 
 const utils = require('./utils');
 
-var CN = "fridge"
+var CN = "attacker"
+var pubkeys=utils.loadPubkeys();
 
 var options = { 
     key: fs.readFileSync('certs/'+CN+'.key'), 
@@ -21,9 +22,10 @@ https.createServer(options, function (req, res) {
     
     //We will verify client's modulus
 
-    console.log(req.socket.getPeerCertificate().modulus);
-    console.log(utils.sha256(req.socket.getPeerCertificate().modulus));
+    //console.log(req.socket.getPeerCertificate().modulus);
+    console.log(utils.getModHash(req));
 
+    console.log("VERIFY RESULT : "+utils.verifyKey(utils.getModHash(req)));
     res.writeHead(200); 
     res.end("Mutual SSL, OK. \n"); 
 }).listen(4433);

@@ -1,13 +1,36 @@
 var exec = require( "child_process" ).exec;
 var crypto = require('crypto');
 var fs = require ('fs');
+var pubkeys = loadPubkeys();
+
+function verifyKey(pubkey){
+    for (var i in pubkeys){
+        if(pubkeys[i]===pubkey){
+            return true;
+        }
+    }
+    console.log("HACKER DETECTED !!!");
+    return false;
+}
 
 function sha256(content){
     //remove all line break; 
     if(typeof content ==="string") content = content.replace(/(\r\n\t|\n|\r\t)/gm,"");
     return crypto.createHash('sha256').update(content).digest('hex');
-
 }
+
+function getModHash(REQ_RES){
+    return sha256(REQ_RES.socket.getPeerCertificate().modulus);
+}
+
+function loadPubkeys(){
+    //this will replaced.
+    var arr=[];
+    arr.push(fs.readFileSync('certs/washer.m','utf8'));
+    arr.push(fs.readFileSync('certs/fridge.m','utf8'));
+    return arr;
+}
+
 
 
 //   createCert("washer",(result)=>{
@@ -73,4 +96,4 @@ function createCert(CN,callback){
 }
 
 
-module.exports = {createCert,sha256};
+module.exports = {createCert,sha256,loadPubkeys,getModHash,verifyKey};

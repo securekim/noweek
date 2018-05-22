@@ -2,7 +2,7 @@ var fs = require('fs');
 var https = require('https'); 
 var utils = require('./utils');
 //const {sha256} = utils;
-var CN = "washer";
+var CN = "attacker";
 
 var options = { 
     hostname: 'localhost', 
@@ -39,7 +39,8 @@ var req = https.request(options, function(res) {
     
     console.log(new Date()+' [CLIENT] Server Is :'+res.socket.getPeerCertificate().subject.CN+'');
     //console.log(res.socket.getPeerCertificate().modulus);
-    console.log(utils.sha256(res.socket.getPeerCertificate().modulus));
+    console.log("VERIFY RESULT : "+utils.verifyKey(utils.getModHash(res)));
+    
 
     res.on('data', function(data) {
         process.stdout.write(data); 
