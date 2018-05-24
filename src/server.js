@@ -1,4 +1,5 @@
 var fs = require('fs'); 
+var http = require('http');
 var https = require('https'); 
 const utils = require('./utils');
 
@@ -17,13 +18,12 @@ https.createServer(options, function (req, res) {
     console.log(new Date()+' [SERVER] Client Is :'+ 
         //req.connection.remoteAddress+' '+ 
         req.socket.getPeerCertificate().subject.CN+' ' 
-    //    req.method+' '+req.url
+        +req.method+' '+req.url
     ); 
     
+    //if(req.url.split('/')[0])
     //We will verify client's modulus
-
-    //console.log(req.socket.getPeerCertificate().modulus);
-    console.log(utils.getModHash(req));
+    //console.log(utils.getModHash(req));
 
     console.log("VERIFY RESULT : "+utils.verifyKey(utils.getModHash(req)));
     res.writeHead(200); 

@@ -31,8 +31,6 @@ function loadPubkeys(){
     return arr;
 }
 
-
-
 //   createCert("washer",(result)=>{
 //       console.log(result);
 //       createCert("attacker",(result)=>{
@@ -43,6 +41,9 @@ function loadPubkeys(){
 //     });
 //   });
   
+function generatePin(data){
+    
+}
 
 function createCert(CN,callback){
     result = {fail:1,result:"none"};
