@@ -1,7 +1,55 @@
 var exec = require( "child_process" ).exec;
 var crypto = require('crypto');
 var fs = require ('fs');
-var pubkeys = loadPubkeys();
+var serverPrime = "" // for speed. 2048... it's long time ...
+
+try {
+    console.log("read DiffieHellman Prime");
+    serverPrime = fs.readFileSync("certs/DH_1024.prime");
+} catch(e){
+    console.log("Generate DiffieHellman Prime");
+    server = crypto.createDiffieHellman(1024);
+    serverPrime = server.getPrime('base64');
+    fs.writeFileSync("certs/DH_1024.prime",serverPrime);
+}
+
+/*
+// Generate Alice's keys...
+const alice = crypto.createDiffieHellman(2048);
+const aliceKey = alice.generateKeys();
+
+// Generate Bob's keys...
+const bob = crypto.createDiffieHellman(alice.getPrime(), alice.getGenerator());
+const bobKey = bob.generateKeys();
+
+// Exchange and generate the secret...
+const aliceSecret = alice.computeSecret(bobKey);
+const bobSecret = bob.computeSecret(aliceKey);
+*/
+
+
+function DH_generate(isServer,prime,pubkey,callback){
+    //if SERVER
+    if(isServer){
+        server = serverParam.createDiffieHellman(serverPrime,'base64');
+        serverPubkey = server.generateKeys();
+        secret = server.computeSecret(pubkey);
+    } else {
+        client = crypto.createDiffieHellman(prime,'base64');
+        clientPubKey = client.generateKeys();
+        secret = client.computeSecret(pubkey);
+    }
+
+    console.log(secret);
+    callback(secret);
+}
+
+
+//var pubkeys = loadPubkeys();
+
+//if you want to create certificate, 
+//just command to this.
+//node utils.js <CommonName>
 
 function verifyKey(pubkey){
     for (var i in pubkeys){
@@ -31,16 +79,6 @@ function loadPubkeys(){
     return arr;
 }
 
-//   createCert("washer",(result)=>{
-//       console.log(result);
-//       createCert("attacker",(result)=>{
-//         console.log(result);
-//         createCert("fridge",(result)=>{
-//             console.log(result);
-//         });
-//     });
-//   });
-  
 function generatePin(data){
     
 }
@@ -183,4 +221,4 @@ if(process.argv.length >2){
 }
 
 
-module.exports = {createCert,sha256,loadPubkeys,getModHash,verifyKey};
+module.exports = {DH_generate,sha256,loadPubkeys,getModHash,verifyKey};

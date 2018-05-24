@@ -24,8 +24,9 @@ https.createServer(options, function (req, res) {
     //if(req.url.split('/')[0])
     //We will verify client's modulus
     //console.log(utils.getModHash(req));
+    //console.log("VERIFY RESULT : "+utils.verifyKey(utils.getModHash(req)));
+    u
 
-    console.log("VERIFY RESULT : "+utils.verifyKey(utils.getModHash(req)));
     res.writeHead(200); 
     res.end("Mutual SSL, OK. \n"); 
 }).listen(4433);
