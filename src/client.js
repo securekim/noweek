@@ -1,16 +1,20 @@
 var fs = require('fs'); 
 var https = require('https'); 
 var utils = require('./utils');
+const querystring = require('querystring');  
 //const {sha256} = utils;
 var CN = "washer";
+const PORT_MUTUAL = 4433
+const PORT_DH = 4444;
+
 
 var options_mutual = { 
     hostname: 'localhost', 
-    port: 4433, 
+    port: PORT_MUTUAL, 
     path: '/', 
     method: 'GET',
     rejectUnauthorized: false, 
-    key: fs.readFileSync('certs/attacker.key'), 
+    key: fs.readFileSync('certs/'+CN+'.key'), 
     cert: fs.readFileSync('certs/'+CN+'.pem'), 
     // checkServerIdentity: function(host, cert) {
     //  const pubkeysInBlock = ['pL1+qb9HTMRZJmuC/bB/ZI9d302BYrrqiVuRyW+DGrU='];
@@ -36,7 +40,7 @@ var req_mutual = https.request(options_mutual, function(res) {
     
     console.log(new Date()+' [CLIENT] Server Is :'+res.socket.getPeerCertificate().subject.CN+'');
     //console.log(res.socket.getPeerCertificate().modulus);
-    console.log("VERIFY RESULT : "+utils.verifyKey(utils.getModHash(res)));
+    //console.log("VERIFY RESULT : "+utils.verifyKey(utils.getModHash(res)));
     
 
     res.on('data', function(data) {
@@ -52,33 +56,16 @@ req_mutual.on('error', function(e) {
 });
 
 
-
-
-
-options_mutual.agent = new https.Agent(options_mutual);
-var req_mutual = https.request(options_mutual, function(res) {
-    
-    //We will verify server's modulus
-    
-    console.log(new Date()+' [CLIENT] Server Is :'+res.socket.getPeerCertificate().subject.CN+'');
-    //console.log(res.socket.getPeerCertificate().modulus);
-    console.log("VERIFY RESULT : "+utils.verifyKey(utils.getModHash(res)));
-    
-
-    res.on('data', function(data) {
-        process.stdout.write(data); 
-    }); 
-    
-}); 
-
-req_mutual.end(); 
-
-req_mutual.on('error', function(e) { 
-    console.error(e); 
-});
+generate_PIN();
 
 function generate_PIN(){
-    PostCode(JSON.stringify({prime:utils.clientPrime,pubkey:utils.DH_getMyPubKey(utils.clientPrime)}));
+    try{
+    data = {prime:utils.clientPrime,pubkey:utils.DH_getMyPubKey(utils.clientPrime)};
+    console.log(data);
+    PostCode(data);
+    }catch(e){
+        console.log(e);
+    }
 }
 
 
@@ -86,23 +73,26 @@ function PostCode(post_data) {
     
     var options_dh = { 
         hostname: 'localhost', 
-        port: 4444, 
+        port: PORT_DH, 
         path: '/', 
         method: 'POST',
         rejectUnauthorized: false,
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
-            'Content-Length': Buffer.byteLength(post_data)
+            'Content-Length': post_data.length
         } 
     }
-    
-    var post_req = http.request(post_options, function(res) {
+    try{
+    var post_req = https.request(options_dh, function(res) {
+        console.log("BYE");
         res.setEncoding('utf8');
         res.on('data', function (chunk) {
             console.log('Response: ' + chunk);
         });
     });
-  
-    post_req.write(post_data);
+    post_req.write(querystring.stringify(post_data));
     post_req.end();
+    }catch(e){
+        console.log(e);
+    }
   }

@@ -5,10 +5,10 @@ var clientPrime = "" // for speed. 2048... it's long time ...
 
 try {
     console.log("read DiffieHellman Prime");
-    clientPrime = fs.readFileSync("certs/DH_1024.prime");
+    clientPrime = fs.readFileSync("certs/DH_1024.prime",'hex');
 } catch(e){
     console.log("Generate DiffieHellman Prime");
-    client = crypto.createDiffieHellman(1024);
+    client = crypto.createDiffieHellman(1024,'hex');
     clientPrime = client.getPrime('hex');
     fs.writeFileSync("certs/DH_1024.prime",clientPrime);
 }
@@ -29,16 +29,26 @@ const bobSecret = bob.computeSecret(aliceKey);
 
 
 function DH_generate(prime,pubkey){
+    try{
     dh = crypto.createDiffieHellman(prime,'hex');
     //myPubkey = dh.generateKeys();
     secret = dh.computeSecret(pubkey);
     console.log(secret);
     return secret;
+    }catch(e){
+        console.log(e);
+        return e;
+    }
 }
 
 function DH_getMyPubKey(prime){
+    try{
     dh = crypto.createDiffieHellman(prime,'hex');
-    return dh.generateKeys()
+    return dh.generateKeys('hex');
+    } catch(e){
+        console.log(e);
+        return e;
+    }
 }
 
 //var pubkeys = loadPubkeys();
