@@ -1,16 +1,16 @@
 var exec = require( "child_process" ).exec;
 var crypto = require('crypto');
 var fs = require ('fs');
-var serverPrime = "" // for speed. 2048... it's long time ...
+var clientPrime = "" // for speed. 2048... it's long time ...
 
 try {
     console.log("read DiffieHellman Prime");
-    serverPrime = fs.readFileSync("certs/DH_1024.prime");
+    clientPrime = fs.readFileSync("certs/DH_1024.prime");
 } catch(e){
     console.log("Generate DiffieHellman Prime");
-    server = crypto.createDiffieHellman(1024);
-    serverPrime = server.getPrime('base64');
-    fs.writeFileSync("certs/DH_1024.prime",serverPrime);
+    client = crypto.createDiffieHellman(1024);
+    clientPrime = client.getPrime('hex');
+    fs.writeFileSync("certs/DH_1024.prime",clientPrime);
 }
 
 /*
@@ -28,22 +28,19 @@ const bobSecret = bob.computeSecret(aliceKey);
 */
 
 
-function DH_generate(isServer,prime,pubkey,callback){
-    //if SERVER
-    if(isServer){
-        server = serverParam.createDiffieHellman(serverPrime,'base64');
-        serverPubkey = server.generateKeys();
-        secret = server.computeSecret(pubkey);
-    } else {
-        client = crypto.createDiffieHellman(prime,'base64');
-        clientPubKey = client.generateKeys();
-        secret = client.computeSecret(pubkey);
-    }
-
+function DH_generate(prime,pubkey,callback){
+    dh = crypto.createDiffieHellman(prime,'hex');
+    //myPubkey = dh.generateKeys();
+    secret = server.computeSecret(pubkey);
     console.log(secret);
     callback(secret);
 }
 
+function DH_getMyPubKey(prime,callback){
+    dh = crypto.createDiffieHellman(prime,'hex');
+    callback(dh.generateKeys())
+    
+}
 
 //var pubkeys = loadPubkeys();
 
@@ -119,59 +116,6 @@ function CERT_sign(CSR,CA,days,callback){
     });  
 }
 
-
-/*
-function createCert(CN,callback){
-    result = {fail:1,result:"none"};
-    exec('openssl genrsa -out certs/'+CN+'.key 4096', function(error, stdout, stderr) {
-        if(error !== null) {
-            console.log("Create Cert Key : " + error);
-            result.result=error;
-            callback(result);
-        } else {
-            exec('openssl req -new -key certs/'+CN+'.key -nodes -subj "/C=KR/O=noweek, Inc./OU=www.securekim.com/OU=(c) 2018 noweek, Inc./CN='+CN+'" -out certs/'+CN+'.csr', function(error, stdout, stderr) {
-                if(error !== null) {
-                    console.log("Create Certificate : " + error);
-                    result.result=error;
-                    callback(result);
-                } else {
-                    exec('openssl x509 -req -days 3650 -in certs/'+CN+'.csr -signkey certs/'+CN+'.key -out certs/'+CN+'.pem', function(error, stdout, stderr) {
-                        if(error !== null) {
-                            console.log("Create Signed Certificate : " + error);
-                            result.result = error;
-                            callback(result);
-                        } else {
-                            //console.log('openssl x509 -noout -modulus -in certs/'+CN+'.pem | cut -f 2 -d = | openssl sha256 > certs/'+CN+'.m');
-                            exec('openssl x509 -noout -modulus -in certs/'+CN+'.pem', function(error, stdout, stderr) {
-                                if(error !== null) {
-                                    console.log("Create Modulus in Certificate : " + error);
-                                    result.result = error;
-                                    callback(result);
-                                } else {
-                                    console.log(stdout.split('=')[1]);
-                                    var mod = sha256(stdout.split('=')[1]);
-                                    console.log("modulus : "+mod);
-                                    fs.writeFile('certs/'+CN+'.m',mod,'utf8',function(error){
-                                        if(error !== null){
-                                            console.log("Calculate sha256 : " + error);
-                                            result.result = error;
-                                            callback(result);
-                                        } else {
-                                            result.result="CN :"+CN;
-                                            result.fail=0;
-                                            callback(result);
-                                        }
-                                    })
-                                }
-                            });
-                        }
-                    });     
-                }
-            });  
-        }
-    });
-}
-*/
 ///for command line
 
 function CERT_createCA(CN,callback){
@@ -221,4 +165,4 @@ if(process.argv.length >2){
 }
 
 
-module.exports = {DH_generate,sha256,loadPubkeys,getModHash,verifyKey};
+module.exports = {clientPrime,DH_getMyPubKey, DH_generate,sha256,loadPubkeys,getModHash,verifyKey};

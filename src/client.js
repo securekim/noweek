@@ -4,7 +4,7 @@ var utils = require('./utils');
 //const {sha256} = utils;
 var CN = "washer";
 
-var options = { 
+var options_mutual = { 
     hostname: 'localhost', 
     port: 4433, 
     path: '/', 
@@ -29,8 +29,8 @@ var options = {
     // }
 }; 
 
-options.agent = new https.Agent(options);
-var req = https.request(options, function(res) {
+options_mutual.agent = new https.Agent(options_mutual);
+var req_mutual = https.request(options_mutual, function(res) {
     
     //We will verify server's modulus
     
@@ -45,8 +45,67 @@ var req = https.request(options, function(res) {
     
 }); 
 
-req.end(); 
+req_mutual.end(); 
 
-req.on('error', function(e) { 
+req_mutual.on('error', function(e) { 
     console.error(e); 
 });
+
+
+
+
+
+options_mutual.agent = new https.Agent(options_mutual);
+var req_mutual = https.request(options_mutual, function(res) {
+    
+    //We will verify server's modulus
+    
+    console.log(new Date()+' [CLIENT] Server Is :'+res.socket.getPeerCertificate().subject.CN+'');
+    //console.log(res.socket.getPeerCertificate().modulus);
+    console.log("VERIFY RESULT : "+utils.verifyKey(utils.getModHash(res)));
+    
+
+    res.on('data', function(data) {
+        process.stdout.write(data); 
+    }); 
+    
+}); 
+
+req_mutual.end(); 
+
+req_mutual.on('error', function(e) { 
+    console.error(e); 
+});
+
+function generate_PIN(){
+    utils.clientPrime;
+    utils.DH_getMyPubKey(utils.clientPrime,(pubkey)=>{
+        PostCode(JSON.stringify({prime:utils.clientPrime,pubkey:pubkey}));
+    });
+}
+
+
+function PostCode(post_data) {
+    
+    var options_dh = { 
+        hostname: 'localhost', 
+        port: 4444, 
+        path: '/', 
+        method: 'POST',
+        rejectUnauthorized: false,
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Content-Length': Buffer.byteLength(post_data)
+        } 
+    }
+    
+    var post_req = http.request(post_options, function(res) {
+        res.setEncoding('utf8');
+        res.on('data', function (chunk) {
+            console.log('Response: ' + chunk);
+        });
+    });
+  
+    post_req.write(post_data);
+    post_req.end();
+  }
