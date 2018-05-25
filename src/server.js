@@ -2,6 +2,7 @@ var fs = require('fs');
 var http = require('http');
 var https = require('https'); 
 const utils = require('./utils');
+const querystring = require('querystring');  
 const PORT_MUTUAL = 4433
 const PORT_DH = 4444;
 
@@ -56,12 +57,18 @@ https.createServer(options_dh, function (req, res) {
         +req.method+' '+req.url
         );
         try{
-            dh = JSON.parse(body);
-            console.log("prime: " + dh.prime);
-            console.log("client pubkey: " + dh.pubkey);
+            //console.log(querystring.parse(body));
             
-            res.end(utils.DH_getMyPubKey(dh.prime));
-            utils.DH_generate(dh.prime, dh.pubkey); 
+            dh = querystring.parse(body);
+            const prime = dh.prime;
+            const pubkey = dh.pubkey;
+            const secret = utils.DH_generate(prime, pubkey); 
+            const server_pubkey = utils.DH_getMyPubKey(prime);
+            console.log("[SERVER] prime: " + prime);
+            console.log("[SERVER] client pubkey: " + pubkey);
+            console.log("[SERVER] server pubkey:" + server_pubkey);
+            console.log("[SERVER] Server Secret : "+secret);
+            res.end(server_pubkey);
         }catch(e){
             console.log(e);
         }

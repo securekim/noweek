@@ -5,13 +5,15 @@ var clientPrime = "" // for speed. 2048... it's long time ...
 
 try {
     console.log("read DiffieHellman Prime");
-    clientPrime = fs.readFileSync("certs/DH_1024.prime",'hex');
+    clientPrime = fs.readFileSync("certs/DH_1024.prime",'base64');
 } catch(e){
     console.log("Generate DiffieHellman Prime");
-    client = crypto.createDiffieHellman(1024,'hex');
-    clientPrime = client.getPrime('hex');
+    client = crypto.createDiffieHellman(1024,'base64');
+    clientPrime = client.getPrime('base64');
     fs.writeFileSync("certs/DH_1024.prime",clientPrime);
 }
+if(typeof clientPrime ==="string") clientPrime = clientPrime.replace(/(\r\n\t|\n|\r\t)/gm,"");
+    
 
 /*
 // Generate Alice's keys...
@@ -27,12 +29,41 @@ const aliceSecret = alice.computeSecret(bobKey);
 const bobSecret = bob.computeSecret(aliceKey);
 */
 
+DH_localTest();
+function DH_localTest(){
+    try{
+    L_clientPrime = clientPrime;
+    //client will send the prime to server
+    //client will send the client public key to server
+    const client_dh = crypto.createDiffieHellman(L_clientPrime,'base64');
+    L_client_pubkey = client_dh.generateKeys('base64');
+    //server will generate public key with clientPrime
+    const server_dh = crypto.createDiffieHellman(L_clientPrime,'base64');
+    L_server_pubkey = server_dh.generateKeys('base64');
+    //server will generate secret with client public key
+    L_server_secret = server_dh.computeSecret(L_client_pubkey,'base64','base64');
+    //server will send the server public key to client
+    //client will generate secret with server public key
+    L_client_secret = client_dh.computeSecret(L_server_pubkey,'base64','base64');
+    console.log(L_server_secret);
+    console.log(L_client_secret);
+    console.log(L_server_secret === L_client_secret);
+    } catch(err){
+        console.log(err);
+    }
+}
+
+
 
 function DH_generate(prime,pubkey){
     try{
-    dh = crypto.createDiffieHellman(prime,'hex');
+    //dh = crypto.createDiffieHellman(prime,'base64');
+    console.log("[UTILS] PRIME : "+prime);
+    console.log("[UTILS] PUB KEY : "+pubkey);
+    const pub = pubkey;
+    const dh = crypto.createDiffieHellman(prime,'base64')
     //myPubkey = dh.generateKeys();
-    secret = dh.computeSecret(pubkey);
+    const secret = dh.computeSecret(pub,'base64','base64');
     console.log(secret);
     return secret;
     }catch(e){
@@ -43,8 +74,8 @@ function DH_generate(prime,pubkey){
 
 function DH_getMyPubKey(prime){
     try{
-    dh = crypto.createDiffieHellman(prime,'hex');
-    return dh.generateKeys('hex');
+    const dh = crypto.createDiffieHellman(prime,'base64');
+    return dh.generateKeys('base64');
     } catch(e){
         console.log(e);
         return e;
@@ -70,7 +101,7 @@ function verifyKey(pubkey){
 function sha256(content){
     //remove all line break; 
     if(typeof content ==="string") content = content.replace(/(\r\n\t|\n|\r\t)/gm,"");
-    return crypto.createHash('sha256').update(content).digest('hex');
+    return crypto.createHash('sha256').update(content).digest('base64');
 }
 
 function getModHash(REQ_RES){

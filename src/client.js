@@ -61,7 +61,8 @@ generate_PIN();
 function generate_PIN(){
     try{
     data = {prime:utils.clientPrime,pubkey:utils.DH_getMyPubKey(utils.clientPrime)};
-    console.log(data);
+    console.log("[CLIENT] client prime : "+ data.prime);
+    console.log("[CLIENT] client pubkey : "+ data.pubkey);
     PostCode(data);
     }catch(e){
         console.log(e);
@@ -70,6 +71,8 @@ function generate_PIN(){
 
 
 function PostCode(post_data) {
+
+    var postData = querystring.stringify(post_data);
     
     var options_dh = { 
         hostname: 'localhost', 
@@ -79,18 +82,19 @@ function PostCode(post_data) {
         rejectUnauthorized: false,
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
-            'Content-Length': post_data.length
+            'Content-Length': postData.length
         } 
     }
     try{
     var post_req = https.request(options_dh, function(res) {
-        console.log("BYE");
         res.setEncoding('utf8');
         res.on('data', function (chunk) {
-            console.log('Response: ' + chunk);
+            const secret = utils.DH_generate(utils.clientPrime,chunk);
+            console.log('[CLIENT] Server pubkey: ' + chunk);
+            console.log("[CLIENT] client secret : "+ secret);
         });
     });
-    post_req.write(querystring.stringify(post_data));
+    post_req.write(postData);
     post_req.end();
     }catch(e){
         console.log(e);
