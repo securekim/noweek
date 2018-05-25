@@ -78,10 +78,7 @@ req_mutual.on('error', function(e) {
 });
 
 function generate_PIN(){
-    utils.clientPrime;
-    utils.DH_getMyPubKey(utils.clientPrime,(pubkey)=>{
-        PostCode(JSON.stringify({prime:utils.clientPrime,pubkey:pubkey}));
-    });
+    PostCode(JSON.stringify({prime:utils.clientPrime,pubkey:utils.DH_getMyPubKey(utils.clientPrime)}));
 }
 
 

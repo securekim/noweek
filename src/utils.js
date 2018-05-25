@@ -28,18 +28,17 @@ const bobSecret = bob.computeSecret(aliceKey);
 */
 
 
-function DH_generate(prime,pubkey,callback){
+function DH_generate(prime,pubkey){
     dh = crypto.createDiffieHellman(prime,'hex');
     //myPubkey = dh.generateKeys();
-    secret = server.computeSecret(pubkey);
+    secret = dh.computeSecret(pubkey);
     console.log(secret);
-    callback(secret);
+    return secret;
 }
 
-function DH_getMyPubKey(prime,callback){
+function DH_getMyPubKey(prime){
     dh = crypto.createDiffieHellman(prime,'hex');
-    callback(dh.generateKeys())
-    
+    return dh.generateKeys()
 }
 
 //var pubkeys = loadPubkeys();
