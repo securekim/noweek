@@ -2,6 +2,8 @@ var exec = require( "child_process" ).exec;
 var crypto = require('crypto');
 var fs = require ('fs');
 var clientPrime = "" // for speed. 2048... it's long time ...
+var dh = null;
+var secret;
 
 try {
     console.log("read DiffieHellman Prime");
@@ -33,6 +35,7 @@ DH_localTest();
 function DH_localTest(){
     try{
     L_clientPrime = clientPrime;
+    //L_clientPrime = 'M2Erdm03SE80T3lWcVJkZWZ6Z3RvVTV4NVlOckE4M0cwR2tWTDhjSm96S2VtVkNIWmZIcktRQzdSNVU0N1NYZjI1M3o0YVNicHVBb3gwZ1F1cmQ0Vnd2alYydWpmRjdDUnFIRlVFZzBLTXFPWDJ1allTeDg4aElMSVFoSGp2RXlUaHROYW4rS0oycjJWRzNTZld4Z0xQSEtTNVJJUERkNmFiRm9GZTJOQ2VNPQ==';
     //client will send the prime to server
     //client will send the client public key to server
     const client_dh = crypto.createDiffieHellman(L_clientPrime,'base64');
@@ -40,6 +43,7 @@ function DH_localTest(){
     //server will generate public key with clientPrime
     const server_dh = crypto.createDiffieHellman(L_clientPrime,'base64');
     L_server_pubkey = server_dh.generateKeys('base64');
+    
     //server will generate secret with client public key
     L_server_secret = server_dh.computeSecret(L_client_pubkey,'base64','base64');
     //server will send the server public key to client
@@ -53,15 +57,17 @@ function DH_localTest(){
     }
 }
 
-
-
+    
 function DH_generate(prime,pubkey){
     try{
     //dh = crypto.createDiffieHellman(prime,'base64');
     console.log("[UTILS] PRIME : "+prime);
     console.log("[UTILS] PUB KEY : "+pubkey);
     const pub = pubkey;
-    const dh = crypto.createDiffieHellman(prime,'base64')
+    if(dh===null){
+        dh = crypto.createDiffieHellman(prime,'base64')
+        dh.generateKeys();
+    }
     //myPubkey = dh.generateKeys();
     const secret = dh.computeSecret(pub,'base64','base64');
     console.log(secret);
@@ -74,8 +80,11 @@ function DH_generate(prime,pubkey){
 
 function DH_getMyPubKey(prime){
     try{
-    const dh = crypto.createDiffieHellman(prime,'base64');
-    return dh.generateKeys('base64');
+        if(dh===null){
+            dh = crypto.createDiffieHellman(prime,'base64')
+            dh.generateKeys('base64');
+        }
+        return dh.getPublicKey('base64'); 
     } catch(e){
         console.log(e);
         return e;
@@ -116,8 +125,8 @@ function loadPubkeys(){
     return arr;
 }
 
-function generatePin(data){
-    
+function generatePinWithData(data){
+    return sha256(data);
 }
 
 function CERT_createKey(CN,keylen,callback){
