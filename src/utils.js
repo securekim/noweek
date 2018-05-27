@@ -31,11 +31,16 @@ const aliceSecret = alice.computeSecret(bobKey);
 const bobSecret = bob.computeSecret(aliceKey);
 */
 
-DH_localTest();
+//DH_localTest();
 function DH_localTest(){
     try{
+    //client = crypto.createDiffieHellman(1024,'base64');
+    //clientPrime = client.getPrime('base64');//DH_localTest();
+function DH_localTest(){
+    try{
+    //client = crypto.createDiffieHellman(1024,'base64');
+    //clientPrime = client.getPrime('base64');
     L_clientPrime = clientPrime;
-    //L_clientPrime = 'M2Erdm03SE80T3lWcVJkZWZ6Z3RvVTV4NVlOckE4M0cwR2tWTDhjSm96S2VtVkNIWmZIcktRQzdSNVU0N1NYZjI1M3o0YVNicHVBb3gwZ1F1cmQ0Vnd2alYydWpmRjdDUnFIRlVFZzBLTXFPWDJ1allTeDg4aElMSVFoSGp2RXlUaHROYW4rS0oycjJWRzNTZld4Z0xQSEtTNVJJUERkNmFiRm9GZTJOQ2VNPQ==';
     //client will send the prime to server
     //client will send the client public key to server
     const client_dh = crypto.createDiffieHellman(L_clientPrime,'base64');
@@ -56,7 +61,27 @@ function DH_localTest(){
         console.log(err);
     }
 }
-
+    L_clientPrime = clientPrime;
+    //client will send the prime to server
+    //client will send the client public key to server
+    const client_dh = crypto.createDiffieHellman(L_clientPrime,'base64');
+    L_client_pubkey = client_dh.generateKeys('base64');
+    //server will generate public key with clientPrime
+    const server_dh = crypto.createDiffieHellman(L_clientPrime,'base64');
+    L_server_pubkey = server_dh.generateKeys('base64');
+    
+    //server will generate secret with client public key
+    L_server_secret = server_dh.computeSecret(L_client_pubkey,'base64','base64');
+    //server will send the server public key to client
+    //client will generate secret with server public key
+    L_client_secret = client_dh.computeSecret(L_server_pubkey,'base64','base64');
+    console.log(L_server_secret);
+    console.log(L_client_secret);
+    console.log(L_server_secret === L_client_secret);
+    } catch(err){
+        console.log(err);
+    }
+}
     
 function DH_generate(prime,pubkey){
     try{
@@ -65,6 +90,7 @@ function DH_generate(prime,pubkey){
     console.log("[UTILS] PUB KEY : "+pubkey);
     const pub = pubkey;
     if(dh===null){
+        console.log("[UTILS] DH_generate : DH IS NULL");
         dh = crypto.createDiffieHellman(prime,'base64')
         dh.generateKeys();
     }
@@ -77,10 +103,13 @@ function DH_generate(prime,pubkey){
         return e;
     }
 }
-
+function DH_clean(){
+    dh=null;
+}
 function DH_getMyPubKey(prime){
     try{
         if(dh===null){
+            console.log("[UTILS] DH_getMyPubKey : DH IS NULL");
             dh = crypto.createDiffieHellman(prime,'base64')
             dh.generateKeys('base64');
         }
@@ -214,4 +243,4 @@ if(process.argv.length >2){
 }
 
 
-module.exports = {clientPrime,DH_getMyPubKey, DH_generate,sha256,loadPubkeys,getModHash,verifyKey};
+module.exports = {DH_clean,clientPrime,DH_getMyPubKey, DH_generate,sha256,loadPubkeys,getModHash,verifyKey};

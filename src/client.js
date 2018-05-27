@@ -1,3 +1,4 @@
+
 var fs = require('fs'); 
 var https = require('https'); 
 var utils = require('./utils');
@@ -56,26 +57,19 @@ req_mutual.on('error', function(e) {
 });
 
 
-generate_PIN();
+//generate_PIN();
 
-function generate_PIN(){
+function generate_PIN(ip,callback){
     try{
-    data = {prime:utils.clientPrime,pubkey:utils.DH_getMyPubKey(utils.clientPrime)};
+    var data = {prime:utils.clientPrime,pubkey:utils.DH_getMyPubKey(utils.clientPrime)};
     console.log("[CLIENT] client prime : "+ data.prime);
     console.log("[CLIENT] client pubkey : "+ data.pubkey);
-    PostCode(data);
-    }catch(e){
-        console.log(e);
-    }
-}
-
-
-function PostCode(post_data) {
-
-    var postData = querystring.stringify(post_data);
+    //callback(PostCode(data,ip));
+    
+    var postData = querystring.stringify(data);
     
     var options_dh = { 
-        hostname: 'localhost', 
+        hostname: ip, 
         port: PORT_DH, 
         path: '/', 
         method: 'POST',
@@ -92,6 +86,8 @@ function PostCode(post_data) {
             const secret = utils.DH_generate(utils.clientPrime,chunk);
             console.log('[CLIENT] Server pubkey: ' + chunk);
             console.log("[CLIENT] client secret : "+ secret);
+            callback(secret);
+            utils.DH_clean();
         });
     });
     post_req.write(postData);
@@ -99,4 +95,16 @@ function PostCode(post_data) {
     }catch(e){
         console.log(e);
     }
+
+
+    }catch(e){
+        console.log(e);
+    }
+}
+
+
+function PostCode(post_data,ip) {
+
   }
+
+  module.exports = {generate_PIN};

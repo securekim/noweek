@@ -1,3 +1,15 @@
+/*
+1. [root@localhost~]# connmanctl 
+2. connmanctl> enable wifi 
+3. connmanctl> scan wifi 
+4. connmanctl> services
+5. connmanctl> agent on
+6. connmanctl> connect <ssid service>
+7. Passphrase? (비밀번호 입력 후 enter, 연결결과 출력)
+8. connmanctl> quit (종료)
+9. [root@localhost~]# ifconfig (연결상태 및 ip 확인가능)
+*/  
+
 var fs = require('fs'); 
 var http = require('http');
 var https = require('https'); 
@@ -43,7 +55,7 @@ var options_dh = {
 
 
 console.log("Open for DH Key exchange :"+PORT_DH);
-https.createServer(options_dh, function (req, res) { 
+var server = https.createServer(options_dh, function (req, res) { 
     //this is for DH.
     //We dont need a client certificate. 
     console.log("Hello, DH");
@@ -68,6 +80,7 @@ https.createServer(options_dh, function (req, res) {
             console.log("[SERVER] client pubkey: " + pubkey);
             console.log("[SERVER] server pubkey:" + server_pubkey);
             console.log("[SERVER] Server Secret : "+secret);
+            utils.DH_clean();
             res.end(server_pubkey);
         }catch(e){
             console.log(e);
