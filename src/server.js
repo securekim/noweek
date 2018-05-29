@@ -76,10 +76,12 @@ var server = https.createServer(options_dh, function (req, res) {
             const pubkey = dh.pubkey;
             const secret = utils.DH_generate(prime, pubkey); 
             const server_pubkey = utils.DH_getMyPubKey(prime);
-            console.log("[SERVER] prime: " + prime);
-            console.log("[SERVER] client pubkey: " + pubkey);
-            console.log("[SERVER] server pubkey:" + server_pubkey);
-            console.log("[SERVER] Server Secret : "+secret);
+            //console.log("[SERVER] prime: " + prime);
+            //console.log("[SERVER] client pubkey: " + pubkey);
+            //console.log("[SERVER] server pubkey:" + server_pubkey);
+            //console.log("[SERVER] Server Secret : "+secret);
+            const pin = utils.generatePin(secret);
+            console.log("[SERVER] Pin code : "+pin);
             utils.DH_clean();
             res.end(server_pubkey);
         }catch(e){

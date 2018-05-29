@@ -57,44 +57,44 @@ req_mutual.on('error', function(e) {
 });
 
 
-//generate_PIN();
-
-function generate_PIN(ip,callback){
+function generatePin(ip,callback){
     try{
-    var data = {prime:utils.clientPrime,pubkey:utils.DH_getMyPubKey(utils.clientPrime)};
-    console.log("[CLIENT] client prime : "+ data.prime);
-    console.log("[CLIENT] client pubkey : "+ data.pubkey);
-    //callback(PostCode(data,ip));
-    
-    var postData = querystring.stringify(data);
-    
-    var options_dh = { 
-        hostname: ip, 
-        port: PORT_DH, 
-        path: '/', 
-        method: 'POST',
-        rejectUnauthorized: false,
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Content-Length': postData.length
-        } 
-    }
-    try{
-    var post_req = https.request(options_dh, function(res) {
-        res.setEncoding('utf8');
-        res.on('data', function (chunk) {
-            const secret = utils.DH_generate(utils.clientPrime,chunk);
-            console.log('[CLIENT] Server pubkey: ' + chunk);
-            console.log("[CLIENT] client secret : "+ secret);
-            callback(secret);
-            utils.DH_clean();
+        var data = {prime:utils.clientPrime,pubkey:utils.DH_getMyPubKey(utils.clientPrime)};
+        //console.log("[CLIENT] client prime : "+ data.prime);
+        //console.log("[CLIENT] client pubkey : "+ data.pubkey);
+        //callback(PostCode(data,ip));
+        
+        var postData = querystring.stringify(data);
+        
+        var options_dh = { 
+            hostname: ip, 
+            port: PORT_DH, 
+            path: '/', 
+            method: 'POST',
+            rejectUnauthorized: false,
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'Content-Length': postData.length
+            } 
+        }
+        try{
+        var post_req = https.request(options_dh, function(res) {
+            res.setEncoding('utf8');
+            res.on('data', function (chunk) {
+                const secret = utils.DH_generate(utils.clientPrime,chunk);
+                //console.log('[CLIENT] Server pubkey: ' + chunk);
+                //console.log("[CLIENT] client secret : "+ secret);
+                const pin = utils.generatePin(secret);
+                console.log("PIN : "+pin);
+                callback(pin);
+                utils.DH_clean();
+            });
         });
-    });
-    post_req.write(postData);
-    post_req.end();
-    }catch(e){
-        console.log(e);
-    }
+        post_req.write(postData);
+        post_req.end();
+        }catch(e){
+            console.log(e);
+        }
 
 
     }catch(e){
@@ -105,6 +105,6 @@ function generate_PIN(ip,callback){
 
 function PostCode(post_data,ip) {
 
-  }
+}
 
-  module.exports = {generate_PIN};
+module.exports = {generatePin};

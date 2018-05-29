@@ -13,8 +13,8 @@ app.get("/pincode/:ip", (req,res)=>{
     //generate pin code
     //Mobile is client.
     //please request with IP.
-    console.log(req.params.ip);
-    client.generate_PIN(req.params.ip,(secret)=>{
+    console.log("IP IS : "+req.params.ip);
+    client.generatePin(req.params.ip,(secret)=>{
         res.send(secret);
     });
 })
@@ -32,4 +32,8 @@ app.post("/peers", (req,res)=> {
 });
 
 
-const server = app.listen(PORT, () => console.log(`secureCoin Server running on ${PORT}`));
+process.on("uncaughtException",(e)=>{
+    console.log(e);
+})
+
+const server = app.listen(PORT, () => console.log(`noweek Server running on ${PORT}`));
