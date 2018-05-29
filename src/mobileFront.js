@@ -9,10 +9,26 @@ const app = express();
 app.use(bodyParser.json());
 app.use(morgan("combined"));
 
+app.get("/broadcast", (req,res)=>{
+    //to do : request just for on targets.
+    //        attacker or not, we don't care.
+
+});
+
+app.get("/addBlockChain",(req,res)=>{
+    //to do : we will add the CA certificate to chain.
+    //           AFTER NUMERIC COMPARISON ONLY
+});
+
+app.get("/initChain", (req,res)=>{
+    //to do : remove All chains.
+    //        create genesis - mobile.
+});
+
 app.get("/pincode/:ip", (req,res)=>{
     //generate pin code
     //Mobile is client.
-    //please request with IP.
+    //please request with Target IP.
     console.log("IP IS : "+req.params.ip);
     client.generatePin(req.params.ip,(secret)=>{
         res.send(secret);
