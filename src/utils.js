@@ -220,8 +220,14 @@ if(process.argv.length >2){
             });
         }
     });
+}
 
+function mergeToBundle(CADATA,callback){
+    fs.writeFile("certs/bundle.pem",CADATA,(err)=>{
+        if(err) console.log(err);
+        callback(err);
+    });
 }
 
 
-module.exports = {DH_clean,clientPrime,DH_getMyPubKey,generatePin,DH_generate,sha256,loadPubkeys,getModHash,verifyKey};
+module.exports = {mergeToBundle,DH_clean,clientPrime,DH_getMyPubKey,generatePin,DH_generate,sha256,loadPubkeys,getModHash,verifyKey};

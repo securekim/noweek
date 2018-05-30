@@ -30,7 +30,11 @@ var options_mutual = {
 }; 
 
 console.log("Open for mutual SSL : "+PORT_MUTUAL);
-https.createServer(options_mutual, function (req, res) { 
+var mutualServer = mutalServerCreate();
+
+function mutalServerCreate(){
+
+return https.createServer(options_mutual, function (req, res) { 
 
     var body = '';
     req.on('data', function (data) {
@@ -49,6 +53,16 @@ https.createServer(options_mutual, function (req, res) {
         console.log("THE DATA");
         console.log(body);
         res.end(data.command);
+        if(data.command === "serverOff"){
+            mutualServer.close(()=>{
+                console.log("Server Closed in 10 sec");
+            });
+            mutualServer=null
+            setTimeout(()=>{
+                mutualServer=mutalServerCreate();
+                console.log("10 seconds already done !");
+            },10*1000);
+        }
     });
     //if(req.url.split('/')[0])
     //We will verify client's modulus
@@ -58,6 +72,7 @@ https.createServer(options_mutual, function (req, res) {
      
 }).listen(PORT_MUTUAL);
 
+}
 
 /////////////////////////////////////////////////////
 
@@ -104,3 +119,8 @@ var server = https.createServer(options_dh, function (req, res) {
     }); 
     res.writeHead(200); 
 }).listen(PORT_DH);
+
+process.on("uncaughtException",(err)=>{
+    console.log("Uncaught Exception !! ");
+    console.log(err);
+})
