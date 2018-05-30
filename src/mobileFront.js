@@ -12,7 +12,6 @@ app.use(morgan("combined"));
 app.get("/broadcast", (req,res)=>{
     //to do : request just for on targets.
     //        attacker or not, we don't care.
-
 });
 
 app.get("/addBlockChain",(req,res)=>{
@@ -33,6 +32,18 @@ app.get("/pincode/:ip", (req,res)=>{
     client.generatePin(req.params.ip,(secret)=>{
         res.send(secret);
     });
+})
+
+
+app.post("/control", (req,res)=>{
+    //control to other device
+    const {body: {data}} = req;
+    const {body: {ip}} = req;
+    console.log(ip+" -> "+data);
+    client.sendWithMutual(ip,data,(chunk)=>{
+        console.log("chunk:"+chunk)
+        res.send(chunk);
+    })
 })
 
 app.post("/blocks", (req,res)=>{

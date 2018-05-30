@@ -24,24 +24,38 @@ var CN = "fridge"
 var options_mutual = { 
     key: fs.readFileSync('certs/'+CN+'.key'), 
     cert: fs.readFileSync('certs/'+CN+'.pem'), 
-    ca: fs.readFileSync('certs/'+CN+'-CA.pem'), 
+    ca: fs.readFileSync('certs/bundle.pem'), 
     requestCert: true, 
-    rejectUnauthorized: false 
+    rejectUnauthorized: true
 }; 
 
 console.log("Open for mutual SSL : "+PORT_MUTUAL);
 https.createServer(options_mutual, function (req, res) { 
+
+    var body = '';
+    req.on('data', function (data) {
+        body += data;
+    });
+
     console.log(new Date()+' [SERVER] Client Is :'+ 
-        //req.connection.remoteAddress+' '+ 
-        req.socket.getPeerCertificate().subject.CN+' ' 
-        +req.method+' '+req.url
-    ); 
+    //req.connection.remoteAddress+' '+ 
+    req.socket.getPeerCertificate().subject.CN+' ' 
+    +req.method+' '+req.url
+    );
+
+    req.on('end', function () {
+        //const {body: {data}} = req;
+        data = querystring.parse(body);
+        console.log("THE DATA");
+        console.log(body);
+        res.end(data.command);
+    });
     //if(req.url.split('/')[0])
     //We will verify client's modulus
     //console.log(utils.getModHash(req));
     //console.log("VERIFY RESULT : "+utils.verifyKey(utils.getModHash(req)));
     res.writeHead(200); 
-    res.end("Mutual SSL, OK. \n"); 
+     
 }).listen(PORT_MUTUAL);
 
 
