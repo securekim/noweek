@@ -233,12 +233,30 @@ if(process.argv.length >2){
     CERT_initCERT(process.argv[2]);
 }
 
-function mergeToBundle(CADATA,callback){
+function makeBundle(CADATA,callback){
     fs.writeFile("certs/bundle.pem",CADATA,(err)=>{
         if(err) console.log(err);
         callback(err);
     });
 }
 
+function startServer(callback){
+    exec('node server.js', function(error, stdout, stderr) {
+        if(error !== null) {
+            console.log("start server.js : " + error);
+            callback({fail:true,error:error});
+        } else {
+            callback({fail:false,error:"none"});
+        }
+    });
+}
 
-module.exports = {CERT_initCERT,mergeToBundle,DH_clean,clientPrime,DH_getMyPubKey,generatePin,DH_generate,sha256,loadPubkeys,getModHash,verifyKey};
+function restartServer(callback){
+    exec("pkill -f 'node server.js'", function(error, stdout, stderr) {
+        startServer((err)=>{
+            callback(err);
+        });
+    });
+}
+
+module.exports = {startServer,restartServer,CERT_initCERT,makeBundle,DH_clean,clientPrime,DH_getMyPubKey,generatePin,DH_generate,sha256,loadPubkeys,getModHash,verifyKey};

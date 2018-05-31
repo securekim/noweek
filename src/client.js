@@ -9,6 +9,12 @@ var CN = "washer";
 const PORT_MUTUAL = 4433
 const PORT_DH = 4444;
 
+console.log("[CLIENT] I Will Start the server");
+utils.startServer((result)=>{
+    console.log("[CLIENT] Start Server Automatically");  // if server is started already, error will be occured.
+    console.log("[CLIENT] FAIL ? :"+result.fail);
+});
+
 function sendWithMutual(ip,data,callback){
 
     var postData = querystring.stringify({command:data});
@@ -155,6 +161,9 @@ function PostCode(post_data,ip) {
 function initChain(CN,callback){
     utils.CERT_initCERT(CN,(result)=>{
         callback(result);
+        utils.restartServer((resut)=>{
+            console.log(result)
+        });
     });
 }
 
