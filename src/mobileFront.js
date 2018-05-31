@@ -19,9 +19,15 @@ app.get("/addBlockChain",(req,res)=>{
     //           AFTER NUMERIC COMPARISON ONLY
 });
 
-app.get("/initChain", (req,res)=>{
+app.post("/initChain", (req,res)=>{
     //to do : remove All chains.
     //        create genesis - mobile.
+    //        create CA and ,,
+    const {body: {CN}} = req;
+    console.log("Generate CN : "+CN);
+    client.initChain(CN,(result)=>{
+        res.send(result);
+    });
 });
 
 app.get("/pincode/:ip", (req,res)=>{

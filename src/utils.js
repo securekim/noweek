@@ -203,6 +203,23 @@ function CERT_createCERT(CA,CN,callback){
     });
 }
 
+function CERT_initCERT(CN,callback){
+    CERT_createCA(CN+"-CA",(result)=>{
+        if(result){
+            CERT_createCERT(CN+"-CA",CN,(result)=>{
+                console.log("MAKE CERTIFICATE SIGNED BY CA :"+result);
+                if(result){
+                    callback("Success to Generate Certificate: "+CN);
+                } else {
+                    callback("Fail to Generate Certificate"+CN);
+                }
+            });
+        } else {
+            callback("Fail to Generate CA Certificate");
+        }
+    });
+}
+
 function callbacktest(callback){
     return callback(1); //if no return, below code will be executed.
     console.log("dont"); 
@@ -212,14 +229,8 @@ if(process.argv.length >2){
     //node utils.js washer --> args[2]
     //make washerCA key, csr, selfsigned cert
     //make washer key, csr, signed by washerCA
-    console.log(process.argv[2]);
-    CERT_createCA(process.argv[2]+"-CA",(result)=>{
-        if(result){
-            CERT_createCERT(process.argv[2]+"-CA",process.argv[2],(result)=>{
-                console.log("MAKE CERTIFICATE SIGNED BY CA :"+result);
-            });
-        }
-    });
+    //console.log(process.argv[2]);
+    CERT_initCERT(process.argv[2]);
 }
 
 function mergeToBundle(CADATA,callback){
@@ -230,4 +241,4 @@ function mergeToBundle(CADATA,callback){
 }
 
 
-module.exports = {mergeToBundle,DH_clean,clientPrime,DH_getMyPubKey,generatePin,DH_generate,sha256,loadPubkeys,getModHash,verifyKey};
+module.exports = {CERT_initCERT,mergeToBundle,DH_clean,clientPrime,DH_getMyPubKey,generatePin,DH_generate,sha256,loadPubkeys,getModHash,verifyKey};

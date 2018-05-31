@@ -152,4 +152,10 @@ function PostCode(post_data,ip) {
 
 }
 
-module.exports = {generatePin,sendWithMutual};
+function initChain(CN,callback){
+    utils.CERT_initCERT(CN,(result)=>{
+        callback(result);
+    });
+}
+
+module.exports = {generatePin,sendWithMutual,initChain};

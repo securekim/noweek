@@ -21,19 +21,19 @@ const PORT_DH = 4444;
 var CN = "fridge"
 //var pubkeys=utils.loadPubkeys();
 
-var options_mutual = { 
-    key: fs.readFileSync('certs/'+CN+'.key'), 
-    cert: fs.readFileSync('certs/'+CN+'.pem'), 
-    ca: fs.readFileSync('certs/bundle.pem'), 
-    requestCert: true, 
-    rejectUnauthorized: true
-}; 
-
 console.log("Open for mutual SSL : "+PORT_MUTUAL);
 var mutualServer = mutalServerCreate();
 
 function mutalServerCreate(){
 
+    var options_mutual = { 
+        key: fs.readFileSync('certs/'+CN+'.key'), 
+        cert: fs.readFileSync('certs/'+CN+'.pem'), 
+        ca: fs.readFileSync('certs/bundle.pem'), 
+        requestCert: true, 
+        rejectUnauthorized: true
+    }; 
+    
 return https.createServer(options_mutual, function (req, res) { 
 
     var body = '';
