@@ -9,7 +9,6 @@ const app = express();
 app.use(bodyParser.json());
 app.use(morgan("combined"));
 
-try{
 app.get("/broadcast", (req,res)=>{
     //to do : request just for on targets.
     //        attacker or not, we don't care.
@@ -23,13 +22,18 @@ app.get("/broadcast", (req,res)=>{
         console.log(e);
     }
 });
-} catch (e) {
-
-}
 
 app.get("/addBlockChain",(req,res)=>{
     //to do : we will add the CA certificate to chain.
     //           AFTER NUMERIC COMPARISON ONLY
+});
+
+
+app.get("/getBlockChain",(req,res)=>{
+    //to do : get blockchain list.
+    client.getBlockChain((json)=>{
+        res.send(JSON.stringify(json));
+    });
 });
 
 app.post("/initChain", (req,res)=>{

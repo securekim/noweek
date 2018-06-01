@@ -5,8 +5,6 @@ GET http://localhost:3082/broadcast
 
 
 ###
-
-
 POST http://localhost:3082/control
 Content-Type: application/json
 
@@ -40,5 +38,19 @@ POST http://localhost:3082/initChain
 Content-Type: application/json
 
 {
-    "CN":"test"
+    "CN":"mobile"
+}
+
+###
+
+
+GET http://localhost:3082/getBlockChain
+
+
+###
+POST http://localhost:3082/initChain
+Content-Type: application/json
+
+{
+    "CN":"mobile"
 }

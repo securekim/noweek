@@ -59,6 +59,10 @@ function DH_localTest(){
     }
 }
     
+function DH_encrypt(data){
+    
+}
+
 function DH_generate(prime,pubkey){
     try{
     //dh = crypto.createDiffieHellman(prime,'base64');
@@ -71,7 +75,7 @@ function DH_generate(prime,pubkey){
         dh.generateKeys();
     }
     //myPubkey = dh.generateKeys();
-    const secret = dh.computeSecret(pub,'base64','base64');
+    secret = dh.computeSecret(pub,'base64','base64');
     console.log(secret);
     return secret;
     }catch(e){
@@ -210,7 +214,10 @@ function CERT_initCERT(CN,callback){
             CERT_createCERT(CN+"-CA",CN,(result)=>{
                 console.log("MAKE CERTIFICATE SIGNED BY CA :"+result);
                 if(result){
-                    callback("Success to Generate Certificate: "+CN);
+                    fs.readFile("certs/"+CN+"-CA.pem",'utf8',(err,CN_CA)=>{
+                        if(err) console.log(err);
+                        callback(CN_CA);
+                    })
                 } else {
                     callback("Fail to Generate Certificate"+CN);
                 }

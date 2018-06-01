@@ -79,7 +79,7 @@ return https.createServer(options_mutual, function (req, res) {
 var options_dh = { 
     key: fs.readFileSync('certs/'+CN+'.key'), 
     cert: fs.readFileSync('certs/'+CN+'.pem'), 
-    ca: fs.readFileSync('certs/'+CN+'-CA.pem')  
+    ca: fs.readFileSync('certs/'+CN+'-CA.pem','utf8')  
 }; 
 
 
@@ -112,7 +112,7 @@ var server = https.createServer(options_dh, function (req, res) {
             const pin = utils.generatePin(secret);
             console.log("[SERVER] Pin code : "+pin);
             utils.DH_clean();
-            res.end(server_pubkey);
+            res.end(JSON.stringify({pubkey:server_pubkey,CA:options_dh.ca}));
         }catch(e){
             console.log(e);
             res.end();

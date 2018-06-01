@@ -4,6 +4,7 @@ var tls = require('tls');
 var https = require('https'); 
 var utils = require('./utils');
 var async = require('async');
+var el_request = require('./el_request'); 
 const querystring = require('querystring');  
 //const {sha256} = utils;
 var CN = "washer";
@@ -15,6 +16,13 @@ utils.startServer((result)=>{
     console.log("[CLIENT] Start Server Automatically");  // if server is started already, error will be occured.
     console.log("[CLIENT] FAIL ? :"+result.fail);
 });
+
+function getBlockChain(callback){
+    el_request.request_getBlockchain((json)=>{
+        callback(json);
+    });
+}
+
 
 function sendWithMutual(ip,data,callback){
 
@@ -77,10 +85,12 @@ var ipabc;
 function broadcast(callback){
     ipabc = utils.getIPABC();
     //broadcastList = {IP_123:}
+    el_request.setLocalAddressBase(ipabc);
     callback(broadcastList);
 }
 
 ipabc = utils.getIPABC();
+el_request.setLocalAddressBase(ipabc);
 broadcast_loop();
 
 setInterval(function(){
@@ -164,11 +174,13 @@ function generatePin(ip,callback){
         var post_req = https.request(options_dh, function(res) {
             res.setEncoding('utf8');
             res.on('data', function (chunk) {
-                const secret = utils.DH_generate(utils.clientPrime,chunk);
+                chunk = JSON.parse(chunk);
+                const secret = utils.DH_generate(utils.clientPrime,chunk.pubkey);
                 //console.log('[CLIENT] Server pubkey: ' + chunk);
                 //console.log("[CLIENT] client secret : "+ secret);
                 const pin = utils.generatePin(secret);
                 console.log("PIN : "+pin);
+                el_request.broadcast_addBlock(chunk.CA);
                 callback(pin);
                 utils.DH_clean();
             });
@@ -191,12 +203,15 @@ function PostCode(post_data,ip) {
 }
 
 function initChain(CN,callback){
-    utils.CERT_initCERT(CN,(result)=>{
-        callback(result);
+    utils.CERT_initCERT(CN,(CN_CA)=>{
+        ///callback(result);
+        el_request.request_initBlockchain(CN_CA,(result)=>{
+            callback(result);
+        });
         utils.restartServer((resut)=>{
             console.log(result)
         });
     });
 }
 
-module.exports = {broadcast,generatePin,sendWithMutual,initChain};
+module.exports = {getBlockChain,broadcast,generatePin,sendWithMutual,initChain};
