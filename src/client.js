@@ -71,46 +71,73 @@ function sendWithMutual(ip,data,callback){
     });
 }
 
+var broadcastList = {};
+var ipabc;
+
 function broadcast(callback){
-    
-    var options_broad = { 
+    ipabc = utils.getIPABC();
+    //broadcastList = {IP_123:}
+    callback(broadcastList);
+}
+
+ipabc = utils.getIPABC();
+broadcast_loop();
+
+setInterval(function(){
+    broadcast_loop();
+},100*255);
+
+function broadcast_loop(){
+    var options_broad = {
         hostname: "", 
         port: PORT_DH, 
         path: '/', 
         method: 'GET',
         rejectUnauthorized: false,
+        timeout: 500
     }
 
-    var arr = [];
-    var ipabc = utils.getIPABC();
-
-    function httpsRequest(ip,doneCallback){
-        //console.log("httpsRequest : "+ip);
-        options_broad.hostname = ip;
-        try{
-            var post_req = https.request(options_broad, function(res) {
-                var CN = res.socket.getPeerCertificate().subject.CN;
-                //console.log(CN);
-                arr.push({CN:CN, ip:ip});
-                doneCallback(arr);
+    function requestTo(ip){
+        options_broad.hostname = ipabc+"."+ip
+        
+        var post_req = https.request(options_broad, function(res) {
+            res.setEncoding('utf8');
+            var CN = res.socket.getPeerCertificate().subject.CN;
+            console.log(CN);
+            //console.log(res.socket);
+            broadcastList["IP_"+res.connection.remoteAddress] = CN;
+            //console.log(arr);
+            res.setTimeout(100);
+            res.on('timeout',()=>{
+                broadcastList["IP_"+res.connection.remoteAddress] = 'null';
             });
-            post_req.write("");
-            post_req.end();
-        }catch(e){
-            //console.log(e);
-            doneCallback(arr);
-        }
-    }
-
-    iparr =[];
-    for(var i=1; i<255; i++){
-        iparr.push(ipabc+"."+i);
-    }
-
-    async.each(iparr, httpsRequest, function(arr){
-        callback(arr);
-    })
+        })
     
+        post_req.on('socket',function(socket){
+            socket.setTimeout(100);
+            socket.on('timeout',()=>{
+                var ip = socket._pendingData.split(":")[1].split(" ")[1];
+                broadcastList["IP_"+ip] = 'null';
+                post_req.abort();
+            });
+        })
+
+        post_req.on('error',(e)=>{
+            broadcastList["IP_"+post_req.socket.connection.remoteAddress] = 'null';
+            post_req.abort();
+        });
+        // post_req.on('error',()=>{
+        //     console.log("error");
+        //     startIP++;
+        //     return next();
+        // });
+        post_req.write("");
+        post_req.end();
+    }
+
+    for(var i =1; i<255; i++){
+        requestTo(i);
+    }
 }
 
 function generatePin(ip,callback){

@@ -17,13 +17,14 @@ app.get("/broadcast", (req,res)=>{
     client.broadcast((result)=>{
         console.log("END !");
         console.log(result);
+        res.send(JSON.stringify(result));
     });
     }catch(e){
-        console.log("error in broadcast");
+        console.log(e);
     }
 });
 } catch (e) {
-    
+
 }
 
 app.get("/addBlockChain",(req,res)=>{
@@ -78,7 +79,7 @@ app.post("/peers", (req,res)=> {
 
 
 process.on("uncaughtException",(e)=>{
-    console.log("uncaughtException");
+    //console.log("uncaughtException");
     //console.log(e);
 })
 
