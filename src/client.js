@@ -91,7 +91,7 @@ function broadcast(callback){
             var post_req = https.request(options_broad, function(res) {
                 var CN = res.socket.getPeerCertificate().subject.CN;
                 //console.log(CN);
-                arr.push(CN);
+                arr.push({CN:CN, ip:ip});
                 doneCallback(arr);
             });
             post_req.write("");
