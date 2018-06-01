@@ -9,11 +9,22 @@ const app = express();
 app.use(bodyParser.json());
 app.use(morgan("combined"));
 
-
+try{
 app.get("/broadcast", (req,res)=>{
     //to do : request just for on targets.
     //        attacker or not, we don't care.
+    try{
+    client.broadcast((result)=>{
+        console.log("END !");
+        console.log(result);
+    });
+    }catch(e){
+        console.log("error in broadcast");
+    }
 });
+} catch (e) {
+    
+}
 
 app.get("/addBlockChain",(req,res)=>{
     //to do : we will add the CA certificate to chain.
@@ -67,7 +78,8 @@ app.post("/peers", (req,res)=> {
 
 
 process.on("uncaughtException",(e)=>{
-    console.log(e);
+    console.log("uncaughtException");
+    //console.log(e);
 })
 
 const server = app.listen(PORT, () => console.log(`noweek Server running on ${PORT}`));

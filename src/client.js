@@ -3,6 +3,7 @@ var fs = require('fs');
 var tls = require('tls');
 var https = require('https'); 
 var utils = require('./utils');
+var async = require('async');
 const querystring = require('querystring');  
 //const {sha256} = utils;
 var CN = "washer";
@@ -23,7 +24,7 @@ function sendWithMutual(ip,data,callback){
         hostname: ip, 
         port: PORT_MUTUAL, 
         path: '/', 
-        method: 'GET',
+        method: 'POST',
         rejectUnauthorized: true, // should be true 
         key: fs.readFileSync('certs/'+CN+'.key'), 
         cert: fs.readFileSync('certs/'+CN+'.pem'),
@@ -37,42 +38,6 @@ function sendWithMutual(ip,data,callback){
               console.log(err.cert.issuer.CN);
               //return err;
             }
-        
-            // Pin the public key, similar to HPKP pin-sha25 pinning
-            // const pubkey256 = 'pL1+qb9HTMRZJmuC/bB/ZI9d302BYrrqiVuRyW+DGrU=';
-            // if (sha256(cert.pubkey) !== pubkey256) {
-            //   const msg = 'Certificate verification error: ' +
-            //     `The public key of '${cert.subject.CN}' ` +
-            //     'does not match our pinned fingerprint';
-            //   return new Error(msg);
-            // }
-        
-            // Pin the exact certificate, rather then the pub key
-            // const cert256 = '25:FE:39:32:D9:63:8C:8A:FC:A1:9A:29:87:' +
-            //   'D8:3E:4C:1D:98:DB:71:E4:1A:48:03:98:EA:22:6A:BD:8B:93:16';
-            // if (cert.fingerprint256 !== cert256) {
-            //   const msg = 'Certificate verification error: ' +
-            //     `The certificate of '${cert.subject.CN}' ` +
-            //     'does not match our pinned fingerprint';
-            //   return new Error(msg);
-            // }
-        
-            // This loop is informational only.
-            // Print the certificate and public key fingerprints of all certs in the
-            // chain. Its common to pin the public key of the issuer on the public
-            // internet, while pinning the public key of the service in sensitive
-            // environments.
-            // do {
-            //   console.log('Subject Common Name:', cert.subject.CN);
-            //   console.log('  Certificate SHA256 fingerprint:', cert.fingerprint256);
-        
-            //   hash = crypto.createHash('sha256');
-            //   console.log('  Public key ping-sha256:', sha256(cert.pubkey));
-        
-            //   lastprint256 = cert.fingerprint256;
-            //   cert = cert.issuerCertificate;
-            // } while (cert.fingerprint256 !== lastprint256);
-        
           },
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
@@ -91,8 +56,6 @@ function sendWithMutual(ip,data,callback){
         console.log(new Date()+' [CLIENT] Server Is :'+res.socket.getPeerCertificate().subject.CN+'');
         //console.log(res.socket.getPeerCertificate().modulus);
         //console.log("VERIFY RESULT : "+utils.verifyKey(utils.getModHash(res)));
-        
-
         res.on('data', function(chunk) {
             //process.stdout.write(data); 
             callback(chunk);
@@ -106,6 +69,48 @@ function sendWithMutual(ip,data,callback){
     req_mutual.on('error', function(e) { 
         console.error(e); 
     });
+}
+
+function broadcast(callback){
+    
+    var options_broad = { 
+        hostname: "", 
+        port: PORT_DH, 
+        path: '/', 
+        method: 'GET',
+        rejectUnauthorized: false,
+    }
+
+    var arr = [];
+    var ipabc = utils.getIPABC();
+
+    function httpsRequest(ip,doneCallback){
+        //console.log("httpsRequest : "+ip);
+        options_broad.hostname = ip;
+        try{
+            var post_req = https.request(options_broad, function(res) {
+                var CN = res.socket.getPeerCertificate().subject.CN;
+                //console.log(CN);
+                arr.push(CN);
+                doneCallback(arr);
+            });
+            post_req.write("");
+            post_req.end();
+        }catch(e){
+            //console.log(e);
+            doneCallback(arr);
+        }
+    }
+
+    iparr =[];
+    for(var i=1; i<255; i++){
+        iparr.push(ipabc+"."+i);
+    }
+
+    async.each(iparr, httpsRequest, function(arr){
+        callback(arr);
+    })
+    
 }
 
 function generatePin(ip,callback){
@@ -167,4 +172,4 @@ function initChain(CN,callback){
     });
 }
 
-module.exports = {generatePin,sendWithMutual,initChain};
+module.exports = {broadcast,generatePin,sendWithMutual,initChain};

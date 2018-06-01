@@ -1,6 +1,7 @@
 var exec = require( "child_process" ).exec;
 var crypto = require('crypto');
 var fs = require ('fs');
+var os = require ('os');
 var clientPrime = "" // for speed. 2048... it's long time ...
 var dh = null;
 var secret;
@@ -234,6 +235,8 @@ if(process.argv.length >2){
 }
 
 function makeBundle(CADATA,callback){
+    //todo : make bundle with cadatas
+    //      if bundle is updated, restart the server.
     fs.writeFile("certs/bundle.pem",CADATA,(err)=>{
         if(err) console.log(err);
         callback(err);
@@ -259,4 +262,19 @@ function restartServer(callback){
     });
 }
 
-module.exports = {startServer,restartServer,CERT_initCERT,makeBundle,DH_clean,clientPrime,DH_getMyPubKey,generatePin,DH_generate,sha256,loadPubkeys,getModHash,verifyKey};
+function getCN(ip){
+
+}
+
+function getIPABC(){
+    try{
+        var ip = os.networkInterfaces().wlan0[0].address.split('.');
+        return ip[0]+"."+ip[1]+"."+ip[2];
+    }catch(e){
+        console.log(e);
+        return interfaces;
+    }
+}
+
+
+module.exports = {getIPABC,startServer,restartServer,CERT_initCERT,makeBundle,DH_clean,clientPrime,DH_getMyPubKey,generatePin,DH_generate,sha256,loadPubkeys,getModHash,verifyKey};

@@ -99,7 +99,7 @@ var server = https.createServer(options_dh, function (req, res) {
         );
         try{
             //console.log(querystring.parse(body));
-            
+            if(body === '' || body ===null) throw new error("No body No body but you");
             dh = querystring.parse(body);
             const prime = dh.prime;
             const pubkey = dh.pubkey;
@@ -115,6 +115,7 @@ var server = https.createServer(options_dh, function (req, res) {
             res.end(server_pubkey);
         }catch(e){
             console.log(e);
+            res.end();
         }
     }); 
     res.writeHead(200); 
