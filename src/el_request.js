@@ -167,6 +167,10 @@ function request_clearBlockchain(callback){
 }
 
 function artik_led_control(color, isOn, callback){
+
+    if(color=="blue") color =38;
+    if(color=="red") color =28;
+
     var options = {
         url: 'http://localhost:3000/artik_led_control',
         method: 'POST',
