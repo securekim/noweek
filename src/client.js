@@ -181,7 +181,7 @@ function generatePin(ip,callback){
                 const pin = utils.generatePin(secret);
                 console.log("PIN : "+pin);
                 el_request.broadcast_addBlock(chunk.CA);
-                callback(pin);
+                callback({pin:pin,secret:secret,ip:options_dh.hostname});
                 utils.DH_clean();
             });
         });

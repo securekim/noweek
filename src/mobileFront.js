@@ -52,8 +52,10 @@ app.get("/pincode/:ip", (req,res)=>{
     //Mobile is client.
     //please request with Target IP.
     console.log("IP IS : "+req.params.ip);
-    client.generatePin(req.params.ip,(secret)=>{
-        res.send(secret);
+    client.generatePin(req.params.ip,(dh)=>{
+        console.log(dh);
+        res.send(JSON.stringify(dh));
+        //dh => {pin, secret, ip}
     });
 })
 
