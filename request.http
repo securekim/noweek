@@ -1,4 +1,18 @@
+###
 GET http://localhost:3082/pincode/127.0.0.1
+
+###
+
+POST http://localhost:3082/confirmPin
+Content-Type: application/json
+
+{
+    "pin":"test",
+    "secret":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "ip":"127.0.0.1",
+    "CN":"mobile"
+}
+
 ###
 
 GET http://localhost:3082/broadcast
@@ -32,17 +46,7 @@ Content-Type: application/json
     "data" : "serverOff"
 }
 
-
 ###
-POST http://localhost:3082/initChain
-Content-Type: application/json
-
-{
-    "CN":"mobile"
-}
-
-###
-
 
 GET http://localhost:3082/getBlockChain
 
@@ -63,12 +67,3 @@ Content-Type: application/json
 
 
 ###
-POST http://localhost:3082/confirmPin
-Content-Type: application/json
-
-{
-    "pin":"test",
-    "secret":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-    "ip":"test",
-    "CN":"mobile"
-}

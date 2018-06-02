@@ -21,7 +21,14 @@ const PORT_MUTUAL = 4433
 const PORT_DH = 4444;
 var lastSecret = "";
 
-var CN = "fridge"
+try{
+    var CN = fs.readFileSync("myProfile.txt",'utf8');
+}catch(e){
+    console.log(e);
+    var CN = "fridge";
+}
+if(typeof CN ==="string") CN = CN.replace(/(\r\n\t|\n|\r\t)/gm,"");
+    
 //var pubkeys=utils.loadPubkeys();
 
 console.log("Open for mutual SSL : "+PORT_MUTUAL);
@@ -107,10 +114,12 @@ var server = https.createServer(options_dh, function (req, res) {
             if(req.url==="/confirmPin"){
                 try{
                 console.log("/confirmPin in Server");
+                console.log(body);
                 const decipher = crypto.createDecipher('aes-256-cbc', 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
-                let decryptedCA = decipher.update(body, 'base64', 'utf8'); // 암호화할문 (base64, utf8이 위의 cipher과 반대 순서입니다.)
+                let decryptedCA = decipher.update(JSON.stringify(body), 'base64', 'utf8'); // 암호화할문 (base64, utf8이 위의 cipher과 반대 순서입니다.)
                 decryptedCA += decipher.final('utf8'); // 암호화할문장 (여기도 base64대신 utf8)
-                
+                console.log(decryptedCA);
+
                 el_request.artik_button_read((json)=>{
                     //{result:true, data: body}); //pushed 0
                     if(json.result && json.data == 0 ){
@@ -129,7 +138,7 @@ var server = https.createServer(options_dh, function (req, res) {
                     }
                 });
             }catch(e){
-                console.log("in Server. In confirmPin")
+                console.log("Error in Server. In confirmPin")
                 res.end({result:false,data:e});
             }
         }else{

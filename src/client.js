@@ -11,7 +11,14 @@ var crypto = require('crypto');
 var forge = require('node-forge');
 var pki = forge.pki;
 //const {sha256} = utils;
-var CN = "washer";
+try{
+    var CN = fs.readFileSync("myProfile.txt",'utf8');
+}catch(e){
+    console.log(e);
+    var CN = "fridge";
+}
+if(typeof CN ==="string") CN = CN.replace(/(\r\n\t|\n|\r\t)/gm,"");
+    
 const PORT_MUTUAL = 4433
 const PORT_DH = 4444;
 
@@ -128,30 +135,38 @@ function broadcast_loop(){
     function requestTo(ip){
         options_broad.hostname = ipabc+"."+ip
         
-        var post_req = https.request(options_broad, function(res) {
-            res.setEncoding('utf8');
-            var CN = res.socket.getPeerCertificate().subject.CN;
-            console.log(CN);
-            //console.log(res.socket);
-            broadcastList["IP_"+res.connection.remoteAddress] = CN;
-            //console.log(arr);
-            res.setTimeout(500);
-            res.on('timeout',()=>{
-                broadcastList["IP_"+res.connection.remoteAddress] = 'null';
-            });
+        var post_req = https.request(options_broad, function(res){
+            try{
+                res.setEncoding('utf8');
+                var CN = res.socket.getPeerCertificate().subject.CN;
+                console.log(CN);
+                //console.log(res.socket);
+                broadcastList["IP_"+res.connection.remoteAddress] = CN;
+                //console.log(arr);
+                res.setTimeout(500);
+                res.on('timeout',()=>{
+                    broadcastList["IP_"+res.connection.remoteAddress] = 'null';
+                });
+            }catch(e){
+
+            }
         })
     
         post_req.on('socket',function(socket){
             socket.setTimeout(100);
             socket.on('timeout',()=>{
+                try{
                 var ip = socket._pendingData.split(":")[1].split(" ")[1];
                 broadcastList["IP_"+ip] = 'null';
                 post_req.abort();
+                }catch(e){
+
+                }
             });
         })
 
         post_req.on('error',(e)=>{
-            broadcastList["IP_"+post_req.socket.connection.remoteAddress] = 'null';
+            //broadcastList["IP_"+post_req.socket.connection.remoteAddress] = 'null';
             post_req.abort();
         });
         // post_req.on('error',()=>{
@@ -217,14 +232,14 @@ function generatePin(ip,callback){
 
 function confirmPin(jsonData,callback){
     try{
-        console.log(jsonData.CN);
-        console.log(typeof jsonData.CN);
+        console.log("ConfirmPin");
         const myCA = utils.getCA(jsonData.CN);
         
         const cipher = crypto.createCipher('aes-256-cbc', jsonData.secret);
         let encryptedCA = cipher.update(myCA, 'utf8', 'base64'); // 'HbMtmFdroLU0arLpMflQ'
         encryptedCA += cipher.final('base64'); // 'HbMtmFdroLU0arLpMflQYtt8xEf4lrPn5tX5k+a8Nzw='
 
+        console.log("encryptedCA : "+encryptedCA);
         //encryptedCA = utils.DH_encrypt(myCA);
         //pin, secret, ip, CN
         //el_request.broadcast_addBlock(chunk.CA);
@@ -281,6 +296,7 @@ function initChain(CN,callback){
         utils.restartServer((result)=>{
             console.log(result)
         });
+        fs.writeFile('myProfile.txt',CN);
     });
 }
 

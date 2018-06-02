@@ -101,7 +101,7 @@ app.post("/peers", (req,res)=> {
 
 process.on("uncaughtException",(e)=>{
     //console.log("uncaughtException");
-    //console.log(e);
+    console.log(e);
 })
 
 const server = app.listen(PORT, () => console.log(`noweek Server running on ${PORT}`));

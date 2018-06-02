@@ -65,7 +65,7 @@ app.post("/addBlock", (req, res) => {
 
 app.post("/getBlockchain", (req, res) => {
     res_body = "getBlockchain complete...";
-    blockchain = blockchain_get(publicKey);
+    blockchain = blockchain_get();
 
     res.send(blockchain);
 });
