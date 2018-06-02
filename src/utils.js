@@ -132,6 +132,10 @@ function verifyKey(pubkey){
     return false;
 }
 
+function parseCert(cert){
+    //return cert.getPeerCertificate();
+}
+
 function sha256(content){
     //remove all line break; 
     if(typeof content ==="string") content = content.replace(/(\r\n\t|\n|\r\t)/gm,"");
@@ -299,5 +303,8 @@ function getIPABC(){
     }
 }
 
+function getCN(CN){
+    return fs.readFileSync('certs/'+CN+'-CA.pem','utf8');
+}
 
-module.exports = {DH_encrypt, DH_decrypt, getIPABC,startServer,restartServer,CERT_initCERT,makeBundle,DH_clean,clientPrime,DH_getMyPubKey,generatePin,DH_generate,sha256,loadPubkeys,getModHash,verifyKey};
+module.exports = {getCN, DH_encrypt, DH_decrypt, getIPABC,startServer,restartServer,CERT_initCERT,makeBundle,DH_clean,clientPrime,DH_getMyPubKey,generatePin,DH_generate,sha256,loadPubkeys,getModHash,verifyKey};

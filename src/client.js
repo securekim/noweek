@@ -6,7 +6,8 @@ var utils = require('./utils');
 var async = require('async');
 var el_request = require('./el_request'); 
 var el_server = require('./el_server'); 
-const querystring = require('querystring');  
+const querystring = require('querystring');
+var crypto = require('crypto');  
 //const {sha256} = utils;
 var CN = "washer";
 const PORT_MUTUAL = 4433
@@ -20,7 +21,21 @@ utils.startServer((result)=>{
 
 function getBlockChain(callback){
     el_request.request_getBlockchain((json)=>{
+        try{
+        
+        for(var i in json.data){
+            console.log(i);
+            var cert = JSON.parse(json.data)[i].pubkey
+            console.log(cert);
+            crypto.Certificate().exportPublicKey(cert);
+            const publicKey = crypto.Certificate().exportPublicKey(cert);
+            console.log("PUBLIC KEY !!!");
+            console.log(publicKey);
+        }
         callback(json);
+    } catch(e){
+        console.log(e);
+    }
     });
 }
 
@@ -116,9 +131,9 @@ function broadcast_loop(){
             var CN = res.socket.getPeerCertificate().subject.CN;
             console.log(CN);
             //console.log(res.socket);
-            broadcastList["IP_"+res.connection.remoteAddress] = CN;
+            broadcastList["IP_"+res.connection.remoteAddress] = res.socket.getPeerCertificate();
             //console.log(arr);
-            res.setTimeout(100);
+            res.setTimeout(500);
             res.on('timeout',()=>{
                 broadcastList["IP_"+res.connection.remoteAddress] = 'null';
             });
@@ -181,7 +196,7 @@ function generatePin(ip,callback){
                 //console.log("[CLIENT] client secret : "+ secret);
                 const pin = utils.generatePin(secret);
                 console.log("PIN : "+pin);
-                el_request.broadcast_addBlock(chunk.CA);
+                //el_request.broadcast_addBlock(chunk.CA);
                 callback({pin:pin,secret:secret,ip:options_dh.hostname});
                 utils.DH_clean();
             });
@@ -200,6 +215,8 @@ function generatePin(ip,callback){
 function confirmPin(jsonData,callback){
     try{
         parsedData = JSON.parse(jsonData);
+        myCN = utils.getCN(CN);
+        encryptedCN = utils.DH_encrypt(myCN);
         //pin, secret, ip
         //el_request.broadcast_addBlock(chunk.CA);
         var options_dh = { 
@@ -210,17 +227,17 @@ function confirmPin(jsonData,callback){
             rejectUnauthorized: false,
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
-                'Content-Length': jsonData.length
+                'Content-Length': encryptedCN.length
             } 
         }
         try{
         var post_req = https.request(options_dh, function(res) {
             res.setEncoding('utf8');
-            res.on('data', function (chunk) {
+            res.on('data', function (chunk) { // OTher's CA cert
                 chunk = JSON.parse(chunk);
                 if(chunk.result){
                     console.log("CONFIRMED !!! ");
-                    el_request.broadcast_addBlock(chunk.CA);
+                    el_request.broadcast_addBlock(utils.DH_encrypt(parsedData.secret,chunk.CA));
                     callback(chunk);
                 } else {
                     console.log("NOT CONFIRMED !!! ");
@@ -228,7 +245,7 @@ function confirmPin(jsonData,callback){
                 }
             });
         });
-        post_req.write(postData);
+        post_req.write(encryptedCN); 
         post_req.end();
         }catch(e){
             console.log(e);
