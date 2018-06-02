@@ -10,6 +10,7 @@ const {
     blockchain_add,
     blockchain_get,
     blockchain_replace,
+    blockchain_clear,
     blockchain_run
 } = Blockchain;
 
