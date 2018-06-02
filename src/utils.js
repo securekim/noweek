@@ -32,7 +32,7 @@ const aliceSecret = alice.computeSecret(bobKey);
 const bobSecret = bob.computeSecret(aliceKey);
 */
 
-//DH_localTest();
+DH_localTest();
 function DH_localTest(){
     try{
     //client = crypto.createDiffieHellman(1024,'base64');
@@ -54,6 +54,17 @@ function DH_localTest(){
     console.log(L_server_secret);
     console.log(L_client_secret);
     console.log(L_server_secret === L_client_secret);
+    console.log(L_server_secret.length)
+
+    const cipher = crypto.createCipher('aes-256-cbc', L_server_secret);
+    let result = cipher.update('DECRYPT OK', 'utf8', 'base64');
+    result += cipher.final('base64'); 
+    
+    const decipher = crypto.createDecipher('aes-256-cbc', L_client_secret);
+    let result2 = decipher.update(result, 'base64', 'utf8'); // 암호화할문 (base64, utf8이 위의 cipher과 반대 순서입니다.)
+    result2 += decipher.final('utf8'); // 암호화할문장 (여기도 base64대신 utf8)
+    console.log(result);
+    console.log(result2);
     } catch(err){
         console.log(err);
     }

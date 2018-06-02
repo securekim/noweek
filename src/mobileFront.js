@@ -28,6 +28,12 @@ app.get("/addBlockChain",(req,res)=>{
     //           AFTER NUMERIC COMPARISON ONLY
 });
 
+app.get("/delBlockChain",(req,res)=>{
+    //to do : get blockchain list.
+    client.delBlockChain((json)=>{
+        res.send(JSON.stringify(json));
+    });
+});
 
 app.get("/getBlockChain",(req,res)=>{
     //to do : get blockchain list.
@@ -59,6 +65,12 @@ app.get("/pincode/:ip", (req,res)=>{
     });
 })
 
+app.post("/confirmPin",(req,res)=>{
+    const {body} = req;
+    console.log("Confirm pincode with :"+body.ip);
+    //dh => {pin, secret, ip}
+    
+});
 
 app.post("/control", (req,res)=>{
     //control to other device
