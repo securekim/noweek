@@ -12,6 +12,8 @@ const {
     broadcast_getBlockchain,
 } = Request;
 
+const __MAGIC_NUMBE__ = "###";
+
 var __PRIVATE_KEY__ = "certs/mobile.key";
 const __BLOCKCHAIN_DIR__ = 'blocks';
 const __BLOCKCHAIN_POSTFIX__ = '.blk';
@@ -26,6 +28,7 @@ var encryptStringWithRsaPrivateKey = function(toEncrypt, relativeOrAbsolutePathT
 };
 
 var decryptStringWithRsaPublicKey = function(toDecrypt, publicKey) {
+    publicKey = publicKey.split(__MAGIC_NUMBE__)[0];        // MAGIC Handler
     var buffer = new Buffer(toDecrypt, "base64");
     var decrypted = crypto.publicDecrypt(publicKey, buffer);
     return decrypted.toString("utf8");
@@ -61,23 +64,23 @@ const getBlocksHash = block =>
     block.timestamp,
     block.previousHash,
     block.pubkey
-    );
+);
 
 const getSignature = hash => encryptStringWithRsaPrivateKey(hash, __PRIVATE_KEY__);
 
-const getCurrentTimestamp = () => new Date().getTime().toString();
+const getCurrentTimestamp = () => new Date().getTime();
 
 const getBlockchain = () => BLOCKCHAIN;
 
 const getGenesisIndex = () => 0;
+const getGenesisBlock = () => BLOCKCHAIN[getGenesisIndex()];
 const getGenesisBlockHash = () => BLOCKCHAIN[getGenesisIndex()].hash;
 const getGenesisBlockPubKey = () => BLOCKCHAIN[getGenesisIndex()].pubkey;
 
 const getLatestIndex = () => (BLOCKCHAIN.length - 1);
-const getLastBlockIndex = () => {
-    return BLOCKCHAIN[getLatestIndex()].index;
-}
-const getLastBlockHash = () => BLOCKCHAIN[getLatestIndex()].hash;
+const getLatestBlock = () => BLOCKCHAIN[getLatestIndex()];
+const getLatestBlockIndex = () => BLOCKCHAIN[getLatestIndex()].index;
+const getLatestBlockHash = () => BLOCKCHAIN[getLatestIndex()].hash;
 
 const setBlock = (index, timestamp, previousHash, pubkey) => new Block(
     index,
@@ -88,7 +91,45 @@ const setBlock = (index, timestamp, previousHash, pubkey) => new Block(
     getSignature(createHash(index, timestamp, previousHash, pubkey), __PRIVATE_KEY__)
 );
 
-const createBlock = (pubkey) => setBlock(getLastBlockIndex() + 1, getCurrentTimestamp(), getLastBlockHash(), pubkey);
+const isBlockValid = (candidateBlock, latestBlock) => {
+    if (!isBlockStructureValid(candidateBlock)) {
+        console.log("The candidate block structure is not valid");
+        return false;
+    } else if (latestBlock.index + 1 !== candidateBlock.index) {
+        console.log("The candidate block doesnt have a valid index");
+        return false;
+    } else if (latestBlock.hash !== candidateBlock.previousHash) {
+        console.log("The previousHash of the candidate block is not the hash of the latest block");
+        return false;
+    } else if (getBlocksHash(candidateBlock) !== candidateBlock.hash) {
+        console.log("The hash of this block is invalid");
+        return false;
+    } else if (!isTimeStampValid(candidateBlock, latestBlock)) {
+        console.log("The timestamp of this block is dodgy");
+        return false;
+    }
+    return true;
+};
+
+const isTimeStampValid = (newBlock, oldBlock) => {
+    return (
+        oldBlock.timestamp - 60 < newBlock.timestamp &&
+        newBlock.timestamp - 60 < getCurrentTimestamp()
+    );
+};
+
+const isBlockStructureValid = (block) => {
+    return (
+        typeof block.index === "number" &&
+        typeof block.timestamp === "number" &&
+        typeof block.previousHash === "string" &&
+        typeof block.pubkey === "string"&&
+        typeof block.hash === "string" &&
+        typeof block.signature === "string"
+    );
+};
+
+const createBlock = (pubkey) => setBlock(getLatestBlockIndex() + 1, getCurrentTimestamp(), getLatestBlockHash(), pubkey);
 const createGenesisBlock = (pubkey) => setBlock(0, getCurrentTimestamp(), "", pubkey);
 
 // check block directory
@@ -149,36 +190,36 @@ function block_mem2file(block_idx, block){
     return true;
 }
 
-const blockchain_isValidkey = (publicKey) => {
-    for (var i = 0; i < BLOCKCHAIN.length; i++)
-        if(BLOCKCHAIN[i].pubkey === publicKey)
-            return true;
-    return false;
-};
-
 const blockchain_clear = () => {
     BLOCKCHAIN = [];
     file_name = __BLOCKCHAIN_DIR__ + '/*';
     shell.rm('-rf', file_name);
-};
+}
 
-const blockchain_replaceCheck = (blockchain) => {
+const isChainValid = (candidateChain) => {
     // check longest
-    if (BLOCKCHAIN.length >= blockchain.length){
+    if (BLOCKCHAIN.length >= candidateChain.length){
         console.log("ORG Blockchain length: " + BLOCKCHAIN.length);
-        console.log("NEW Blockchain length: " + blockchain.length);
+        console.log("NEW Blockchain length: " + candidateChain.length);
         return false;
     }
 
     // check is valid
     genesis_hash = getGenesisBlockHash();
     genesis_pubkey = getGenesisBlockPubKey();
-    for (var i = 0; i < blockchain.length; i++){
-        if (blockchain[i].hash !== decryptStringWithRsaPublicKey(blockchain[i].signature, genesis_pubkey)){
-            console.log("decrypt: "+ decryptStringWithRsaPublicKey(blockchain[i].signature, genesis_pubkey));
-            console.log("hash: " + blockchain[i].hash);
+    for (var i = 0; i < candidateChain.length; i++){
+        if (candidateChain[i].hash !== decryptStringWithRsaPublicKey(candidateChain[i].signature, genesis_pubkey)){
+            console.log("decrypt: "+ decryptStringWithRsaPublicKey(candidateChain[i].signature, genesis_pubkey));
+            console.log("hash: " + candidateChain[i].hash);
             return false;
         }
+    }
+
+    // valid candidate chain
+    for (let i = 1; i < candidateChain.length; i++) {
+        const currentBlock = candidateChain[i];
+        if (!isBlockValid(currentBlock, candidateChain[i - 1]))
+            return false;
     }
 
     return true;
@@ -187,7 +228,7 @@ const blockchain_replaceCheck = (blockchain) => {
 const blockchain_replace = (blockchain) => {
     blockchain = JSON.parse(blockchain);
 
-    if(!blockchain_replaceCheck(blockchain))
+    if(!isChainValid(blockchain))
         return false;
 
     blockchain_clear();
@@ -210,11 +251,13 @@ const blockchain_init = (pubkey) => {
     broadcast_getBlockchain();
 };
 
-const blockchain_add = (block) => {
+const blockchain_add = (newBlock) => {
     if(BLOCKCHAIN.length === 0)
         return false;
 
-    newBlock = block;
+    if(!isBlockValid(newBlock, getLatestBlock()))
+        return false;
+
     BLOCKCHAIN.push(newBlock);
     block_mem2file(newBlock.index, newBlock);
 
@@ -254,14 +297,6 @@ module.exports = {
     blockchain_add,
     blockchain_get,
     blockchain_replace,
-    blockchain_run,
-    blockchain_clear
+    blockchain_clear,
+    blockchain_run
 };
-
-
-/***
- * . Blockchain get 할 때, 어떤 방식으로 공유할지
- * . 적혀있는 블록+index 읽어서 메모리에 로드
- * . broadcast
- * . AWS 연동테스트
- */

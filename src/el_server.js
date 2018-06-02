@@ -10,9 +10,15 @@ const {
     blockchain_add,
     blockchain_get,
     blockchain_replace,
-    blockchain_run,
-    blockchain_clear
+    blockchain_run
 } = Blockchain;
+
+const Artik = require('./el_artik');
+const {
+    artik_all_init,
+    led_control,
+    button_read
+} = Artik;
 
 const PORT = process.env.HTTP_PORT || 3000;
 
@@ -46,17 +52,19 @@ app.post("/makeBlock", (req,res) => {
 });
 
 app.post("/addBlock", (req, res) => {
-    res_body = "addBlock complete...";
     block = req.body.block;
 
-    blockchain_add(block);
+    if(blockchain_add(block))
+        res_body = "addBlock complete...";
+    else
+        res_body = "failed addBlock...";
 
     res.send(res_body);
 });
 
 app.post("/getBlockchain", (req, res) => {
     res_body = "getBlockchain complete...";
-    blockchain = blockchain_get();
+    blockchain = blockchain_get(publicKey);
 
     res.send(blockchain);
 });
@@ -78,8 +86,28 @@ app.post("/clearBlockchain", (req, res) => {
     res.send(res_body);
 });
 
+app.post("/artik_led_control", (req, res) => {
+    res_body = "artik_led_control complete...";
+
+    color = req.body.color;
+    isOn = req.body.isOn;
+    led_control(color, isOn);
+
+    res.send(res_body);
+});
+
+app.post("/artik_button_read", (req, res) => {
+    res_body = "artik_button_read complete...";
+
+    BUTTON_SW403 = '30';
+    result = button_read(BUTTON_SW403);
+
+    res.send(result);
+});
+
 const server = app.listen(PORT, () =>
   console.log(`IOTC HTTP Server running on port ${PORT} ✅`)
 );
 
+artik_all_init();
 blockchain_run();
