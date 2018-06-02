@@ -56,22 +56,27 @@ function DH_localTest(){
     console.log(L_server_secret === L_client_secret);
     console.log(L_server_secret.length)
 
-    const cipher = crypto.createCipher('aes-256-cbc', L_server_secret);
-    let result = cipher.update('DECRYPT OK', 'utf8', 'base64');
-    result += cipher.final('base64'); 
+    encrypted = DH_encrypt(L_client_secret,"PLAIN TEXT");
+    plain = DH_decrypt(L_server_secret,encrypted);
     
-    const decipher = crypto.createDecipher('aes-256-cbc', L_client_secret);
-    let result2 = decipher.update(result, 'base64', 'utf8'); // 암호화할문 (base64, utf8이 위의 cipher과 반대 순서입니다.)
-    result2 += decipher.final('utf8'); // 암호화할문장 (여기도 base64대신 utf8)
-    console.log(result);
-    console.log(result2);
+    console.log(encrypted);
+    console.log(plain);
+
     } catch(err){
         console.log(err);
     }
 }
     
-function DH_encrypt(data){
-    
+function DH_encrypt(key,data){
+    const cipher = crypto.createCipher('aes-256-cbc', key);
+    let result = cipher.update(data, 'utf8', 'base64');
+    result += cipher.final('base64'); 
+}
+
+function DH_decrypt(key,data){
+    const decipher = crypto.createDecipher('aes-256-cbc', key);
+    let result2 = decipher.update(data, 'base64', 'utf8'); 
+    result2 += decipher.final('utf8'); 
 }
 
 function DH_generate(prime,pubkey){
@@ -250,6 +255,7 @@ if(process.argv.length >2){
     //make washerCA key, csr, selfsigned cert
     //make washer key, csr, signed by washerCA
     //console.log(process.argv[2]);
+    DH_localTest();
     CERT_initCERT(process.argv[2],(result)=>{
         console.log(result);
     });
@@ -289,9 +295,9 @@ function getIPABC(){
         return ip[0]+"."+ip[1]+"."+ip[2];
     }catch(e){
         console.log(e);
-        return interfaces;
+        return "127.0.0";
     }
 }
 
 
-module.exports = {getIPABC,startServer,restartServer,CERT_initCERT,makeBundle,DH_clean,clientPrime,DH_getMyPubKey,generatePin,DH_generate,sha256,loadPubkeys,getModHash,verifyKey};
+module.exports = {DH_encrypt, DH_decrypt, getIPABC,startServer,restartServer,CERT_initCERT,makeBundle,DH_clean,clientPrime,DH_getMyPubKey,generatePin,DH_generate,sha256,loadPubkeys,getModHash,verifyKey};

@@ -69,7 +69,9 @@ app.post("/confirmPin",(req,res)=>{
     const {body} = req;
     console.log("Confirm pincode with :"+body.ip);
     //dh => {pin, secret, ip}
-    
+    client.confirmPin(body,(result)=>{
+        res.send(JSON.stringify(result));
+    });
 });
 
 app.post("/control", (req,res)=>{

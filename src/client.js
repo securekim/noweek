@@ -201,11 +201,11 @@ function confirmPin(jsonData,callback){
     try{
         parsedData = JSON.parse(jsonData);
         //pin, secret, ip
-
+        //el_request.broadcast_addBlock(chunk.CA);
         var options_dh = { 
-            hostname: jsonData.ip, 
+            hostname: parsedData.ip, 
             port: PORT_DH, 
-            path: '/', 
+            path: '/confirmPin', 
             method: 'POST',
             rejectUnauthorized: false,
             headers: {
@@ -218,14 +218,14 @@ function confirmPin(jsonData,callback){
             res.setEncoding('utf8');
             res.on('data', function (chunk) {
                 chunk = JSON.parse(chunk);
-                const secret = utils.DH_generate(utils.clientPrime,chunk.pubkey);
-                //console.log('[CLIENT] Server pubkey: ' + chunk);
-                //console.log("[CLIENT] client secret : "+ secret);
-                const pin = utils.generatePin(secret);
-                console.log("PIN : "+pin);
-                el_request.broadcast_addBlock(chunk.CA);
-                callback({pin:pin,secret:secret,ip:options_dh.hostname});
-                utils.DH_clean();
+                if(chunk.result){
+                    console.log("CONFIRMED !!! ");
+                    el_request.broadcast_addBlock(chunk.CA);
+                    callback(chunk);
+                } else {
+                    console.log("NOT CONFIRMED !!! ");
+                    callback(chunk);
+                }
             });
         });
         post_req.write(postData);
@@ -256,4 +256,4 @@ function initChain(CN,callback){
     });
 }
 
-module.exports = {clearBlockChain,getBlockChain,broadcast,generatePin,sendWithMutual,initChain};
+module.exports = {confirmPin,clearBlockChain,getBlockChain,broadcast,generatePin,sendWithMutual,initChain};
