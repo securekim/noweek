@@ -32,13 +32,13 @@ console.log("server CN : "+CN);
 //var pubkeys=utils.loadPubkeys();
 
 console.log("Open for mutual SSL : "+PORT_MUTUAL);
-var mutualServer = mutalServerCreate();
+var mutualServer = mutualServerCreate();
 
 function setLastSecret(data){
     lastSecret = data;
 }
 
-function mutalServerCreate(){
+function mutualServerCreate(){
 
     var options_mutual = { 
         key: fs.readFileSync('certs/'+CN+'.key'), 
@@ -65,17 +65,25 @@ return https.createServer(options_mutual, function (req, res) {
         //const {body: {data}} = req;
         data = querystring.parse(body);
         console.log("THE DATA");
-        console.log(body);
-        res.end(data.command);
+        console.log(data);
+        try{
         if(data.command === "serverOff"){
             mutualServer.close(()=>{
                 console.log("Server Closed in 10 sec");
             });
             mutualServer=null
             setTimeout(()=>{
-                mutualServer=mutalServerCreate();
+                mutualServer=mutualServerCreate();
                 console.log("10 seconds already done !");
             },10*1000);
+            res.end(data.command);
+        }else if (data.command.split(',')[0]=="artik_led_control"){
+            el_request.artik_led_control(data.command.split(',')[1],data.command.split(',')[2],(result)=>{
+                res.end(JSON.stringify(result));
+            })
+        }
+        }catch(e){
+            console.log(e);
         }
     });
     //if(req.url.split('/')[0])

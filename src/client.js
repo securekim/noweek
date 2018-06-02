@@ -89,8 +89,11 @@ function sendWithMutual(ip,data,callback){
     var req_mutual = https.request(options_mutual,function(res) {
         
         //We will verify server's modulus
-        
-        console.log(new Date()+' [CLIENT] Server Is :'+res.socket.getPeerCertificate().subject.CN+'');
+        try{
+            console.log(new Date()+' [CLIENT] Server Is :'+res.socket.getPeerCertificate().subject.CN+'');
+        }catch(e){
+            console.log(e);
+        }
         //console.log(res.socket.getPeerCertificate().modulus);
         //console.log("VERIFY RESULT : "+utils.verifyKey(utils.getModHash(res)));
         res.on('data', function(chunk) {
