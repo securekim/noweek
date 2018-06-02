@@ -178,8 +178,12 @@ function broadcast_loop(){
         post_req.end();
     }
 
-    for(var i =1; i<255; i++){
-        requestTo(i);
+    if(ipabc==="127.0.0"){
+        requestTo(1);
+    } else {
+        for(var i =1; i<255; i++){
+            requestTo(i);
+        }
     }
 }
 
