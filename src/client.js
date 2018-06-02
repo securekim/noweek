@@ -211,9 +211,9 @@ function generatePin(ip,callback){
         try{
         var post_req = https.request(options_dh, function(res) {
             res.setEncoding('utf8');
-            var CN = res.socket.getPeerCertificate().subject.CN;
             res.on('data', function (chunk) {
                 chunk = JSON.parse(chunk);
+                var CN = chunk.CN;
                 const secret = utils.DH_generate(utils.clientPrime,chunk.pubkey);
                 latestSecret = secret;
                 //console.log('[CLIENT] Server pubkey: ' + chunk);

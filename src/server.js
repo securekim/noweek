@@ -115,14 +115,13 @@ var server = https.createServer(options_dh, function (req, res) {
             if(req.url==="/confirmPin"){
                 try{
                 console.log("/confirmPin in Server");
-                console.log(body);
                 decryptedCA = utils.DH_decrypt(lastSecret, body);
-                console.log(decryptedCA);
 
                 el_request.artik_button_read((json)=>{
                     //{result:true, data: body}); //pushed 0
+                    console.log("Check button read");
                     if(json.result && json.data == 0 ){
-
+                        console.log("CLICKED !!!");
                         el_request.request_initBlockchain(decryptedCA,(data)=>{
                             //{result:true, data: null}
                             const myCA = utils.getCA(CN);
@@ -131,6 +130,7 @@ var server = https.createServer(options_dh, function (req, res) {
                             res.end(JSON.stringify({result:true,data:encryptedCA}));
                         });
                     } else {
+                        console.log("NOT CLICKED !!!");
                         res.end(JSON.stringify({result:false,data:"Please Click The Button !"}));
                     }
                 });
@@ -156,7 +156,7 @@ var server = https.createServer(options_dh, function (req, res) {
             const pin = utils.generatePin(secret);
             console.log("[SERVER] Pin code : "+pin);
             utils.DH_clean();
-            res.end(JSON.stringify({pubkey:server_pubkey,CA:options_dh.ca}));
+            res.end(JSON.stringify({pubkey:server_pubkey,CA:options_dh.ca,CN:CN}));
         }catch(e){
             console.log("Server : someone search me.")
             res.end();
