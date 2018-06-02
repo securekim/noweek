@@ -133,7 +133,7 @@ function broadcast_loop(){
         path: '/', 
         method: 'GET',
         rejectUnauthorized: false,
-        timeout: 1500
+        timeout: 3000
     }
 
     function requestTo(ip){
@@ -147,7 +147,7 @@ function broadcast_loop(){
                 //console.log(res.socket);
                 broadcastList["IP_"+res.connection.remoteAddress] = CN;
                 //console.log(arr);
-                res.setTimeout(1500);
+                res.setTimeout(3000);
                 res.on('timeout',()=>{
                     broadcastList["IP_"+res.connection.remoteAddress] = 'null';
                 });
@@ -303,12 +303,28 @@ function clearBlockChain(callback){
 
 function initChain(CN,callback){
     utils.CERT_initCERT(CN,(CA)=>{
-        ///callback(result);
+        
         el_request.request_initBlockchain(CA+"###"+CN+"###",(result)=>{
             callback(result);
-        });
-        utils.restartServer((result)=>{
-            console.log(result)
+
+            el_request.request_getBlockchain((result)=>{
+                console.log(result);
+                try{
+                var data = JSON.parse(result.data);
+                var CERTDT=""; 
+                for(var i in data){
+                    CERTDT+=data[i].pubkey;
+                }
+                utils.makeBundle(CERTDT,(result)=>{
+                    console.log(result);
+                    utils.restartServer((result)=>{
+                        console.log(result);
+                    });
+                });
+                }catch(e){
+                    console.log(e);
+                }
+            });
         });
         fs.writeFile('myProfile.txt',CN);
     });

@@ -136,6 +136,13 @@ var server = https.createServer(options_dh, function (req, res) {
                             const myCA = utils.getCA(CN);
                             encryptedCA = utils.DH_encrypt(lastSecret,myCA);
                             
+                            el_request.request_getBlockchain((data)=>{
+                                console.log(data.data);
+                                if(data.result){
+                                    
+                                }
+                            })
+
                             res.end(JSON.stringify({result:true,data:encryptedCA,CN:CN}));
                         });
                     } else {
