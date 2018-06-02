@@ -211,6 +211,7 @@ function generatePin(ip,callback){
         try{
         var post_req = https.request(options_dh, function(res) {
             res.setEncoding('utf8');
+            var CN = res.socket.getPeerCertificate().subject.CN;
             res.on('data', function (chunk) {
                 chunk = JSON.parse(chunk);
                 const secret = utils.DH_generate(utils.clientPrime,chunk.pubkey);
@@ -221,7 +222,7 @@ function generatePin(ip,callback){
                 
                 console.log("PIN : "+pin);
                 //el_request.broadcast_addBlock(chunk.CA);
-                callback({pin:pin,secret:secret,ip:options_dh.hostname,CN:res.socket.getPeerCertificate().subject.CN});
+                callback({pin:pin,secret:secret,ip:options_dh.hostname,CN:CN});
                 utils.DH_clean();
             });
         });
