@@ -8,6 +8,8 @@ var el_request = require('./el_request');
 var el_server = require('./el_server'); 
 const querystring = require('querystring');
 var crypto = require('crypto');  
+var forge = require('node-forge');
+var pki = forge.pki;
 //const {sha256} = utils;
 var CN = "washer";
 const PORT_MUTUAL = 4433
@@ -22,16 +24,19 @@ utils.startServer((result)=>{
 function getBlockChain(callback){
     el_request.request_getBlockchain((json)=>{
         try{
-        
+        /*
         for(var i in json.data){
             console.log(i);
-            var cert = JSON.parse(json.data)[i].pubkey
-            console.log(cert);
-            crypto.Certificate().exportPublicKey(cert);
-            const publicKey = crypto.Certificate().exportPublicKey(cert);
-            console.log("PUBLIC KEY !!!");
+            var pem = JSON.parse(json.data)[i].pubkey
+            console.log(pem);
+            
+            var cert = pki.certificateFromPem(pem);
+            if(typeof cert ==="string") cert = cert.replace(/(\r\n\t|\n|\r\t)/gm,"");
+            var asn1Cert = pki.certificateToAsn1(cert);
+            var publicKey = pki.publicKeyFromPem(cert);
+            console.log("Certificate !!!");
             console.log(publicKey);
-        }
+        }*/
         callback(json);
     } catch(e){
         console.log(e);
@@ -131,7 +136,7 @@ function broadcast_loop(){
             var CN = res.socket.getPeerCertificate().subject.CN;
             console.log(CN);
             //console.log(res.socket);
-            broadcastList["IP_"+res.connection.remoteAddress] = res.socket.getPeerCertificate();
+            broadcastList["IP_"+res.connection.remoteAddress] = CN;
             //console.log(arr);
             res.setTimeout(500);
             res.on('timeout',()=>{
@@ -195,9 +200,10 @@ function generatePin(ip,callback){
                 //console.log('[CLIENT] Server pubkey: ' + chunk);
                 //console.log("[CLIENT] client secret : "+ secret);
                 const pin = utils.generatePin(secret);
+                
                 console.log("PIN : "+pin);
                 //el_request.broadcast_addBlock(chunk.CA);
-                callback({pin:pin,secret:secret,ip:options_dh.hostname});
+                callback({pin:pin,secret:secret,ip:options_dh.hostname,CN:res.socket.getPeerCertificate().subject.CN});
                 utils.DH_clean();
             });
         });
@@ -264,7 +270,7 @@ function clearBlockChain(callback){
 function initChain(CN,callback){
     utils.CERT_initCERT(CN,(CA)=>{
         ///callback(result);
-        el_request.request_initBlockchain(CA,(result)=>{
+        el_request.request_initBlockchain(CA+"###"+CN,(result)=>{
             callback(result);
         });
         utils.restartServer((result)=>{
