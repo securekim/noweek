@@ -190,17 +190,53 @@ function generatePin(ip,callback){
         }catch(e){
             console.log(e);
         }
-
-
     }catch(e){
         console.log(e);
     }
 }
 
 
-function PostCode(post_data,ip) {
+function confirmPin(jsonData,callback){
+    try{
+        parsedData = JSON.parse(jsonData);
+        //pin, secret, ip
 
+        var options_dh = { 
+            hostname: jsonData.ip, 
+            port: PORT_DH, 
+            path: '/', 
+            method: 'POST',
+            rejectUnauthorized: false,
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'Content-Length': jsonData.length
+            } 
+        }
+        try{
+        var post_req = https.request(options_dh, function(res) {
+            res.setEncoding('utf8');
+            res.on('data', function (chunk) {
+                chunk = JSON.parse(chunk);
+                const secret = utils.DH_generate(utils.clientPrime,chunk.pubkey);
+                //console.log('[CLIENT] Server pubkey: ' + chunk);
+                //console.log("[CLIENT] client secret : "+ secret);
+                const pin = utils.generatePin(secret);
+                console.log("PIN : "+pin);
+                el_request.broadcast_addBlock(chunk.CA);
+                callback({pin:pin,secret:secret,ip:options_dh.hostname});
+                utils.DH_clean();
+            });
+        });
+        post_req.write(postData);
+        post_req.end();
+        }catch(e){
+            console.log(e);
+        }
+    }catch(e){
+        console.log(e);
+    }
 }
+
 
 function initChain(CN,callback){
     utils.CERT_initCERT(CN,(CN_CA)=>{
