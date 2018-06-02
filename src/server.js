@@ -15,14 +15,21 @@ var http = require('http');
 var https = require('https'); 
 const utils = require('./utils');
 const querystring = require('querystring');  
+const el_request = require('./el_request');
+
 const PORT_MUTUAL = 4433
 const PORT_DH = 4444;
+var lastSecret = "";
 
 var CN = "fridge"
 //var pubkeys=utils.loadPubkeys();
 
 console.log("Open for mutual SSL : "+PORT_MUTUAL);
 var mutualServer = mutalServerCreate();
+
+function setLastSecret(data){
+    lastSecret = data;
+}
 
 function mutalServerCreate(){
 
@@ -97,6 +104,29 @@ var server = https.createServer(options_dh, function (req, res) {
         console.log(new Date()+' '+ 
         +req.method+' '+req.url
         );
+            if(req.url==="/confirmPin"){
+                try{
+                console.log("/confirmPin in Server");
+                const decipher = crypto.createDecipher('aes-256-cbc', 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+                let decryptedCA = decipher.update(body, 'base64', 'utf8'); // 암호화할문 (base64, utf8이 위의 cipher과 반대 순서입니다.)
+                decryptedCA += decipher.final('utf8'); // 암호화할문장 (여기도 base64대신 utf8)
+                
+                el_request.artik_button_read((json)=>{
+                    //{result:true, data: body}); //pushed 0
+                    if(json.result && json.data == 0 ){
+                        el_request.request_initBlockchain(decryptedCA,(data)=>{
+                            //{result:true, data: null}
+                            res.end(data)
+                        });
+                    } else {
+                        res.end({result:false,data:"Please Click The Button !"});
+                    }
+                });
+            }catch(e){
+                console.log("in Server. confirmPin")
+                res.end({result:false,data:e});
+            }
+        }else{
         try{
             //console.log(querystring.parse(body));
             if(body === '' || body ===null) throw new Error("No body No body but you");
@@ -104,6 +134,7 @@ var server = https.createServer(options_dh, function (req, res) {
             const prime = dh.prime;
             const pubkey = dh.pubkey;
             const secret = utils.DH_generate(prime, pubkey); 
+            setLastSecret(secret);
             const server_pubkey = utils.DH_getMyPubKey(prime);
             //console.log("[SERVER] prime: " + prime);
             //console.log("[SERVER] client pubkey: " + pubkey);
@@ -116,6 +147,7 @@ var server = https.createServer(options_dh, function (req, res) {
         }catch(e){
             res.end();
         }
+    }
     }); 
     res.writeHead(200); 
 }).listen(PORT_DH);

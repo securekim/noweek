@@ -81,13 +81,17 @@ function DH_localTest(){
     
 function DH_encrypt(key,data){
     const cipher = crypto.createCipher('aes-256-cbc', key);
-    var result = cipher.update(data, 'utf8', 'base64');
+    str = JSON.stringify(data);
+    console.log("encrypt : "+typeof str);
+    var result = cipher.update(str, 'utf8', 'base64');
     result += cipher.final('base64'); 
 }
 
 function DH_decrypt(key,data){
     const decipher = crypto.createDecipher('aes-256-cbc', key);
-    var result2 = decipher.update(data, 'base64', 'utf8'); 
+    str = JSON.stringify(data);
+    console.log("decrypt : "+typeof str);
+    var result2 = decipher.update(str, 'base64', 'utf8'); 
     result2 += decipher.final('utf8'); 
 }
 

@@ -16,7 +16,7 @@ app.get("/broadcast", (req,res)=>{
     client.broadcast((result)=>{
         console.log("END !");
         console.log(result);
-        res.send(JSON.stringify(result));
+        res.send(result);
     });
     }catch(e){
         console.log(e);

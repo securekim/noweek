@@ -221,7 +221,11 @@ function confirmPin(jsonData,callback){
         console.log(typeof jsonData.CN);
         const myCA = utils.getCA(jsonData.CN);
         
-        encryptedCA = utils.DH_encrypt(myCA);
+        const cipher = crypto.createCipher('aes-256-cbc', jsonData.secret);
+        let encryptedCA = cipher.update(myCA, 'utf8', 'base64'); // 'HbMtmFdroLU0arLpMflQ'
+        encryptedCA += cipher.final('base64'); // 'HbMtmFdroLU0arLpMflQYtt8xEf4lrPn5tX5k+a8Nzw='
+
+        //encryptedCA = utils.DH_encrypt(myCA);
         //pin, secret, ip, CN
         //el_request.broadcast_addBlock(chunk.CA);
         var options_dh = { 
@@ -235,19 +239,13 @@ function confirmPin(jsonData,callback){
                 'Content-Length': encryptedCA.length
             } 
         }
+        
         try{
         var post_req = https.request(options_dh, function(res) {
             res.setEncoding('utf8');
             res.on('data', function (chunk) { // OTher's CA cert
-                chunk = JSON.parse(chunk);
-                if(chunk.result){
-                    console.log("CONFIRMED !!! ");
-                    //el_request.broadcast_addBlock(utils.DH_encrypt(parsedData.secret,chunk.CA));
-                    callback(chunk);
-                } else {
-                    console.log("NOT CONFIRMED !!! ");
-                    callback(chunk);
-                }
+                //chunk = JSON.parse(chunk);
+                callback(chunk);
             });
         });
         post_req.write(encryptedCA); 

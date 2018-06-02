@@ -165,7 +165,7 @@ function request_clearBlockchain(callback){
     });
 }
 
-function artik_led_control(color, isOn){
+function artik_led_control(color, isOn, callback){
     var options = {
         url: 'http://localhost:3000/artik_led_control',
         method: 'POST',
@@ -180,7 +180,7 @@ function artik_led_control(color, isOn){
     });
 }
 
-function artik_button_read(){
+function artik_button_read(callback){
     var options = {
         url: 'http://localhost:3000/artik_button_read',
         method: 'POST'
@@ -189,9 +189,9 @@ function artik_button_read(){
     request(options, function (error, response, body) {
         console.log(body);
         if (!error && response.statusCode == 200)
-            callback({result:true, data: body});
+            callback({result:true, data: body}); //pushed 0
         else
-            callback({result:false, data: body});
+            callback({result:false, data: body}); //not pushed 1
     });
 }
 
