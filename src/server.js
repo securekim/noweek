@@ -116,9 +116,7 @@ var server = https.createServer(options_dh, function (req, res) {
                 try{
                 console.log("/confirmPin in Server");
                 console.log(body);
-                const decipher = crypto.createDecipher('aes-256-cbc', 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
-                let decryptedCA = decipher.update(JSON.stringify(body), 'base64', 'utf8'); // 암호화할문 (base64, utf8이 위의 cipher과 반대 순서입니다.)
-                decryptedCA += decipher.final('utf8'); // 암호화할문장 (여기도 base64대신 utf8)
+                decryptedCA = utils.DH_decrypt(lastSecret, body);
                 console.log(decryptedCA);
 
                 el_request.artik_button_read((json)=>{
@@ -128,19 +126,18 @@ var server = https.createServer(options_dh, function (req, res) {
                         el_request.request_initBlockchain(decryptedCA,(data)=>{
                             //{result:true, data: null}
                             const myCA = utils.getCA(CN);
-                            const cipher = crypto.createCipher('aes-256-cbc', 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
-                            let encryptedCA = cipher.update(myCA, 'utf8', 'base64'); // 'HbMtmFdroLU0arLpMflQ'
-                            encryptedCA += cipher.final('base64'); // 'HbMtmFdroLU0arLpMflQYtt8xEf4lrPn5tX5k+a8Nzw='
-
-                            res.end({result:true,data:encryptedCA});
+                            encryptedCA = utils.DH_encrypt(lastSecret,myCA);
+                            
+                            res.end(JSON.stringify({result:true,data:encryptedCA}));
                         });
                     } else {
-                        res.end({result:false,data:"Please Click The Button !"});
+                        res.end(JSON.stringify({result:false,data:"Please Click The Button !"}));
                     }
                 });
             }catch(e){
                 console.log("Error in Server. In confirmPin")
-                res.end({result:false,data:e});
+                console.log(e);
+                res.end(JSON.stringify({result:false,data:e}));
             }
         }else{
         try{

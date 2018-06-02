@@ -10,6 +10,7 @@ const querystring = require('querystring');
 var crypto = require('crypto');  
 var forge = require('node-forge');
 var pki = forge.pki;
+var latestSecret;
 //const {sha256} = utils;
 try{
     var CN = fs.readFileSync("myProfile.txt",'utf8');
@@ -213,6 +214,7 @@ function generatePin(ip,callback){
             res.on('data', function (chunk) {
                 chunk = JSON.parse(chunk);
                 const secret = utils.DH_generate(utils.clientPrime,chunk.pubkey);
+                latestSecret = secret;
                 //console.log('[CLIENT] Server pubkey: ' + chunk);
                 //console.log("[CLIENT] client secret : "+ secret);
                 const pin = utils.generatePin(secret);
@@ -239,9 +241,11 @@ function confirmPin(jsonData,callback){
         console.log("ConfirmPin");
         const myCA = utils.getCA(jsonData.CN);
         
-        const cipher = crypto.createCipher('aes-256-cbc', jsonData.secret);
-        let encryptedCA = cipher.update(myCA, 'utf8', 'base64'); // 'HbMtmFdroLU0arLpMflQ'
-        encryptedCA += cipher.final('base64'); // 'HbMtmFdroLU0arLpMflQYtt8xEf4lrPn5tX5k+a8Nzw='
+        // const cipher = crypto.createCipher('aes-256-cbc', jsonData.secret);
+        // let encryptedCA = cipher.update(myCA, 'utf8', 'base64'); // 'HbMtmFdroLU0arLpMflQ'
+        // encryptedCA += cipher.final('base64'); // 'HbMtmFdroLU0arLpMflQYtt8xEf4lrPn5tX5k+a8Nzw='
+
+        encryptedCA = utils.DH_encrypt(jsonData.secret,myCA);
 
         console.log("encryptedCA : "+encryptedCA);
         //encryptedCA = utils.DH_encrypt(myCA);
@@ -266,10 +270,7 @@ function confirmPin(jsonData,callback){
                 //chunk = JSON.parse(chunk);
                 console.log("Client Get chunk in ")
                 if(chunk.result){
-                    //{result:true,data:encryptedCA}
-                    const decipher = crypto.createDecipher('aes-256-cbc', 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
-                    let decryptedCA = decipher.update(chunk.data, 'base64', 'utf8'); // 암호화할문 (base64, utf8이 위의 cipher과 반대 순서입니다.)
-                    decryptedCA += decipher.final('utf8'); // 암호화할문장 (여기도 base64대신 utf8)
+                    var decryptedCA = utils.DH_decrypt(latestSecret,chunk.data);
                     chunk.data = decryptedCA;
                 } 
                 callback(chunk);

@@ -68,8 +68,8 @@ function DH_localTest(){
     console.log(result);
     console.log(result2);
 
-    encrypted = DH_encrypt(L_client_secret,data);
-    plain = DH_decrypt(L_server_secret,encrypted);
+    var encrypted = DH_encrypt(L_client_secret,data);
+    var plain = DH_decrypt(L_server_secret,encrypted);
 
     console.log(encrypted);
     console.log(plain);
@@ -81,10 +81,12 @@ function DH_localTest(){
     
 function DH_encrypt(key,data){
     const cipher = crypto.createCipher('aes-256-cbc', key);
+    data = new String(data);
     str = JSON.stringify(data);
     console.log("encrypt : "+typeof str);
     var result = cipher.update(str, 'utf8', 'base64');
     result += cipher.final('base64'); 
+    return result;
 }
 
 function DH_decrypt(key,data){
@@ -93,6 +95,7 @@ function DH_decrypt(key,data){
     console.log("decrypt : "+typeof str);
     var result2 = decipher.update(str, 'base64', 'utf8'); 
     result2 += decipher.final('utf8'); 
+    return result2;
 }
 
 function DH_generate(prime,pubkey){
@@ -277,7 +280,7 @@ if(process.argv.length >2){
     //console.log(process.argv[2]);
     DH_localTest();
     CERT_initCERT(process.argv[2],(result)=>{
-        console.log(result);
+        //console.log(result);
     });
 }
 
