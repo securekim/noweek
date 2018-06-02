@@ -19,7 +19,7 @@ const {
     artik_all_init,
     led_control,
     button_read,
-    SEE_writeFile
+    see_write_file
 } = Artik;
 
 const PORT = process.env.HTTP_PORT || 3000;
@@ -111,7 +111,7 @@ app.post("/artik_see_write_file", (req, res) => {
     res_body = "artik_see_write_file complete...";
 
     file_full_path = req.body.file_full_path;
-    result = SEE_writeFile(file_full_path);
+    result = see_write_file(file_full_path);
 
     res.send(result);
 });
