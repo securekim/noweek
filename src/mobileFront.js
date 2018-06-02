@@ -32,7 +32,7 @@ app.get("/addBlockChain",(req,res)=>{
 app.get("/clearBlockChain",(req,res)=>{
     //to do : get blockchain list.
     client.clearBlockChain((json)=>{
-        res.send(JSON.stringify(json));
+        res.send(json);
     });
 });
 
@@ -61,7 +61,7 @@ app.get("/pincode/:ip", (req,res)=>{
     console.log("IP IS : "+req.params.ip);
     client.generatePin(req.params.ip,(dh)=>{
         console.log(dh);
-        res.send(JSON.stringify(dh));
+        res.send(dh);
         //dh => {pin, secret, ip}
     });
 })
@@ -71,7 +71,7 @@ app.post("/confirmPin",(req,res)=>{
     console.log("Confirm pincode with :"+body.ip);
     //dh => {pin, secret, ip, CN}
     client.confirmPin(body,(result)=>{
-        res.send(JSON.stringify(result));
+        res.send(result);
     });
 });
 

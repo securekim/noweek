@@ -114,16 +114,22 @@ var server = https.createServer(options_dh, function (req, res) {
                 el_request.artik_button_read((json)=>{
                     //{result:true, data: body}); //pushed 0
                     if(json.result && json.data == 0 ){
+
                         el_request.request_initBlockchain(decryptedCA,(data)=>{
                             //{result:true, data: null}
-                            res.end(data)
+                            const myCA = utils.getCA(CN);
+                            const cipher = crypto.createCipher('aes-256-cbc', 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+                            let encryptedCA = cipher.update(myCA, 'utf8', 'base64'); // 'HbMtmFdroLU0arLpMflQ'
+                            encryptedCA += cipher.final('base64'); // 'HbMtmFdroLU0arLpMflQYtt8xEf4lrPn5tX5k+a8Nzw='
+
+                            res.end({result:true,data:encryptedCA});
                         });
                     } else {
                         res.end({result:false,data:"Please Click The Button !"});
                     }
                 });
             }catch(e){
-                console.log("in Server. confirmPin")
+                console.log("in Server. In confirmPin")
                 res.end({result:false,data:e});
             }
         }else{
