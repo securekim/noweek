@@ -32,14 +32,26 @@ function button_init(pin_no){
     });
 }
 
-function button_read(pin_no,callback){
+function button_read(pin_no, callback){
     command = "cat /sys/class/gpio/gpio" + pin_no + "/value";
     console.log("Execute command: " + command);
     child = exec(command, function(error, stdout, stderr) {
         if(error !== null){
             console.log("[ERROR] " + error);
             callback(-1);
-            
+        }
+        else
+            callback(stdout);
+    });
+}
+
+function SEE_writeFile(file_full_path, callback){
+    command = "bin/ss_write " + file_full_path;
+    console.log("Execute command: " + command);
+    child = exec(command, function(error, stdout, stderr) {
+        if(error !== null){
+            console.log("[ERROR] " + error);
+            callback("SEE_writeFile() Error!!");
         }
         else
             callback(stdout);
@@ -55,5 +67,6 @@ function artik_all_init(){
 module.exports = {
     artik_all_init,
     led_control,
-    button_read
+    button_read,
+    SEE_writeFile
 };

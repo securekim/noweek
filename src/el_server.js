@@ -18,7 +18,8 @@ const Artik = require('./el_artik');
 const {
     artik_all_init,
     led_control,
-    button_read
+    button_read,
+    SEE_writeFile
 } = Artik;
 
 const PORT = process.env.HTTP_PORT || 3000;
@@ -104,6 +105,15 @@ app.post("/artik_button_read", (req, res) => {
     button_read(BUTTON_SW403,(result)=>{
         res.send(result);
     });
+});
+
+app.post("/artik_see_write_file", (req, res) => {
+    res_body = "artik_see_write_file complete...";
+
+    file_full_path = req.body.file_full_path;
+    result = SEE_writeFile(file_full_path);
+
+    res.send(result);
 });
 
 const server = app.listen(PORT, () =>
