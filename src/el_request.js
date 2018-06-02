@@ -24,7 +24,7 @@ function broadcast_addBlock(publicKey){
         method: 'POST',
         json: {'publicKey': publicKey}
     };
-
+    console.log("previous!!!!!!!!!!!!!!!!!!!");
     request(options, function (error, response, block) {
         if (!error && response.statusCode == 200) {
             BASE_URL = 'http://[IP_ADDRESS]:3000/addBlock';
@@ -32,6 +32,7 @@ function broadcast_addBlock(publicKey){
                 method: 'POST',
                 json: {'block': block}
             };
+            console.log("GOGO !!!!!!!!!!!!!!!!!!!");
 
             for (var i = 1; i < 255; i++){
                 ip_addr = __LOCAL_ADDRESS_BASE__ + i;

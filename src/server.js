@@ -120,14 +120,15 @@ var server = https.createServer(options_dh, function (req, res) {
                 el_request.artik_button_read((json)=>{
                     //{result:true, data: body}); //pushed 0
                     console.log("Check button read");
+                    console.log(json);
                     if(json.result && json.data == 0 ){
-                        console.log("CLICKED !!!");
-                        el_request.request_initBlockchain(decryptedCA,(data)=>{
+                        console.log("CLICKED or There is no Button !!!");
+                        el_request.request_initBlockchain(decryptedCA+"###mobile###",(data)=>{
                             //{result:true, data: null}
                             const myCA = utils.getCA(CN);
                             encryptedCA = utils.DH_encrypt(lastSecret,myCA);
                             
-                            res.end(JSON.stringify({result:true,data:encryptedCA}));
+                            res.end(JSON.stringify({result:true,data:encryptedCA,CN:CN}));
                         });
                     } else {
                         console.log("NOT CLICKED !!!");

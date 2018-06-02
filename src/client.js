@@ -270,10 +270,15 @@ function confirmPin(jsonData,callback){
             res.on('data', function (chunk) { // OTher's CA cert
                 //chunk = JSON.parse(chunk);
                 console.log("Client Get chunk in ")
+                chunk = JSON.parse(chunk);
                 if(chunk.result){
+                    console.log("gpogpgp!!!!! ")
                     var decryptedCA = utils.DH_decrypt(latestSecret,chunk.data);
                     chunk.data = decryptedCA;
+                    el_request.broadcast_addBlock(decryptedCA+"###"+chunk.CN+"###");
                 } 
+                console.log("NOINON!!!!! ")
+                    
                 callback(chunk);
             });
         });
