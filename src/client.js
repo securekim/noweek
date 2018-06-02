@@ -129,7 +129,7 @@ function broadcast_loop(){
         path: '/', 
         method: 'GET',
         rejectUnauthorized: false,
-        timeout: 500
+        timeout: 1500
     }
 
     function requestTo(ip){
@@ -143,7 +143,7 @@ function broadcast_loop(){
                 //console.log(res.socket);
                 broadcastList["IP_"+res.connection.remoteAddress] = CN;
                 //console.log(arr);
-                res.setTimeout(500);
+                res.setTimeout(1500);
                 res.on('timeout',()=>{
                     broadcastList["IP_"+res.connection.remoteAddress] = 'null';
                 });

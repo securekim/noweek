@@ -28,7 +28,7 @@ try{
     var CN = "fridge";
 }
 if(typeof CN ==="string") CN = CN.replace(/(\r\n\t|\n|\r\t)/gm,"");
-    
+console.log("server CN : "+CN);
 //var pubkeys=utils.loadPubkeys();
 
 console.log("Open for mutual SSL : "+PORT_MUTUAL);
@@ -93,7 +93,8 @@ return https.createServer(options_mutual, function (req, res) {
 var options_dh = { 
     key: fs.readFileSync('certs/'+CN+'.key'), 
     cert: fs.readFileSync('certs/'+CN+'.pem'), 
-    ca: fs.readFileSync('certs/'+CN+'-CA.pem','utf8')  
+    ca: fs.readFileSync('certs/'+CN+'-CA.pem','utf8'),
+      
 }; 
 
 
@@ -101,7 +102,7 @@ console.log("Open for DH Key exchange :"+PORT_DH);
 var server = https.createServer(options_dh, function (req, res) { 
     //this is for DH.
     //We dont need a client certificate. 
-    console.log("Hello, DH");
+    //console.log("Hello, DH");
     var body = '';
     req.on('data', function (data) {
         body += data;
@@ -160,6 +161,7 @@ var server = https.createServer(options_dh, function (req, res) {
             utils.DH_clean();
             res.end(JSON.stringify({pubkey:server_pubkey,CA:options_dh.ca}));
         }catch(e){
+            console.log("Server : someone search me.")
             res.end();
         }
     }
