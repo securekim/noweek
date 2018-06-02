@@ -105,13 +105,10 @@ var ipabc;
 
 function broadcast(callback){
     ipabc = utils.getIPABC();
-    //broadcastList = {IP_123:}
-    el_request.setLocalAddressBase(ipabc);
     callback(broadcastList);
 }
 
 ipabc = utils.getIPABC();
-el_request.setLocalAddressBase(ipabc);
 broadcast_loop();
 
 setInterval(function(){
@@ -272,7 +269,7 @@ function clearBlockChain(callback){
 function initChain(CN,callback){
     utils.CERT_initCERT(CN,(CA)=>{
         ///callback(result);
-        el_request.request_initBlockchain(CA+"###"+CN,(result)=>{
+        el_request.request_initBlockchain(CA+"###"+CN+"###",(result)=>{
             callback(result);
         });
         utils.restartServer((result)=>{

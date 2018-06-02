@@ -1,11 +1,18 @@
 const request = require('request'),
     fs = require('fs');
+const os = require('os');
 
-var __LOCAL_ADDRESS_BASE__ = '192.168.0.';
-function setLocalAddressBase(ipabc){
-	__LOCAL_ADDRESS_BASE__ = ipabc;
-	__LOCAL_ADDRESS_BASE__ += '.';
+function getIPABC(){
+    try{
+        var ip = os.networkInterfaces().wlan0[0].address.split('.');
+        return ip[0]+"."+ip[1]+"."+ip[2]+".";
+    }catch(e){
+        console.log(e);
+        return "127.0.0.";
+    }
 }
+
+var __LOCAL_ADDRESS_BASE__ = getIPABC();
 
 /**
  * @name broadcast_addBlock
@@ -199,8 +206,7 @@ module.exports = {
     broadcast_addBlock,
     broadcast_getBlockchain,
     artik_led_control,
-    artik_button_read,
-	setLocalAddressBase
+    artik_button_read
 };
 
 // request_initBlockchain(PEM, callback_func);
