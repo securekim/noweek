@@ -32,7 +32,7 @@ const aliceSecret = alice.computeSecret(bobKey);
 const bobSecret = bob.computeSecret(aliceKey);
 */
 
-DH_localTest();
+//DH_localTest();
 function DH_localTest(){
     try{
     //client = crypto.createDiffieHellman(1024,'base64');
@@ -219,16 +219,18 @@ function CERT_createCERT(CA,CN,callback){
     });
 }
 
+
 function CERT_initCERT(CN,callback){
     CERT_createCA(CN+"-CA",(result)=>{
         if(result){
             CERT_createCERT(CN+"-CA",CN,(result)=>{
                 console.log("MAKE CERTIFICATE SIGNED BY CA :"+result);
                 if(result){
-                    fs.readFile("certs/"+CN+"-CA.pem",'utf8',(err,CN_CA)=>{
-                        if(err) console.log(err);
-                        callback(CN_CA);
-                    })
+                    callback("Success to Generate Certificate: "+CN);
+                    // fs.readFile("certs/"+CN+"-CA.pem",'utf8',(err,CN_CA)=>{
+                    //     if(err) console.log(err);
+                    //     callback(CN_CA);
+                    // })
                 } else {
                     callback("Fail to Generate Certificate"+CN);
                 }
@@ -249,7 +251,9 @@ if(process.argv.length >2){
     //make washerCA key, csr, selfsigned cert
     //make washer key, csr, signed by washerCA
     //console.log(process.argv[2]);
-    CERT_initCERT(process.argv[2]);
+    CERT_initCERT(process.argv[2],(result)=>{
+        console.log(result);
+    });
 }
 
 function makeBundle(CADATA,callback){
@@ -278,10 +282,6 @@ function restartServer(callback){
             callback(err);
         });
     });
-}
-
-function getCN(ip){
-
 }
 
 function getIPABC(){
