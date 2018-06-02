@@ -156,6 +156,11 @@ const blockchain_isValidkey = (publicKey) => {
     return false;
 };
 
+const blockchain_clear = () => {
+    file_name = __BLOCKCHAIN_DIR__ + '/*';
+    shell.rm('-rf', file_name);
+};
+
 const blockchain_replaceCheck = (blockchain) => {
     // check longest
     if (BLOCKCHAIN.length >= blockchain.length){
@@ -184,8 +189,7 @@ const blockchain_replace = (blockchain) => {
     if(!blockchain_replaceCheck(blockchain))
         return false;
 
-    file_name = __BLOCKCHAIN_DIR__ + '/*';
-    shell.rm('-rf', file_name);
+    blockchain_clear();
 
     BLOCKCHAIN = blockchain;
     for(var i = 0; i < BLOCKCHAIN.length; i++)
@@ -195,8 +199,7 @@ const blockchain_replace = (blockchain) => {
 };
 
 const blockchain_init = (pubkey) => {
-    file_name = __BLOCKCHAIN_DIR__ + '/*';
-    shell.rm('-rf', file_name);
+    blockchain_clear();
 
     newBlock = createGenesisBlock(pubkey);
     BLOCKCHAIN = [newBlock];
@@ -251,6 +254,7 @@ module.exports = {
     blockchain_get,
     blockchain_replace,
     blockchain_run,
+    blockchain_clear
 };
 
 
