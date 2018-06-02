@@ -57,9 +57,9 @@ app.post("/addBlock", (req, res) => {
     block = req.body.block;
 
     if(blockchain_add(block))
-        res_body = "addBlock complete...";
+        res_body = req.connection.remoteAddress + " addBlock complete...";
     else
-        res_body = "failed addBlock...";
+        res_body = req.connection.remoteAddress + " failed addBlock...";
 
     res.send(res_body);
 });
