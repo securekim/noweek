@@ -14,8 +14,8 @@ app.get("/broadcast", (req,res)=>{
     //        attacker or not, we don't care.
     try{
     client.broadcast((result)=>{
-        console.log("END !");
-        console.log(result);
+        console.log("broadcast END !");
+        //console.log(result);
         res.send(result);
     });
     }catch(e){

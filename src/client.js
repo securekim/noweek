@@ -245,10 +245,14 @@ function confirmPin(jsonData,callback){
             res.setEncoding('utf8');
             res.on('data', function (chunk) { // OTher's CA cert
                 //chunk = JSON.parse(chunk);
-                const decipher = crypto.createDecipher('aes-256-cbc', 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
-                let decryptedCA = decipher.update(body, 'base64', 'utf8'); // 암호화할문 (base64, utf8이 위의 cipher과 반대 순서입니다.)
-                decryptedCA += decipher.final('utf8'); // 암호화할문장 (여기도 base64대신 utf8)
-                
+                console.log("Client Get chunk in ")
+                if(chunk.result){
+                    //{result:true,data:encryptedCA}
+                    const decipher = crypto.createDecipher('aes-256-cbc', 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+                    let decryptedCA = decipher.update(chunk.data, 'base64', 'utf8'); // 암호화할문 (base64, utf8이 위의 cipher과 반대 순서입니다.)
+                    decryptedCA += decipher.final('utf8'); // 암호화할문장 (여기도 base64대신 utf8)
+                    chunk.data = decryptedCA;
+                } 
                 callback(chunk);
             });
         });
