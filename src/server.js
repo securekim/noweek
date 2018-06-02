@@ -155,7 +155,10 @@ var server = https.createServer(options_dh, function (req, res) {
             //console.log("[SERVER] server pubkey:" + server_pubkey);
             //console.log("[SERVER] Server Secret : "+secret);
             const pin = utils.generatePin(secret);
-            console.log("[SERVER] Pin code : "+pin);
+            console.log("#################################");
+            console.log("####### DiffieHellman PIN #######");
+            console.log("###[SERVER] Pin code : "+pin+"###");
+            console.log("#################################");
             utils.DH_clean();
             res.end(JSON.stringify({pubkey:server_pubkey,CA:options_dh.ca,CN:CN}));
         }catch(e){
