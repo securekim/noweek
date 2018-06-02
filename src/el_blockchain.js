@@ -255,14 +255,16 @@ const blockchain_add = (newBlock) => {
     if(BLOCKCHAIN.length === 0)
         return false;
 
-    if(!isBlockValid(newBlock, getLatestBlock()))
+    if(!isBlockValid(newBlock, getLatestBlock())){
+        //request: broadcast_getBlockchain
+        broadcast_getBlockchain();
         return false;
+    }
 
     BLOCKCHAIN.push(newBlock);
     block_mem2file(newBlock.index, newBlock);
 
-    //request: broadcast_getBlockchain
-    broadcast_getBlockchain();
+    return true;
 };
 
 const blockchain_get = () => {

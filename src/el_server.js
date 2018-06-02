@@ -18,7 +18,8 @@ const Artik = require('./el_artik');
 const {
     artik_all_init,
     led_control,
-    button_read
+    button_read,
+    see_write_file
 } = Artik;
 
 const PORT = process.env.HTTP_PORT || 3000;
@@ -56,9 +57,9 @@ app.post("/addBlock", (req, res) => {
     block = req.body.block;
 
     if(blockchain_add(block))
-        res_body = "addBlock complete...";
+        res_body = req.connection.remoteAddress + " addBlock complete...";
     else
-        res_body = "failed addBlock...";
+        res_body = req.connection.remoteAddress + " failed addBlock...";
 
     res.send(res_body);
 });
@@ -104,6 +105,15 @@ app.post("/artik_button_read", (req, res) => {
     button_read(BUTTON_SW403,(result)=>{
         res.send(result);
     });
+});
+
+app.post("/artik_see_write_file", (req, res) => {
+    res_body = "artik_see_write_file complete...";
+
+    file_full_path = req.body.file_full_path;
+    result = see_write_file(file_full_path);
+
+    res.send(result);
 });
 
 const server = app.listen(PORT, () =>
