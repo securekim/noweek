@@ -220,20 +220,22 @@ function generatePin(ip,callback){
 
 function confirmPin(jsonData,callback){
     try{
-        parsedData = JSON.parse(jsonData);
-        myCN = utils.getCN(CN);
-        encryptedCN = utils.DH_encrypt(myCN);
-        //pin, secret, ip
+        console.log(jsonData.CN);
+        console.log(typeof jsonData.CN);
+        const myCA = utils.getCA(jsonData.CN);
+        
+        encryptedCA = utils.DH_encrypt(myCA);
+        //pin, secret, ip, CN
         //el_request.broadcast_addBlock(chunk.CA);
         var options_dh = { 
-            hostname: parsedData.ip, 
+            hostname: jsonData.ip, 
             port: PORT_DH, 
             path: '/confirmPin', 
             method: 'POST',
             rejectUnauthorized: false,
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
-                'Content-Length': encryptedCN.length
+                'Content-Length': encryptedCA.length
             } 
         }
         try{
@@ -243,7 +245,7 @@ function confirmPin(jsonData,callback){
                 chunk = JSON.parse(chunk);
                 if(chunk.result){
                     console.log("CONFIRMED !!! ");
-                    el_request.broadcast_addBlock(utils.DH_encrypt(parsedData.secret,chunk.CA));
+                    //el_request.broadcast_addBlock(utils.DH_encrypt(parsedData.secret,chunk.CA));
                     callback(chunk);
                 } else {
                     console.log("NOT CONFIRMED !!! ");
@@ -251,7 +253,7 @@ function confirmPin(jsonData,callback){
                 }
             });
         });
-        post_req.write(encryptedCN); 
+        post_req.write(encryptedCA); 
         post_req.end();
         }catch(e){
             console.log(e);

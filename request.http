@@ -60,3 +60,15 @@ Content-Type: application/json
 {
     "CN":"mobile"
 }
+
+
+###
+POST http://localhost:3082/confirmPin
+Content-Type: application/json
+
+{
+    "pin":"test",
+    "secret":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "ip":"test",
+    "CN":"mobile"
+}

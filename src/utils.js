@@ -55,8 +55,8 @@ function DH_localTest(){
     console.log(L_client_secret);
     console.log(L_server_secret === L_client_secret);
     console.log(L_server_secret.length)
-
-    encrypted = DH_encrypt(L_client_secret,"PLAIN TEXT");
+    var data = "PLAINTEXT";
+    encrypted = DH_encrypt(L_client_secret,data);
     plain = DH_decrypt(L_server_secret,encrypted);
     
     console.log(encrypted);
@@ -69,13 +69,13 @@ function DH_localTest(){
     
 function DH_encrypt(key,data){
     const cipher = crypto.createCipher('aes-256-cbc', key);
-    let result = cipher.update(data, 'utf8', 'base64');
+    var result = cipher.update(data, 'utf8', 'base64');
     result += cipher.final('base64'); 
 }
 
 function DH_decrypt(key,data){
     const decipher = crypto.createDecipher('aes-256-cbc', key);
-    let result2 = decipher.update(data, 'base64', 'utf8'); 
+    var result2 = decipher.update(data, 'base64', 'utf8'); 
     result2 += decipher.final('utf8'); 
 }
 
@@ -303,8 +303,8 @@ function getIPABC(){
     }
 }
 
-function getCN(CN){
+function getCA(CN){
     return fs.readFileSync('certs/'+CN+'-CA.pem','utf8');
 }
 
-module.exports = {getCN, DH_encrypt, DH_decrypt, getIPABC,startServer,restartServer,CERT_initCERT,makeBundle,DH_clean,clientPrime,DH_getMyPubKey,generatePin,DH_generate,sha256,loadPubkeys,getModHash,verifyKey};
+module.exports = {getCA, DH_encrypt, DH_decrypt, getIPABC,startServer,restartServer,CERT_initCERT,makeBundle,DH_clean,clientPrime,DH_getMyPubKey,generatePin,DH_generate,sha256,loadPubkeys,getModHash,verifyKey};

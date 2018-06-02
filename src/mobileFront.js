@@ -39,7 +39,7 @@ app.get("/clearBlockChain",(req,res)=>{
 app.get("/getBlockChain",(req,res)=>{
     //to do : get blockchain list.
     client.getBlockChain((json)=>{
-        res.send(JSON.stringify(json));
+        res.send(json);
     });
 });
 
@@ -69,7 +69,7 @@ app.get("/pincode/:ip", (req,res)=>{
 app.post("/confirmPin",(req,res)=>{
     const {body} = req;
     console.log("Confirm pincode with :"+body.ip);
-    //dh => {pin, secret, ip}
+    //dh => {pin, secret, ip, CN}
     client.confirmPin(body,(result)=>{
         res.send(JSON.stringify(result));
     });
