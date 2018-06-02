@@ -124,7 +124,7 @@ broadcast_loop();
 
 setInterval(function(){
     broadcast_loop();
-},100*255);
+},25500);
 
 function broadcast_loop(){
     var options_broad = {
@@ -157,7 +157,7 @@ function broadcast_loop(){
         })
     
         post_req.on('socket',function(socket){
-            socket.setTimeout(100);
+            socket.setTimeout(1500);
             socket.on('timeout',()=>{
                 try{
                 var ip = socket._pendingData.split(":")[1].split(" ")[1];
