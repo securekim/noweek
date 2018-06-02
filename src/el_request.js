@@ -186,7 +186,7 @@ function artik_button_read(callback){
         url: 'http://localhost:3000/artik_button_read',
         method: 'POST'
     };
-
+    console.log("artik_button_read !!!!!!!!!!");
     request(options, function (error, response, body) {
         console.log(body);
         if (!error && response.statusCode == 200)
