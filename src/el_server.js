@@ -101,9 +101,9 @@ app.post("/artik_button_read", (req, res) => {
     res_body = "artik_button_read complete...";
     console.log("artik_button_read !!!!");
     BUTTON_SW403 = '30';
-    result = button_read(BUTTON_SW403);
-
-    res.send(result);
+    button_read(BUTTON_SW403,(result)=>{
+        res.send(result);
+    });
 });
 
 const server = app.listen(PORT, () =>

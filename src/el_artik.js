@@ -32,16 +32,17 @@ function button_init(pin_no){
     });
 }
 
-function button_read(pin_no){
+function button_read(pin_no,callback){
     command = "cat /sys/class/gpio/gpio" + pin_no + "/value";
     console.log("Execute command: " + command);
     child = exec(command, function(error, stdout, stderr) {
         if(error !== null){
             console.log("[ERROR] " + error);
-            return -1;
+            callback(-1);
+            
         }
         else
-            return stdout;
+            callback(stdout);
     });
 }
 
