@@ -137,10 +137,25 @@ function request_getBlockchain(callback){
     });
 }
 
+function request_clearBlockchain(callback){
+    var options = {
+        url: 'http://localhost:3000/clearBlockchain',
+        method: 'POST'
+    };
+
+    request(options, function (error, response, body) {
+        if (!error && response.statusCode == 200)
+            callback({result:true, data: null});
+        else
+            callback({result:false, data: null});
+    });
+}
+
 module.exports = {
     request_initBlockchain,
     broadcast_addBlock,
     broadcast_getBlockchain,
     request_getBlockchain,
+    request_clearBlockchain,
     setLocalAddressBase
 };

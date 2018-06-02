@@ -10,7 +10,8 @@ const {
     blockchain_add,
     blockchain_get,
     blockchain_replace,
-    blockchain_run
+    blockchain_run,
+    blockchain_clear
 } = Blockchain;
 
 const PORT = process.env.HTTP_PORT || 3000;
@@ -67,6 +68,14 @@ app.post("/replaceBlockchain", (req, res) => {
     result = blockchain_replace(blockchain);
 
     res.send(result);
+});
+
+app.post("/clearBlockchain", (req, res) => {
+    res_body = "clearBlockchain complete...";
+
+    blockchain_clear();
+
+    res.send(res_body);
 });
 
 const server = app.listen(PORT, () =>
