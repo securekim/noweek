@@ -157,6 +157,7 @@ const blockchain_isValidkey = (publicKey) => {
 };
 
 const blockchain_clear = () => {
+    BLOCKCHAIN = [];
     file_name = __BLOCKCHAIN_DIR__ + '/*';
     shell.rm('-rf', file_name);
 };

@@ -5,6 +5,7 @@ var https = require('https');
 var utils = require('./utils');
 var async = require('async');
 var el_request = require('./el_request'); 
+var el_server = require('./el_server'); 
 const querystring = require('querystring');  
 //const {sha256} = utils;
 var CN = "washer";
@@ -237,17 +238,22 @@ function confirmPin(jsonData,callback){
     }
 }
 
+function clearBlockChain(callback){
+    el_request.request_clearBlockchain((result)=>{
+      callback(result);  
+    });
+}
 
 function initChain(CN,callback){
-    utils.CERT_initCERT(CN,(CN_CA)=>{
+    utils.CERT_initCERT(CN,(CA)=>{
         ///callback(result);
-        el_request.request_initBlockchain(CN_CA,(result)=>{
+        el_request.request_initBlockchain(CA,(result)=>{
             callback(result);
         });
-        utils.restartServer((resut)=>{
+        utils.restartServer((result)=>{
             console.log(result)
         });
     });
 }
 
-module.exports = {getBlockChain,broadcast,generatePin,sendWithMutual,initChain};
+module.exports = {clearBlockChain,getBlockChain,broadcast,generatePin,sendWithMutual,initChain};

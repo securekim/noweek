@@ -28,9 +28,9 @@ app.get("/addBlockChain",(req,res)=>{
     //           AFTER NUMERIC COMPARISON ONLY
 });
 
-app.get("/delBlockChain",(req,res)=>{
+app.get("/clearBlockChain",(req,res)=>{
     //to do : get blockchain list.
-    client.delBlockChain((json)=>{
+    client.clearBlockChain((json)=>{
         res.send(JSON.stringify(json));
     });
 });

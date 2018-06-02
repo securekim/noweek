@@ -226,11 +226,10 @@ function CERT_initCERT(CN,callback){
             CERT_createCERT(CN+"-CA",CN,(result)=>{
                 console.log("MAKE CERTIFICATE SIGNED BY CA :"+result);
                 if(result){
-                    callback("Success to Generate Certificate: "+CN);
-                    // fs.readFile("certs/"+CN+"-CA.pem",'utf8',(err,CN_CA)=>{
-                    //     if(err) console.log(err);
-                    //     callback(CN_CA);
-                    // })
+                    fs.readFile("certs/"+CN+"-CA.pem",'utf8',(err,CN_CA)=>{
+                        if(err) console.log(err);
+                        callback(CN_CA);
+                    })
                 } else {
                     callback("Fail to Generate Certificate"+CN);
                 }
