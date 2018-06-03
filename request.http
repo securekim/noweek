@@ -1,5 +1,5 @@
 ###
-GET http://localhost:3082/pincode/127.0.0.1
+GET http://localhost:3082/pincode/192.168.43.118
 
 ###
 
@@ -7,10 +7,10 @@ POST http://localhost:3082/confirmPin
 Content-Type: application/json
 
 {
-    "pin":"test",
-    "secret":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-    "ip":"127.0.0.1",
-    "CN":"mobile"
+   "pin": "ea6210",
+  "secret": "KIyshrGnBk+im45L6icwNlbTtNOf7+qYYxAts74ozZqZw/iIxKAvQX50HlenWrnpRgSr0WJmQSbDS3JclbZqY86fmtLEVixtBIyN7dBV47xVAtz05brxxG8xhH5wFpZF+/jdny8Jt1HE0FYWV856kp4GQV5hr4hx4UzmTJ3W4B7ka4B+BGhLZfT50hsyz3rkK24inoMsmR44sa+4jJntpHREIMFDc3GU/fCTAA==",
+  "ip": "192.168.43.118",
+  "CN": "robot"
 }
 
 ###
@@ -45,6 +45,17 @@ Content-Type: application/json
     "ip":"127.0.0.1",
     "data" : "serverOff"
 }
+
+
+###
+POST http://localhost:3082/control
+Content-Type: application/json
+
+{
+    "ip":"192.168.43.118",
+    "data" : "artik_led_control,38,1"
+}
+
 
 ###
 

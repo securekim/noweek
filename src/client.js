@@ -243,7 +243,7 @@ function generatePin(ip,callback){
 function confirmPin(jsonData,callback){
     try{
         console.log("ConfirmPin");
-        const myCA = utils.getCA(jsonData.CN);
+        const myCA = utils.getCA(CN);
         
         // const cipher = crypto.createCipher('aes-256-cbc', jsonData.secret);
         // let encryptedCA = cipher.update(myCA, 'utf8', 'base64'); // 'HbMtmFdroLU0arLpMflQ'
