@@ -50,7 +50,7 @@ function see_write_file(file_full_path, callback){
     console.log("Execute command: " + command);
     child = exec(command, function(error, stdout, stderr) {
         if(error !== null){
-            console.log("[ERROR] " + error);
+            //console.log("[ERROR] " + error);
             callback("see_write_file() Error!!");
         }
         else

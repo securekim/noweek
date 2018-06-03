@@ -111,9 +111,9 @@ app.post("/artik_see_write_file", (req, res) => {
     res_body = "artik_see_write_file complete...";
 
     file_full_path = req.body.file_full_path;
-    result = see_write_file(file_full_path);
-
-    res.send(result);
+    see_write_file(file_full_path, function(result){
+        res.send(result);
+    });
 });
 
 const server = app.listen(PORT, () =>

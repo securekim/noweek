@@ -200,10 +200,11 @@ function artik_button_read(callback){
     });
 }
 
-function artik_see_write_file(callback){
+function artik_see_write_file(path,callback){
     var options = {
         url: 'http://localhost:3000/artik_see_write_file',
-        method: 'POST'
+        method: 'POST',
+        json: {"file_full_path" : path}
     };
 
     request(options, function (error, response, body) {
