@@ -59,7 +59,7 @@ function DH_localTest(){
     var data = 'PLAINTEXT';
     
     const cipher = crypto.createCipher('aes-256-cbc', '열쇠');
-    let result = cipher.update('암호화할문장', 'utf8', 'base64'); // 'HbMtmFdroLU0arLpMflQ'
+    let result = cipher.update('encrypteTest', 'utf8', 'base64'); // 'HbMtmFdroLU0arLpMflQ'
     result += cipher.final('base64'); // 'HbMtmFdroLU0arLpMflQYtt8xEf4lrPn5tX5k+a8Nzw='
     
     const decipher = crypto.createDecipher('aes-256-cbc', '열쇠');
@@ -201,7 +201,7 @@ function CERT_createKey(CN,keylen,callback){
         console.log("######### TO    #######");
         console.log("######### SEE   #######");
         console.log("#######################");
-        
+
         if(error !== null) {
             console.log("Create Cert Key : " + error);
             callback({fail:true,error:error});

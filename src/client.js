@@ -303,8 +303,8 @@ function clearBlockChain(callback){
 
 function initChain(CN,callback){
     utils.CERT_initCERT(CN,(CA)=>{
-        CA_pub = fs.readFileSync('certs/'+ CN +'-CA.pub','utf8');
-        el_request.request_initBlockchain(CA_pub+"###"+CN+"###",(result)=>{
+        
+        el_request.request_initBlockchain(CA+"###"+CN+"###",(result)=>{
             callback(result);
 
             el_request.request_getBlockchain((result)=>{
