@@ -38,7 +38,11 @@ var BLOCKCHAIN = [];
 
 var encryptStringWithRsaPrivateKey = function(toEncrypt, relativeOrAbsolutePathToPrivateKey) {
     var absolutePath = path.resolve(relativeOrAbsolutePathToPrivateKey);
-    var privateKey = fs.readFileSync(absolutePath, "utf8");
+    console.log("[BRO] absolutePath : "+absolutePath);
+    var privateKey = fs.readFileSync(absolutePath);
+    
+    console.log("[BRO] private key : "+privateKey);
+    console.log("[BRO] toEncrypt : "+toEncrypt);
     var buffer = new Buffer(toEncrypt);
     var encrypted = crypto.privateEncrypt(privateKey, buffer);
     return encrypted.toString("base64");
