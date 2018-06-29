@@ -1,0 +1,21 @@
+{
+  "name": "src",
+  "version": "1.0.0",
+  "description": "",
+  "main": "mobileFront.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "async": "^2.6.1",
+    "body-parser": "^1.18.3",
+    "crypto": "^1.0.1",
+    "crypto-js": "^3.1.9-1",
+    "express": "^4.16.3",
+    "interfaces": "0.0.3",
+    "morgan": "^1.9.0"
+  }
+}

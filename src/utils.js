@@ -354,8 +354,8 @@ function getIPABC(){
         var ip = os.networkInterfaces().wlan0[0].address.split('.');
         return ip[0]+"."+ip[1]+"."+ip[2];
     }catch(e){
-        console.log(e);
-        return "127.0.0";
+        console.log("Can't get network. default : 192.168.0");
+        return "192.168.0";
     }
 }
 
