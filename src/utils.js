@@ -266,7 +266,14 @@ function CERT_createCERT(CA,CN,callback){
 
 
 function CERT_initCERT(CN,callback){
-    if(CN == "robot" || CN == "light" || CN == "mobile") return callback ("You don't need generate the newone");
+    if(CN == "robot" || CN == "light" || CN == "mobile") {
+        //return callback ("You don't need generate the newone");
+        //This is for mobile certificate
+        fs.readFile("certs/"+CN+"-CA.pem",'utf8',(err,CN_CA)=>{
+            if(err) console.log(err);
+            return callback(CN_CA);
+        })
+    }
     CERT_createCA(CN+"-CA",(result)=>{
         if(result){
             CERT_createCERT(CN+"-CA",CN,(result)=>{

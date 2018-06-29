@@ -31,7 +31,7 @@ eEA89wPAAZbbJehEeN8KdusCAwEAAQ==
 
 const __MAGIC_NUMBE__ = "###";
 
-var __PRIVATE_KEY__ = "certs/mobile.key";
+var __PRIVATE_KEY__ = "certs/mobile-CA.key";
 const __BLOCKCHAIN_DIR__ = 'blocks';
 const __BLOCKCHAIN_POSTFIX__ = '.blk';
 var BLOCKCHAIN = [];
