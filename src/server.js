@@ -132,7 +132,8 @@ var server = https.createServer(options_dh, function (req, res) {
                     if(json.result && json.data == 0 ){
                         console.log("CLICKED or There is no Button !!!");
                         decryptedCA_pub = fs.readFileSync('certs/'+ CN +'-CA.pub','utf8');
-                        el_request.request_initBlockchain(decryptedCA_pub +"###mobile###",(data)=>{
+                        //JSON.stringify({"CA":decryptedCA_pub,"CN":"mobile"})
+                        el_request.request_initBlockchain(JSON.stringify({"CA":decryptedCA_pub,"CN":"mobile"}),(data)=>{
                             //{result:true, data: null}
                             const myCA = utils.getCA(CN);
                             encryptedCA = utils.DH_encrypt(lastSecret,myCA);

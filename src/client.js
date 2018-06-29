@@ -32,19 +32,6 @@ utils.startServer((result)=>{
 function getBlockChain(callback){
     el_request.request_getBlockchain((json)=>{
         try{
-        /*
-        for(var i in json.data){
-            console.log(i);
-            var pem = JSON.parse(json.data)[i].pubkey
-            console.log(pem);
-            
-            var cert = pki.certificateFromPem(pem);
-            if(typeof cert ==="string") cert = cert.replace(/(\r\n\t|\n|\r\t)/gm,"");
-            var asn1Cert = pki.certificateToAsn1(cert);
-            var publicKey = pki.publicKeyFromPem(cert);
-            console.log("Certificate !!!");
-            console.log(publicKey);
-        }*/
         callback(json);
     } catch(e){
         console.log(e);
@@ -275,12 +262,10 @@ function confirmPin(jsonData,callback){
                 console.log("Client Get chunk in ")
                 chunk = JSON.parse(chunk);
                 if(chunk.result){
-                    console.log("gpogpgp!!!!! ")
                     var decryptedCA = utils.DH_decrypt(latestSecret,chunk.data);
                     chunk.data = decryptedCA;
-                    el_request.broadcast_addBlock(decryptedCA+"###"+chunk.CN+"###");
+                    el_request.broadcast_addBlock(JSON.stringify({"CA":decryptedCA,"CN":chunk.CN}));
                 } 
-                console.log("NOINON!!!!! ")
                     
                 callback(chunk);
             });
@@ -303,8 +288,8 @@ function clearBlockChain(callback){
 
 function initChain(CN,callback){
     utils.CERT_initCERT(CN,(CA)=>{
-        
-        el_request.request_initBlockchain(CA+"###"+CN+"###",(result)=>{
+        //JSON.stringify({"CA":CA,"CN":CN})
+        el_request.request_initBlockchain(JSON.stringify({"CA":CA,"CN":CN}),(result)=>{
             callback(result);
 
             el_request.request_getBlockchain((result)=>{
