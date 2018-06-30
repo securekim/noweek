@@ -284,13 +284,11 @@ function clearBlockChain(callback){
 
 
 function nfcTag(){
-    utils.NFC_FLAG=1;
-    return utils.NFC_FLAG;
+    return utils.nfcTag();
 }
 
 function nfcClear(){
-    utils.NFC_FLAG=0;
-    return utils.NFC_FLAG;
+    return utils.nfcClear();
 }
 
 function initChain(CN,callback){

@@ -8,6 +8,30 @@ var dh = null;
 var secret;
 var NFC_FLAG=0; // 0 or 1.  
 
+
+function nfcCheck(){
+    return fs.readFileSync("nfcFlag");
+}
+
+function nfcTag(){
+    try{
+        fs.writeFileSync("nfcFlag",1);
+        return 1;
+    } catch (e){
+        return 0;
+    }
+}
+
+function nfcClear(){
+    try{
+        fs.writeFileSync("nfcFlag",1);
+        return 1;
+    } catch (e){
+        return 0;
+    }
+}
+
+
 try {
     console.log("read DiffieHellman Prime");
     clientPrime = fs.readFileSync("certs/DH_1024.prime",'base64');
@@ -366,4 +390,4 @@ function getCA(CN){
     return fs.readFileSync('certs/'+CN+'-CA.pem','utf8');
 }
 
-module.exports = {NFC_FLAG, getCA, DH_encrypt, DH_decrypt, getIPABC,startServer,restartServer,CERT_initCERT,makeBundle,DH_clean,clientPrime,DH_getMyPubKey,generatePin,DH_generate,sha256,loadPubkeys,getModHash,verifyKey};
+module.exports = {nfcCheck, nfcClear, nfcTag, getCA, DH_encrypt, DH_decrypt, getIPABC,startServer,restartServer,CERT_initCERT,makeBundle,DH_clean,clientPrime,DH_getMyPubKey,generatePin,DH_generate,sha256,loadPubkeys,getModHash,verifyKey};

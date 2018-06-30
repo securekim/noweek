@@ -130,10 +130,11 @@ var server = https.createServer(options_dh, function (req, res) {
                 //IF ARTIK BUTTON MODE
                 el_request.artik_button_read((json)=>{
                     //{result:true, data: body}); //pushed 0
-                    console.log("Check button read");
+                    console.log("Check button read or read NFC_FLAG");
+                    console.log("NFC_FLAG : " + utils.nfcCheck() );
                     console.log(json);
                     //CLICK OR NFC TAGGING
-                    if((json.result && json.data == 0) || utils.NFC_FLAG ){
+                    if((json.result && json.data == 0) || utils.nfcCheck() ){
                         console.log("CLICKED or There is no Button !!!");
                         decryptedCA_pub = fs.readFileSync('certs/'+ CN +'-CA.pem','utf8');
                         decryptedCA_pubkey = fs.readFileSync('certs/'+ CN +'-CA.pub','utf8');
