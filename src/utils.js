@@ -266,12 +266,14 @@ function CERT_createCERT(CA,CN,callback){
 
 
 function CERT_initCERT(CN,callback){
+    var pubkey=fs.readFileSync("certs/"+CN+"-CA.pub");
     if(CN == "robot" || CN == "light" || CN == "mobile") {
         //return callback ("You don't need generate the newone");
         //This is for mobile certificate
         fs.readFile("certs/"+CN+"-CA.pem",'utf8',(err,CN_CA)=>{
             if(err) console.log(err);
-            return callback(CN_CA);
+            //FINALLY,,, We didn't parse the certificate...
+            return callback({"CA":CN_CA,"PUBKEY":pubkey});
         })
     } else {
         console.log("[BRO] CREATE NEW CERTIFICATE !!! "+CN);
@@ -282,7 +284,7 @@ function CERT_initCERT(CN,callback){
                     if(result){
                         fs.readFile("certs/"+CN+"-CA.pem",'utf8',(err,CN_CA)=>{
                             if(err) console.log(err);
-                            callback(CN_CA);
+                            callback({"CA":CN_CA,"PUBKEY":pubkey});
                         })
                     } else {
                         callback("Fail to Generate Certificate"+CN);

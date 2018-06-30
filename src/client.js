@@ -204,8 +204,6 @@ function generatePin(ip,callback){
                 var CN = chunk.CN;
                 const secret = utils.DH_generate(utils.clientPrime,chunk.pubkey);
                 latestSecret = secret;
-                //console.log('[CLIENT] Server pubkey: ' + chunk);
-                //console.log("[CLIENT] client secret : "+ secret);
                 const pin = utils.generatePin(secret);
                 
                 console.log("PIN : "+pin);
@@ -262,7 +260,7 @@ function confirmPin(jsonData,callback){
                 if(chunk.result){
                     var decryptedCA = utils.DH_decrypt(latestSecret,chunk.data);
                     chunk.data = decryptedCA;
-                    el_request.broadcast_addBlock(JSON.stringify({"CA":decryptedCA,"CN":chunk.CN}));
+                    el_request.broadcast_addBlock(JSON.stringify({"CA":decryptedCA,"CN":chunk.CN,"PUBKEY":chunk.PUBKEY}));
                 } 
                     
                 callback(chunk);
@@ -285,9 +283,10 @@ function clearBlockChain(callback){
 }
 
 function initChain(CN,callback){
-    utils.CERT_initCERT(CN,(CA)=>{
+    utils.CERT_initCERT(CN,(DATA)=>{
         //JSON.stringify({"CA":CA,"CN":CN})
-        el_request.request_initBlockchain(JSON.stringify({"CA":CA,"CN":CN}),(result)=>{
+        el_request.request_initBlockchain(JSON.stringify({"CA":DATA.CA,"CN":CN,"PUBKEY":DATA.PUBKEY}),(result)=>{
+            
             callback(result);
 
             el_request.request_getBlockchain((result)=>{

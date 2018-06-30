@@ -39,8 +39,10 @@ var decryptStringWithRsaPublicKey = function(toDecrypt, publicKey) {
     console.log("[BRO] decryptStringWithRsaPublicKey PUBKEY IS !!! : "+publicKey);
     console.log("[BRO] decryptStringWithRsaPublicKey CA IS !!! : "+JSON.parse(publicKey).CA);
     console.log("[BRO] decryptStringWithRsaPublicKey CN IS !!! : "+JSON.parse(publicKey).CN);
+    console.log("[BRO] decryptStringWithRsaPublicKey PUBKEY IS !!! : "+JSON.parse(publicKey).PUBKEY);
+    console.log("[BRO] decryptStringWithRsaPublicKey toDecrypt IS !!! : "+toDecrypt);
     var buffer = new Buffer(toDecrypt, "base64");
-    var decrypted = crypto.publicDecrypt(JSON.parse(publicKey).CA, buffer);
+    var decrypted = crypto.publicDecrypt(JSON.parse(publicKey).PUBKEY, buffer);
     return decrypted.toString("utf8");
 };
 
