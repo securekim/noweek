@@ -144,7 +144,7 @@ function request_getBlockchain(callback){
     };
 
     request(options, function (error, response, body) {
-        console.log("[BRO][el_request][getBlockChain] chain length: "+body.length);
+        console.log("[BRO][el_request][getBlockChain] chain length: "+JSON.parse(body).length);
         if (!error && response.statusCode == 200)
             callback({result:true, data: body});
         else

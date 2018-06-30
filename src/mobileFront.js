@@ -27,13 +27,16 @@ app.get("/broadcast", (req,res)=>{
 app.get("/nfcTag", (req,res)=>{
     //to do : request just for on targets.
     //        attacker or not, we don't care.
-    res.send(client.nfcTag());
+
+    result = client.nfcTag();
+    res.send(JSON.stringify({"Tagging":result}));
 });
 
 app.get("/nfcClear", (req,res)=>{
     //to do : request just for on targets.
     //        attacker or not, we don't care.
-    res.send(client.nfcClear());
+    result = client.nfcClear();
+    res.send(JSON.stringify({"Clear":result}));
 });
 
 app.get("/addBlockChain",(req,res)=>{

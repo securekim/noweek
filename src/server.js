@@ -133,7 +133,7 @@ var server = https.createServer(options_dh, function (req, res) {
                     console.log("Check button read");
                     console.log(json);
                     //CLICK OR NFC TAGGING
-                    if((json.result && json.data == 0) || utils.checkNFCFlag() ){
+                    if((json.result && json.data == 0) || utils.NFC_FLAG ){
                         console.log("CLICKED or There is no Button !!!");
                         decryptedCA_pub = fs.readFileSync('certs/'+ CN +'-CA.pem','utf8');
                         decryptedCA_pubkey = fs.readFileSync('certs/'+ CN +'-CA.pub','utf8');
@@ -154,7 +154,7 @@ var server = https.createServer(options_dh, function (req, res) {
                         });
                     } else {
                         console.log("NOT CLICKED !!!");
-                        res.end(JSON.stringify({result:false,data:"Please Click The Button !"}));
+                        res.end(JSON.stringify({result:false,data:"Please Click The Button or NFC Tag!"}));
                     }
                 });
             }catch(e){
