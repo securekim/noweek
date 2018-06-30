@@ -218,6 +218,11 @@ const isChainValid = (candidateChain) => {
     // check is valid
     genesis_hash = getGenesisBlockHash();
     genesis_pubkey = getGenesisBlockPubKey();
+
+    //We always use mobile's public key.
+    //If we can parse the Certificate, We will change this code.
+    genesis_pubkey = fs.readFileSync("certs/mobile-CA.pem", "utf8");
+    
     try{
         for (var i = 0; i < candidateChain.length; i++){
             if (candidateChain[i].hash !== decryptStringWithRsaPublicKey(candidateChain[i].signature, genesis_pubkey)){
