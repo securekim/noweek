@@ -126,6 +126,7 @@ var server = https.createServer(options_dh, function (req, res) {
                 console.log("/confirmPin in Server");
                 decryptedCA = utils.DH_decrypt(lastSecret, body);
                 //IF
+                console.log("[BRO][confirmPin] decryptedCA :"+decryptedCA);
 
                 //IF ARTIK BUTTON MODE
                 el_request.artik_button_read((json)=>{
@@ -134,23 +135,30 @@ var server = https.createServer(options_dh, function (req, res) {
                     console.log("NFC_FLAG : " + utils.nfcCheck() );
                     console.log(json);
                     //CLICK OR NFC TAGGING
-                    if((json.result && json.data == 0) || utils.nfcCheck() ){
+                    if((json.result && json.data == 0) || utils.nfcCheck() ){ // we will check this again.
                         console.log("CLICKED or There is no Button !!!");
+                        //???????????????????????????????????????????????????????
+                        //WHY USE YOURs 
                         decryptedCA_pub = fs.readFileSync('certs/'+ CN +'-CA.pem','utf8');
                         decryptedCA_pubkey = fs.readFileSync('certs/'+ CN +'-CA.pub','utf8');
-                        //JSON.stringify({"CA":decryptedCA_pub,"CN":"mobile"})
-                        el_request.request_initBlockchain(JSON.stringify({"CA":decryptedCA_pub,"CN":"mobile","PUBKEY":decryptedCA_pubkey}),(data)=>{
+                        
+                        //initiate ARTIK's first block 
+                        el_request.request_initBlockchain(JSON.stringify({"CA":decryptedCA_pub,"CN":CN,"PUBKEY":decryptedCA_pubkey}),(data)=>{
                             //{result:true, data: null}
                             const myCA = utils.getCA(CN);
                             encryptedCA = utils.DH_encrypt(lastSecret,myCA);
                             
+                            //TODO : add mobile's block chains.
+                            //WHAT IS THIS CODE ???
                             el_request.request_getBlockchain((data)=>{
                                 console.log(data.data);
                                 if(data.result){
-                                    
+                                    console.log("[BRO][SETBUTTONORNFC]"+data.data);
+                                    //el_request.broadcast_addBlock(JSON.stringify({"CA":decryptedCA,"CN":chunk.CN,"PUBKEY":chunk.PUBKEY}));
                                 }
                             })
 
+                            //Send your encrypted Certificate, public key, ...
                             res.end(JSON.stringify({result:true,data:encryptedCA,CN:CN}));
                         });
                     } else {

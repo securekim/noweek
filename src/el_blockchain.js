@@ -238,6 +238,7 @@ const isChainValid = (candidateChain) => {
                 return false;
         }
     }catch(e){
+        console.log(e);
         return false;
     }
     return true;
