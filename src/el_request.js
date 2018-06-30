@@ -140,7 +140,7 @@ arg1: callback({result:true, data: blockchain})
 function request_getBlockchain(callback){
     var options = {
         url: 'http://localhost:3000/getBlockchain',
-        method: 'POST'
+        method: 'GET'
     };
 
     request(options, function (error, response, body) {
