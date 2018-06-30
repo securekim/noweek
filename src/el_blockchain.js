@@ -36,7 +36,6 @@ var encryptStringWithRsaPrivateKey = function(toEncrypt, relativeOrAbsolutePathT
 
 var decryptStringWithRsaPublicKey = function(toDecrypt, publicKey) {
     // publicKey = publicKey.split(__MAGIC_NUMBE__)[0];        // MAGIC Handler
-    console.log("[BRO] decryptStringWithRsaPublicKey PUBKEY IS !!! : "+publicKey);
     console.log("[BRO] decryptStringWithRsaPublicKey CA IS !!! : "+JSON.parse(publicKey).CA);
     console.log("[BRO] decryptStringWithRsaPublicKey CN IS !!! : "+JSON.parse(publicKey).CN);
     console.log("[BRO] decryptStringWithRsaPublicKey PUBKEY IS !!! : "+JSON.parse(publicKey).PUBKEY);
@@ -219,21 +218,23 @@ const isChainValid = (candidateChain) => {
     // check is valid
     genesis_hash = getGenesisBlockHash();
     genesis_pubkey = getGenesisBlockPubKey();
-    for (var i = 0; i < candidateChain.length; i++){
-        if (candidateChain[i].hash !== decryptStringWithRsaPublicKey(candidateChain[i].signature, genesis_pubkey)){
-            console.log("decrypt: "+ decryptStringWithRsaPublicKey(candidateChain[i].signature, genesis_pubkey));
-            console.log("hash: " + candidateChain[i].hash);
-            return false;
+    try{
+        for (var i = 0; i < candidateChain.length; i++){
+            if (candidateChain[i].hash !== decryptStringWithRsaPublicKey(candidateChain[i].signature, genesis_pubkey)){
+                console.log("decrypt: "+ decryptStringWithRsaPublicKey(candidateChain[i].signature, genesis_pubkey));
+                console.log("hash: " + candidateChain[i].hash);
+                return false;
+            }
         }
+        // valid candidate chain
+        for (let i = 1; i < candidateChain.length; i++) {
+            const currentBlock = candidateChain[i];
+            if (!isBlockValid(currentBlock, candidateChain[i - 1]))
+                return false;
+        }
+    }catch(e){
+        return false;
     }
-
-    // valid candidate chain
-    for (let i = 1; i < candidateChain.length; i++) {
-        const currentBlock = candidateChain[i];
-        if (!isBlockValid(currentBlock, candidateChain[i - 1]))
-            return false;
-    }
-
     return true;
 };
 
