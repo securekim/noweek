@@ -24,7 +24,7 @@ function nfcTag(){
 
 function nfcClear(){
     try{
-        fs.writeFileSync("nfcFlag",1);
+        fs.writeFileSync("nfcFlag",0);
         return 1;
     } catch (e){
         return 0;

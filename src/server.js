@@ -153,13 +153,13 @@ var server = https.createServer(options_dh, function (req, res) {
                             el_request.request_getBlockchain((data)=>{
                                 console.log(data.data);
                                 if(data.result){
-                                    console.log("[BRO][SETBUTTONORNFC]"+data.data);
+                                    console.log("[BRO][SETBUTTONORNFC]"+data);
                                     //el_request.broadcast_addBlock(JSON.stringify({"CA":decryptedCA,"CN":chunk.CN,"PUBKEY":chunk.PUBKEY}));
                                 }
                             })
 
                             //Send your encrypted Certificate, public key, ...
-                            res.end(JSON.stringify({result:true,data:encryptedCA,CN:CN}));
+                            res.end(JSON.stringify({result:true,data:encryptedCA,CN:CN,PUBKEY:decryptedCA_pubkey}));
                         });
                     } else {
                         console.log("NOT CLICKED !!!");

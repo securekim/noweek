@@ -293,7 +293,6 @@ function nfcClear(){
 
 function initChain(CN,callback){
     utils.CERT_initCERT(CN,(DATA)=>{
-        //JSON.stringify({"CA":CA,"CN":CN})
         el_request.request_initBlockchain(JSON.stringify({"CA":DATA.CA,"CN":CN,"PUBKEY":DATA.PUBKEY}),(result)=>{
             
             callback(result);
