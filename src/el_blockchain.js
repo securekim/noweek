@@ -39,8 +39,11 @@ var BLOCKCHAIN = [];
 var encryptStringWithRsaPrivateKey = function(toEncrypt, relativeOrAbsolutePathToPrivateKey) {
     var absolutePath = path.resolve(relativeOrAbsolutePathToPrivateKey);
     console.log("[BRO] absolutePath : "+absolutePath);
+    try{
     var privateKey = fs.readFileSync(absolutePath);
-    
+    }catch(e){
+        console.log(e);
+    }
     console.log("[BRO] private key : "+privateKey);
     console.log("[BRO] toEncrypt : "+toEncrypt);
     var buffer = new Buffer(toEncrypt);

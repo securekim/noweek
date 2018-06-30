@@ -273,24 +273,26 @@ function CERT_initCERT(CN,callback){
             if(err) console.log(err);
             return callback(CN_CA);
         })
+    } else {
+        console.log("[BRO] CREATE NEW CERTIFICATE !!! "+CN);
+        CERT_createCA(CN+"-CA",(result)=>{
+            if(result){
+                CERT_createCERT(CN+"-CA",CN,(result)=>{
+                    console.log("MAKE CERTIFICATE SIGNED BY CA :"+result);
+                    if(result){
+                        fs.readFile("certs/"+CN+"-CA.pem",'utf8',(err,CN_CA)=>{
+                            if(err) console.log(err);
+                            callback(CN_CA);
+                        })
+                    } else {
+                        callback("Fail to Generate Certificate"+CN);
+                    }
+                });
+            } else {
+                callback("Fail to Generate CA Certificate");
+            }
+        });
     }
-    CERT_createCA(CN+"-CA",(result)=>{
-        if(result){
-            CERT_createCERT(CN+"-CA",CN,(result)=>{
-                console.log("MAKE CERTIFICATE SIGNED BY CA :"+result);
-                if(result){
-                    fs.readFile("certs/"+CN+"-CA.pem",'utf8',(err,CN_CA)=>{
-                        if(err) console.log(err);
-                        callback(CN_CA);
-                    })
-                } else {
-                    callback("Fail to Generate Certificate"+CN);
-                }
-            });
-        } else {
-            callback("Fail to Generate CA Certificate");
-        }
-    });
 }
 
 function callbacktest(callback){
