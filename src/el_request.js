@@ -139,20 +139,20 @@ arg1: callback({result:true, data: blockchain})
 */
 function request_getBlockchain(callback){
     var options = {
-        //url: 'http://localhost:3000/getBlockchain',
-        //method: 'POST'
-        url: 'http://localhost:3082/getBlockChain',
-        method: 'GET'
+        url: 'http://localhost:3000/getBlockchain',
+        method: 'POST'
+        //url: 'http://localhost:3082/getBlockChain',
+        //method: 'GET'
     };
 
     request(options, function (error, response, body) {
         try{
-            console.log("[BRO][el_request][getBlockChain] chain length: "+JSON.parse(body.data).length);
+            console.log("[BRO][el_request][getBlockChain] chain length: "+JSON.parse(body).length);
         } catch(e) {
             //console.log("[BRO][el_request][getBlockChain] Can not get chain. ");
         }
         if (!error && response.statusCode == 200)
-            callback({result:true, data: JSON.parse(body.data)});
+            callback({result:true, data: JSON.parse(body)});
         else
             callback({result:false, data: null});
     });

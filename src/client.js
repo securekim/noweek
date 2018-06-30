@@ -301,7 +301,7 @@ function initChain(CN,callback){
             el_request.request_getBlockchain((result)=>{
                 console.log(result);
                 try{
-                var data = JSON.parse(result.data);
+                var data = result.data;
                 var CERTDT=""; 
                 for(var i in data){
                     CERTDT+=data[i].pubkey;
