@@ -116,8 +116,9 @@ const isBlockValid = (candidateBlock, latestBlock) => {
         console.log("The hash of this block is invalid");
         return false;
     } else if (!isTimeStampValid(candidateBlock, latestBlock)) {
-        console.log("The timestamp of this block is dodgy");
-        return false;
+        //console.log("The timestamp of this block is dodgy");
+        //console.log("But we didn't want to check it.")
+        //return false;
     }
     return true;
 };
