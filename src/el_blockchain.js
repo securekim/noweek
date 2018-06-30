@@ -36,12 +36,12 @@ var encryptStringWithRsaPrivateKey = function(toEncrypt, relativeOrAbsolutePathT
 
 var decryptStringWithRsaPublicKey = function(toDecrypt, publicKey) {
     // publicKey = publicKey.split(__MAGIC_NUMBE__)[0];        // MAGIC Handler
-    console.log("[BRO] decryptStringWithRsaPublicKey CA IS !!! : "+JSON.parse(publicKey).CA);
-    console.log("[BRO] decryptStringWithRsaPublicKey CN IS !!! : "+JSON.parse(publicKey).CN);
-    console.log("[BRO] decryptStringWithRsaPublicKey PUBKEY IS !!! : "+JSON.parse(publicKey).PUBKEY);
-    console.log("[BRO] decryptStringWithRsaPublicKey toDecrypt IS !!! : "+toDecrypt);
+    //console.log("[BRO] decryptStringWithRsaPublicKey CA IS !!! : "+JSON.parse(publicKey).CA);
+    //console.log("[BRO] decryptStringWithRsaPublicKey CN IS !!! : "+JSON.parse(publicKey).CN);
+    //console.log("[BRO] decryptStringWithRsaPublicKey PUBKEY IS !!! : "+JSON.parse(publicKey).PUBKEY);
+    //console.log("[BRO] decryptStringWithRsaPublicKey toDecrypt IS !!! : "+toDecrypt);
     var buffer = new Buffer(toDecrypt, "base64");
-    var decrypted = crypto.publicDecrypt(JSON.parse(publicKey).PUBKEY, buffer);
+    var decrypted = crypto.publicDecrypt(publicKey, buffer);
     return decrypted.toString("utf8");
 };
 
