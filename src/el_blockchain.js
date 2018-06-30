@@ -12,23 +12,6 @@ const {
     broadcast_getBlockchain,
 } = Request;
 
-const PUBKEY = `
------BEGIN PUBLIC KEY-----
-MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAwDWG0OJRcAtdxtW6GcUE
-eJEW7I+DuJiU9zE71PirFauIK7K+e//is7kfK+abGj8tQDqvPNr75owx0ZtEgvug
-0nh4OiNOaWAjw1yajayWrc1e5mzXjHAm3WEA7MDO5oaGYmNZ/PmDVNIqowKAt+xM
-rfkV5Ydm+L3+KbBTl0/dIQDeWwrJCWVPwjjmJVOn4+4TzdBq3zxy2gyyTwdzlK+Y
-ndFy9/pkqPxC6p5sJErJUpQPnTunEz3R9RCI0P90eNoOMBcj7izg+TBpgLR44t4B
-FO84SETfO1zcjs62pRQFnFFmGYVwsxxoJ+dCey7P/CkWEfKi2okg98t+8F/7GWt2
-yz3iBjWB0X4Idl7IXS3Tqt6wq7OpVWalHXuLpekPBmd4m3mmMnRldXI8t+/HuWy/
-8XdxdxlS4HfjF2wxz/kR7nfEWqgcyn5H26dG703R8NyrMOPKFbnd1WCK9DYHoKis
-PtviiU1pEfHy4ouQJh4odYRMaGv1cMffrFkzLugqKjAmqv9p76l/aw5OPOQSXC3p
-kSY6LNTJ4apZ0PYbquc0i1fiKxL3aMA/fKI1ZbVvKsAXPcC8UjkxsnG/DXed1wCU
-/wfGFznvZCNxCylyiBveXoUO/xw+vxuMW/jI5N9YC7nVAazVh3amx7aSzdw0A+d+
-eEA89wPAAZbbJehEeN8KdusCAwEAAQ==
------END PUBLIC KEY-----
-`;
-
 const __MAGIC_NUMBE__ = "###";
 
 var __PRIVATE_KEY__ = "certs/mobile-CA.key";
@@ -255,9 +238,11 @@ const isChainValid = (candidateChain) => {
 const blockchain_replace = (blockchain) => {
     blockchain = JSON.parse(blockchain);
 
-    if(!isChainValid(blockchain))
+    if(!isChainValid(blockchain)){
+        console.log("[BRO] Chain is not valid !!!");
         return false;
-
+    }
+        
     blockchain_clear();
 
     BLOCKCHAIN = blockchain;
