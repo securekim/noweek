@@ -97,7 +97,6 @@ function request_initBlockchain(publicKey, callback){
         method: 'POST',
         json: {'publicKey': publicKey}
     };
-
     request(options, function (error, response, body) {
         if (!error && response.statusCode == 200)
             callback({result:true, data: null});

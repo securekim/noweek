@@ -38,7 +38,6 @@ app.route("/blocks")
 app.post("/initBlockchain", (req, res) => {
     res_body = "initBlockchain complete...";
     publicKey = req.body.publicKey;
-
     blockchain_init(publicKey);
 
     res.send(res_body);

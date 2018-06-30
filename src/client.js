@@ -181,8 +181,6 @@ function broadcast_loop(){
 function generatePin(ip,callback){
     try{
         var data = {prime:utils.clientPrime,pubkey:utils.DH_getMyPubKey(utils.clientPrime)};
-        //console.log("[CLIENT] client prime : "+ data.prime);
-        //console.log("[CLIENT] client pubkey : "+ data.pubkey);
         //callback(PostCode(data,ip));
         
         var postData = querystring.stringify(data);
