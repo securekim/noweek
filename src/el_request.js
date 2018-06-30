@@ -57,7 +57,7 @@ function broadcast_getBlockchain(){
 
     for (var i = 1; i < 255; i++){
         ip_addr = __LOCAL_ADDRESS_BASE__ + i;
-
+        console.log("broadcast_getBlockchain : "+ip_addr);
         options.url = BASE_URL.replace('[IP_ADDRESS]', ip_addr);
         request(options, function (error, response, blockchain) {
             if (!error && response.statusCode == 200) {
@@ -72,12 +72,12 @@ function broadcast_getBlockchain(){
                     if (!error && response.statusCode == 200) {
                         // Print out the response body
                         if(result){
-                            console.log("replace blockchain...");
-                            console.log(JSON.parse(blockchain));
+                            console.log("[el_reqeust] replace blockchain !");
+                            //console.log(JSON.parse(blockchain));
                         }
                         else{
-                            console.log("failed replace blockchain...");
-                            console.log(JSON.parse(blockchain));
+                            console.log("[el_reqeust] failed replace blockchain...");
+                            //console.log(JSON.parse(blockchain));
                         }
                     }
                 });

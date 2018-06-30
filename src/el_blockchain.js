@@ -211,8 +211,8 @@ const blockchain_clear = () => {
 const isChainValid = (candidateChain) => {
     // check longest
     if (BLOCKCHAIN.length >= candidateChain.length){
-        console.log("ORG Blockchain length: " + BLOCKCHAIN.length);
-        console.log("NEW Blockchain length: " + candidateChain.length);
+        console.log("[isChainValid] ORG Blockchain length: " + BLOCKCHAIN.length);
+        console.log("[isChainValid] NEW Blockchain length: " + candidateChain.length);
         return false;
     }
 
@@ -241,7 +241,7 @@ const blockchain_replace = (blockchain) => {
     blockchain = JSON.parse(blockchain);
 
     if(!isChainValid(blockchain)){
-        console.log("[BRO] Chain is not valid !!!");
+        console.log("[BRO][isChainValid] Chain is not valid !!!");
         return false;
     }
         
