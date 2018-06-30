@@ -260,6 +260,8 @@ function confirmPin(jsonData,callback){
                 if(chunk.result){
                     var decryptedCA = utils.DH_decrypt(latestSecret,chunk.data);
                     chunk.data = decryptedCA;
+                    //TODO : delete stringify
+                    console.log("DECRYPTED CA : "+decryptedCA);
                     el_request.broadcast_addBlock(JSON.stringify({"CA":decryptedCA,"CN":chunk.CN,"PUBKEY":chunk.PUBKEY}));
                 } 
                     

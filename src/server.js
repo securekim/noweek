@@ -135,10 +135,9 @@ var server = https.createServer(options_dh, function (req, res) {
                     console.log("NFC_FLAG : " + utils.nfcCheck() );
                     console.log(json);
                     //CLICK OR NFC TAGGING
-                    if((json.result && json.data == 0) || utils.nfcCheck() ){ // we will check this again.
+                    if((json.result && json.data == 0) || utils.nfcCheck()==1 ){ // we will check this again.
                         console.log("CLICKED or There is no Button !!!");
                         //???????????????????????????????????????????????????????
-                        //WHY USE YOURs 
                         decryptedCA_pub = fs.readFileSync('certs/'+ CN +'-CA.pem','utf8');
                         decryptedCA_pubkey = fs.readFileSync('certs/'+ CN +'-CA.pub','utf8');
                         
@@ -148,8 +147,6 @@ var server = https.createServer(options_dh, function (req, res) {
                             const myCA = utils.getCA(CN);
                             encryptedCA = utils.DH_encrypt(lastSecret,myCA);
                             
-                            //TODO : add mobile's block chains.
-                            //WHAT IS THIS CODE ???
                             el_request.request_getBlockchain((data)=>{
                                 console.log(data.data);
                                 if(data.result){
