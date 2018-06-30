@@ -6,6 +6,32 @@ const request = require('request');
 var clientPrime = "" // for speed. 2048... it's long time 
 var dh = null;
 var secret;
+var NFC_FLAG_OLD=0; // 0 or 1.  
+var NFC_FLAG_NEW=0; // 0 or 1.  
+
+
+function checkNFCFlag(){
+    if(NFC_FLAG_OLD==NFC_FLAG_NEW){
+        console.log("[checkNFCFlag] NFC NOT TAGGED !!");
+        return false;
+    }else{
+        console.log("[checkNFCFlag] NFC TAGGED !!");
+        NFC_FLAG_OLD=NFC_FLAG_NEW;
+        return true;
+    }
+}
+
+function changeNFCFlag(){
+    console.log("[changeNFCFlag] NFC TAGGED & Change !!");
+    NFC_FLAG_NEW = (NFC_FLAG_NEW==0?1:0);
+    return NFC_FLAG_NEW;
+}
+
+function clearNFCFlag(){
+    NFC_FLAG_NEW = 0;
+    NFC_FLAG_OLD = 0;
+    return 0;
+}
 
 try {
     console.log("read DiffieHellman Prime");
@@ -365,4 +391,4 @@ function getCA(CN){
     return fs.readFileSync('certs/'+CN+'-CA.pem','utf8');
 }
 
-module.exports = {getCA, DH_encrypt, DH_decrypt, getIPABC,startServer,restartServer,CERT_initCERT,makeBundle,DH_clean,clientPrime,DH_getMyPubKey,generatePin,DH_generate,sha256,loadPubkeys,getModHash,verifyKey};
+module.exports = {checkNFCFlag, changeNFCFlag, getCA, DH_encrypt, DH_decrypt, getIPABC,startServer,restartServer,CERT_initCERT,makeBundle,DH_clean,clientPrime,DH_getMyPubKey,generatePin,DH_generate,sha256,loadPubkeys,getModHash,verifyKey};

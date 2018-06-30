@@ -21,6 +21,7 @@ const PORT_MUTUAL = 4433
 const PORT_DH = 4444;
 var lastSecret = "";
 
+
 try{
     var CN = fs.readFileSync("myProfile.txt",'utf8');
 }catch(e){
@@ -124,12 +125,15 @@ var server = https.createServer(options_dh, function (req, res) {
                 try{
                 console.log("/confirmPin in Server");
                 decryptedCA = utils.DH_decrypt(lastSecret, body);
+                //IF
 
+                //IF ARTIK BUTTON MODE
                 el_request.artik_button_read((json)=>{
                     //{result:true, data: body}); //pushed 0
                     console.log("Check button read");
                     console.log(json);
-                    if(json.result && json.data == 0 ){
+                    //CLICK OR NFC TAGGING
+                    if((json.result && json.data == 0) || utils.checkNFCFlag() ){
                         console.log("CLICKED or There is no Button !!!");
                         decryptedCA_pub = fs.readFileSync('certs/'+ CN +'-CA.pem','utf8');
                         decryptedCA_pubkey = fs.readFileSync('certs/'+ CN +'-CA.pub','utf8');
@@ -187,6 +191,7 @@ var server = https.createServer(options_dh, function (req, res) {
     }); 
     res.writeHead(200); 
 }).listen(PORT_DH);
+
 
 process.on("uncaughtException",(err)=>{
     console.log("Uncaught Exception !! ");
