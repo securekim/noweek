@@ -111,7 +111,7 @@ broadcast_loop();
 
 setInterval(function(){
     broadcast_loop();
-},10000);
+},15000);
 
 function broadcast_loop(){
     var options_broad = {

@@ -1167,15 +1167,17 @@ function iNeedYou(number){
     xmlHttp.send(null);
 }
 
-httpGetAsync("/getBlockChain",function(data){
-  console.log("/getBlockChain");
-  dt=JSON.parse(data);
-  for (var i in dt.data){
-    dt.data[i].pubkey=JSON.parse(dt.data[i].pubkey) 
-  }
-  BLOCKS=dt.data;
-  drawPeople();
-})
+setInterval(function(){
+  httpGetAsync("/getBlockChain",function(data){
+    console.log("/getBlockChain");
+    dt=JSON.parse(data);
+    for (var i in dt.data){
+      dt.data[i].pubkey=JSON.parse(dt.data[i].pubkey) 
+    }
+    BLOCKS=dt.data;
+    drawPeople();
+  })
+},3000);
 
 function timeBeautiful(timestamp){
   date = new Date(timestamp),
@@ -1197,7 +1199,7 @@ function drawPeople(){
     console.log("NO BLOCKS");
   } else {
     for(var i in BLOCKS){
-      addJumbotronToMain("BLOCK NUMBER :"+i,"DEVICE : '"+BLOCKS[i].pubkey.CN+"'","",i,"PERSON");
+      addJumbotronToMain("BLOCK NUMBER :"+i,"DEVICE : '"+BLOCKS[i].pubkey.CN+"'",CNtoIMAGE(BLOCKS[i].pubkey.CN),i,"PERSON");
       //  addJumbotronToMain("휴지", "Security 전문가입니다.", "http://cfile5.uf.tistory.com/image/99E8E33359DB49394B6E66","http://blog.securekim.com","PEOPLE");
     }
   }
@@ -1206,13 +1208,14 @@ function drawPeople(){
 function CNtoIMAGE(CN){
   //todo
   //if CN == mobile -> imageURL
-  return CN;
+  
+  return "images/"+CN+".png";
 }
 
 
 function addJumbotronToMain(name, context, imageURL, number, type){
-  var main = document.getElementById("main");
   
+  var main = document.getElementById("main");
   var jumbotron = document.createElement('div');
     jumbotron.className = "jumbotron";
     jumbotron.style = "background-color: white; margin-bottom: 1rem;";
@@ -1258,6 +1261,8 @@ function addJumbotronToMain(name, context, imageURL, number, type){
       //drawAllItems("HARD_CODED_SCOUTER",number);
       jumbotron.setAttribute("onclick","updatePeopleModal("+number+")");
     } 
+    document.getElementById('load_'+number).innerHTML = '<div class="lds-grid"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>';
+  
 }
 
 function updatePeopleModal(number){

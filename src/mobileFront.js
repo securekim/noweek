@@ -121,7 +121,7 @@ app.get('/', function(req, res) {
 app.get('/*', function(req, res) {
     res.sendFile(__dirname + '/viewer' + req.url, function(err){
         console.log(err);
-        res.send(403, 'Error : '+__dirname + '/viewer' + req.url);
+        if(err) res.send(403, 'Error : '+__dirname + '/viewer' + req.url);
     });
 });
 
