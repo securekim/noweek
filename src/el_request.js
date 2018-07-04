@@ -54,7 +54,7 @@ function broadcast_getBlockchain(){
         method: 'POST'
     };
     BASE_URL = options.url;
-
+23                                                                                                                                      
     for (var i = 1; i < 255; i++){
         //if(i!=225 && i != 54 && i != 118) return;
         ip_addr = __LOCAL_ADDRESS_BASE__ + i;
