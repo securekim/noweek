@@ -28,7 +28,7 @@ app.get("/nfcCheck", (req,res)=>{
     //        attacker or not, we don't care.
 
     var result = client.nfcCheck();
-    res.send(JSON.stringify(String(result)));
+    res.send(String(result));
 });
 
 
@@ -37,14 +37,14 @@ app.get("/nfcTag", (req,res)=>{
     //        attacker or not, we don't care.
 
     result = client.nfcTag();
-    res.send(JSON.stringify(String(result)));
+    res.send(String(result));
 });
 
 app.get("/nfcClear", (req,res)=>{
     //to do : request just for on targets.
     //        attacker or not, we don't care.
     result = client.nfcClear();
-    res.send(JSON.stringify(String(result)));
+    res.send(String(result));
 });
 
 app.get("/addBlockChain",(req,res)=>{
