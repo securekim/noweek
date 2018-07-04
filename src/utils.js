@@ -257,7 +257,10 @@ function CERT_sign(CSR,CA,days,callback){
             callback({fail:true,error:error});
         } else {
             callback({fail:false,error:"none"});
-        }
+        } 
+        exec('openssl x509 -pubkey -noout -in certs/'+CSR+'.pem  > certs/'+CSR+'.pub', function(error, stdout, stderr) {
+            console.log(error);
+        }); 
     });  
 }
 
@@ -281,12 +284,33 @@ function CERT_createCERT(CA,CN,callback){
       if(result.fail) return callback(false);
       CERT_csr(CN,(result)=>{
         if(result.fail) return callback(false);
-        CERT_sign(CN,CA,14,(result)=>{
+        CERT_sign(CN,CA,36500,(result)=>{
             if(result.fail) return callback(false);
             else return callback(true);
         });
       });
     });
+}
+
+function CERT_initCERT_local(CN,callback){
+    console.log("[BRO] CREATE NEW CERTIFICATE IN LOCAL!!! "+CN);
+        CERT_createCA(CN+"-CA",(result)=>{
+            if(result){
+                CERT_createCERT(CN+"-CA",CN,(result)=>{
+                    console.log("MAKE CERTIFICATE SIGNED BY CA :"+result);
+                    if(result){
+                        fs.readFile("certs/"+CN+"-CA.pem",'utf8',(err,CN_CA)=>{
+                            if(err) console.log(err);
+                            callback({"CA":CN_CA});
+                        })
+                    } else {
+                        callback("Fail to Generate Certificate"+CN);
+                    }
+                });
+            } else {
+                callback("Fail to Generate CA Certificate");
+            }
+        });
 }
 
 
@@ -301,6 +325,8 @@ function CERT_initCERT(CN,callback){
             return callback({"CA":CN_CA,"PUBKEY":pubkey});
         })
     } else {
+        //openssl x509 -pubkey -noout -in cert.pem  > pubkey.pem
+        //
         console.log("[BRO] CREATE NEW CERTIFICATE !!! "+CN);
         CERT_createCA(CN+"-CA",(result)=>{
             if(result){
@@ -333,7 +359,9 @@ if(process.argv.length >2){
     //make washer key, csr, signed by washerCA
     //console.log(process.argv[2]);
     DH_localTest();
-    CERT_initCERT(process.argv[2],(result)=>{
+    CERT_initCERT_local(process.argv[2],(result)=>{
+        //parameter 
+        //for create cert
         //console.log(result);
     });
 }
@@ -342,19 +370,6 @@ function makeBundle(chain,callback){
     //todo : make bundle with cadatas
     //      if bundle is updated, restart the server.
 
-    // blocks = JSON.parse(chain.data);
-    // var CADATA=[];
-    // for(var i in blocks){
-    //     CADATA.push(blocks[i].pubkey.split("#")[0].replace("\\n",""));
-    // }
-    // for(var i in CADATA){
-    //     console.log(CADATA[i]);
-    //     //fs.appendFileSync("certs/bundle.pem",CADATA[i]);
-    // }
-    // fs.writeFile("certs/bundle.pem",CADATA,(err)=>{
-    //     if(err) console.log(err);
-    //     callback(err);
-    // });
 }
 
 function startServer(callback){

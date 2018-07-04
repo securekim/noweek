@@ -1167,6 +1167,16 @@ function iNeedYou(number){
     xmlHttp.send(null);
 }
 
+httpGetAsync("/getBlockChain",function(data){
+  console.log("/getBlockChain");
+  dt=JSON.parse(data);
+  for (var i in dt.data){
+    dt.data[i].pubkey=JSON.parse(dt.data[i].pubkey) 
+  }
+  BLOCKS=dt.data;
+  drawPeople();
+})
+
 setInterval(function(){
   httpGetAsync("/getBlockChain",function(data){
     console.log("/getBlockChain");
@@ -1177,7 +1187,7 @@ setInterval(function(){
     BLOCKS=dt.data;
     drawPeople();
   })
-},3000);
+},4000);
 
 function timeBeautiful(timestamp){
   date = new Date(timestamp),
@@ -1232,7 +1242,7 @@ function addJumbotronToMain(name, context, imageURL, number, type){
     jumbotron.appendChild(table);
 
   var td1 = document.createElement('td');
-    td1.style = "padding:20px";
+    td1.style = "padding:20px; width:40%";
     table.appendChild(td1);
 
   var image = '<img src="'+imageURL+'" alt="'+name+'" height="80" width="80" '
