@@ -102,6 +102,25 @@ app.post("/control", (req,res)=>{
     })
 })
 
+/*
+******************************************
+*/
+
+app.get('/', function(req, res) {
+    res.sendFile('viewer/main.html', {root: __dirname })
+});
+
+app.get('/*', function(req, res) {
+    res.sendFile(__dirname + '/viewer' + req.url, function(err){
+        console.log(err);
+        res.send(403, 'Error : '+__dirname + '/viewer' + req.url);
+    });
+});
+
+/*
+******************************************
+*/
+
 
 process.on("uncaughtException",(e)=>{
     //console.log("uncaughtException");

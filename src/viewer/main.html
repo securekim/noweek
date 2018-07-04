@@ -1,0 +1,447 @@
+<!doctype html>
+<html lang="en">
+<!-- http://htmlpreview.github.io/?https://github.com/securekim/pickme/blob/master/main/main.html -->
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../favicon.ico">
+
+    <title>Pick Me !</title>
+
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/alertify.min.css">
+    <link rel="stylesheet" href="css/alertify.rtl.min.css">
+    <link rel="stylesheet" href="css/main.css">
+  </head>
+
+  <body style="color:rgb(68, 68, 68)">
+    <!-- <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">-->
+    <!-- <nav class="navbar navbar-expand-md navbar-dark fixed-top" style="background-color:white; border-bottom: solid;border-bottom-color: gray; border-bottom-width: 0.2px;">
+
+
+
+      <div class="btn-group">
+        <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="margin-right:10px">
+            
+            <span class="glyphicon glyphicon-tag"></span> Tags
+          
+        </button>
+
+        <div class="dropdown-menu">
+          
+          <a class="dropdown-item" href="#" data-value="option1" tabIndex="-1">
+              <input type="checkbox"/> Marketing
+          </a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="#" data-value="option1" tabIndex="-1">
+              <input type="checkbox"/> Server Engineer
+          </a>
+          <a class="dropdown-item" href="#" data-value="option1" tabIndex="-1">
+              <input type="checkbox"/> SW Engineer
+          </a>
+          <div class="dropdown-divider"></div>
+        </div>
+        
+      </div>
+
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <button href="#" class="btn btn-outline-info my-2 my-sm-0" onclick="updateModalI()" data-toggle="modal" data-target="#modalI"><span class="glyphicon glyphicon-user"></span> Profile</button>           
+        </li>
+      </ul>
+      <button class="navbar-toggler" onclick="updateMyPMC()" style="background-color:gray" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon" style="background-color:gray"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarCollapse" style="background-color:white; ">
+      
+        
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+          <a class="nav-link disabled" href="https://pickmed.github.io" id="myPMC" style="color:gray">My PMC <span class="glyphicon glyphicon-fire"></span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link disabled" href="https://pickmed.github.io" style="color:gray">My Wallet <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item disabled">
+          <a class="nav-link" href="https://pickmed.github.io" style="color:gray">Change Password <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link disabled" href="https://pickmed.github.io" style="color:gray">Interview <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item active">
+          
+            
+          <a class="nav-link" href="#" data-toggle="modal" data-target="#myModal" style="color:rgb(56, 56, 56)">My profile <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link disabled" href="https://pickmed.github.io" style="color:gray">Black List <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link disabled" href="https://pickmed.github.io" style="color:gray">Exchange <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link disabled" href="#" style="color:gray">Terms of Use</a>
+        </li>
+      </ul>
+
+        <form class="form-inline mt-2 mt-md-0">
+          <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+          <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><span class="glyphicon glyphicon-search"></span> Search</button>
+
+        </form>
+      </div>
+    </nav>
+
+         -->
+    
+    
+    <main role="main" id="main" class="container" style="padding-top:100px; padding-bottom:100px;">
+      <!-- Add content Dynamically -->
+    </main>
+
+    <!--  !!!!!!!!!!!!!!!!!!! MODAL !!!!!!!!!!!!!!!!!!!!  -->
+
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel"><span class="glyphicon glyphicon-user"> Profile</span></h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+    
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div role="tabpanel">
+                        <!-- Nav tabs -->
+
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            <li class="nav-item">
+                              <a class="nav-link active" id="public-tab" data-toggle="tab" href="#publicTab" role="tab" aria-controls="publicTab" aria-selected="true"><span class="glyphicon glyphicon-eye-open"></span> Public</a>
+                            </li>
+                            <li class="nav-item">
+                              <a class="nav-link" id="private-tab" data-toggle="tab" href="#privateTab" role="tab" aria-controls="privateTab" aria-selected="false"><span class="glyphicon glyphicon-eye-close"></span> Private</a>
+                            </li>
+                          </ul>
+
+
+                        <div class="tab-content">
+                            <!-- Public Info -->
+                            <div role="tabpanel" class="tab-pane active" id="publicTab"> 
+                              <p></p>
+                              <H4> Necessary Information</H4>  
+                              
+                                <div class="form-group">
+                                    <label>Image URL :</label>
+                                    <input type="text" class="form-control" id="URL" placeholder="URL of Your image">
+                                </div>
+                                <div class="form-group">
+                                    Birth of Year :
+                                    <input type="text" class="form-control" id="BIRTH" placeholder="Ex) 1990">
+                                </div>
+                                <div class="form-group">
+                                    Last Job :
+                                    <input type="text" class="form-control" id="JOB" placeholder="Company, Depart, Position">
+                                </div>
+                                <div class="form-group">
+                                    Last Education :
+                                    <input type="text" class="form-control" id="EDUCATION" placeholder="School, Subject, Degree">
+                                </div>
+  
+                                <hr> <!-- ----------------------- -->
+                                <H4> Optional Information</H4>  
+                                <div class="form-group">
+                                    Past Career :
+                                    <input type="text" class="form-control" id="CAREER" placeholder="'Start~Final, Company, Depart, Position', ' ... '">
+                                </div>
+                                <div class="form-group">
+                                    Achievements :
+                                    <input type="text" class="form-control" id="ARCHIEVE" placeholder="'2016 SW Contest 1st', ' ... ' "/>
+                                </div>
+                                <div class="form-group">
+                                    Vision :
+                                    <input type="text" class="form-control" id="VISION" placeholder="'I can do everything', ' ... ' "/>
+                                </div>
+                                <hr> <!-- ----------------------- -->
+                            <label >Gas :
+                              <input type="text" style="width:60px" id="GAS" placeholder="20">
+                              <button  type="button" class="btn btn-primary save">Save Public Info</button>
+                            </label>
+                            </div>
+
+
+                            <!-- Private Info -->
+                            <div role="tabpanel" class="tab-pane" id="privateTab">
+                                <p></p>
+                                <H4> Private Information</H4>  
+                                <div class="form-group">
+                                    Hint for Contents (Free for all) :
+                                    <input type="text" class="form-control" id="HINT" placeholder="'Income', 'Verification of Employment', 'Patent', ... "/>
+                                </div>
+
+                                
+                                <hr> <!-- ----------------------- -->
+                                
+                                Add Contents :
+                                <div id="tables">
+                                    <table id="addTable" class="contents_table" width="350px" style="margin: 0px auto;" bgcolor="#FFFFFF" border="0">
+                                        <tr>
+                                          <td>
+                                            <input type="text" name="addText" style="width:300px; height:30px;" placeholder="Content Name">
+                                          </td>
+                                          <td rowspan="2">
+                                              <button class="btn btn-outline-info my-2 my-sm-0" type=button value="추가" onClick="insertPrivateContent()" style="cursor:hand; height:50px;">+</button>
+                                          </td>
+                                        </tr>
+                                        <tr style="padding-bottom:10px;">
+                                          <td>
+                                            <input type="text" name="addText" style="width:300px; height:30px;" placeholder="Content URL">
+                                            </td>
+                                        </tr>
+                                      </table>
+                                  </div>
+                                    <hr> <!-- ----------------------- -->
+
+                                    Upload zip :
+                                    <div class="file-loading btn-default btn-file">
+                                        <input id="input-44" class="btn-default btn-file" name="input44[]" type="file" multiple>
+                                    </div>
+
+                                    <hr> <!-- ----------------------- -->
+                                <label>Gas :
+                                  <input type="text" style="width:60px"  id="GAS" placeholder="20">
+                                  <button type="button" class="btn btn-danger save">Save Private Info</button>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+      <!--  !!!!!!!!!!!!!!!!!!!MODAL!!!!!!!!!!!!!!!!!!!!  -->
+    
+
+
+
+<!-- 
+
+      <div class="card" style="width: 18rem;">
+        <img class="card-img-top" src="..." alt="Card image cap">
+        <div class="card-body">
+          <h5 class="card-title">Card title</h5>
+          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+          <a href="#" class="btn btn-primary">Go somewhere</a>
+        </div>
+      </div> -->
+    <nav class="navbar navbar-expand-md navbar-dark fixed-bottom" style="background: white; border-top: solid;border-top-color: gray; border-top-width: 0.2px;">
+      <div class="btn-group btn-group-justified" style="margin: 0px auto;">
+        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="drawPeople()"><span class="glyphicon glyphicon-globe"></span> People</button>
+        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="dummyCompany()"><span class="glyphicon glyphicon-briefcase"></span> Company</button>
+        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="dummyPickme()"><span class="glyphicon glyphicon-check"></span> Pick Me!</button>
+        <button type="button" class="btn btn-sm btn-outline-secondary" id="hunted" onclick="drawScout()"><span class="glyphicon glyphicon-screenshot"></span> Hunted</button>
+    </nav>
+      
+          <!-- <ul class="nav nav-tabs" id="profileTab" role="tablist">
+              <li class="nav-item">
+                <a class="nav-link active" id="profile-tab" data-toggle="tab" href="#profileTab" role="tab" aria-controls="profileTab" aria-selected="true"> Profile</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="interview-tab" data-toggle="tab" href="#interviewTab" role="tab" aria-controls="interviewTab" aria-selected="false"> Private</a>
+              </li>
+            </ul> -->
+
+        <div class="container">
+          <div class="modal fade" id="profileModal" tabindex="-1" role="dialog" aria-labelledby="modalPeopleName" aria-hidden="true">
+              <div class="modal-dialog">
+                  <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="modalPeopleName">김병연</h4>
+                          </div>
+                        <div class="modal-body">
+                            <div role="tabpanel">
+                              <ul class="nav nav-tabs" role="tablist">
+                                  <li class="nav-item">
+                                    <a class="nav-link active" id="profile-tab" data-toggle="tab" href="#profileTab" role="tab" aria-controls="profileTab" aria-selected="true">Profile</a>
+                                  </li>
+                                  <li class="nav-item" id="interview-item">
+                                    <a class="nav-link" id="interview-tab" data-toggle="tab" href="#interviewTab" role="tab" aria-controls="interviewTab" aria-selected="false">Interview</a>
+                                  </li>
+                                </ul>
+                              <div class="tab-content">
+                                  <div role="tabpanel" class="tab-pane active" id="profileTab" style="padding-top:50px"> 
+                                    <center>
+                                    <img id = "modalPeopleImg" src="https://dispatch.cdnserbe.net/wp-content/uploads/2017/09/20170910111543_viewimagem-4.jpg" name="aboutme" width="140" height="140" border="0" class="rounded-circle"></a>
+                                    <div id="modalPeopleInfo">
+                                      <h3 class="media-heading">Trust Power 
+                                        <span id="peoplePMC" class="glyphicon glyphicon-flash"></span>500
+                                      </h3>
+                                        <span class="badge badge-pill badge-warning">Marketing</span>
+                                        <span class="badge badge-pill badge-info">Security</span>
+                                        <span class="badge badge-pill badge-info">Server Engineer</span>
+                                        <span class="badge badge-pill badge-success">SW Engineer</span>
+                                      </div>
+                                    </center>
+                                    <hr>
+                                    <div id="modalPeoplePublicInfo">
+                                      <p>
+                                        <strong>Public Info : </strong><br>
+                                        &nbsp;No data.<br>
+                                      </p>
+                                  </div>
+                                  <hr>
+                                    <center>
+                                    <p id="modalPeopleBio"><strong>Free Vision: </strong><br>
+                                      "No data."
+                                    </p>
+                                    <br>
+                                    </center> 
+                                    <hr>
+                                    <p id="modalPeoplePrivateInfo">
+                                    <strong>Private Info : </strong><br>
+                                      "No data."
+                                    </p>
+                                    <hr>
+                                    <p id="modalPeoplePrivateInfoDetail">
+                                    </p>
+                                    <div id="modalLoader" class=""></div>
+                                </div><!-- tabpanel -->
+
+                                <div role="tabpanel" class="tab-pane" id="interviewTab" style="padding-top:50px">
+                                    <center style="padding-bottom: 50px;">
+                                        <img id = "modalPeopleImg2" src="" name="aboutme" width="140" height="140" border="0" class="rounded-circle"></a>
+                                    </center>
+                                    
+                                        <div class="form-group">
+                                            <label>Interview has been scheduled for :</label>
+                                            <input type="text" class="form-control" id="DATE" placeholder="Date">
+                                        </div>
+                                        <div class="form-group">
+                                            Place for interview :
+                                            <input type="text" class="form-control" id="PLACE" placeholder="Your position">
+                                        </div>
+                                        <div class="form-group">
+                                            Contact :
+                                            <input type="text" class="form-control" id="CONTACT" placeholder="Direct line">
+                                        </div>
+                                        <div class="form-group">
+                                            Interview expenses : <span class="glyphicon glyphicon-fire"></span>
+                                            <input type="text" class="form-control" id="EXPENSES" placeholder="PickMeCoin">
+                                        </div>
+  
+
+                                </div>
+                          </div> <!-- tabcontent -->
+                        </div><!-- modalbody -->
+
+                        <div class="modal-footer">
+                            <center>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">That's enough.</button>
+                            <button type="button" onclick="useGas(250)" class="btn btn-info" data-dismiss="modal" id="modalPeopleMore">More 250<span class="glyphicon glyphicon-fire"></span></button>
+                          </center>
+                        </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+      <div class="container">
+          <div class="modal fade" id="modalI" tabindex="-1" role="dialog" aria-labelledby="modalIName" aria-hidden="true">
+              <div class="modal-dialog">
+                  <div class="modal-content">
+                      <div class="modal-header">
+                          <h4 class="modal-title" id="modalIName">김병연</h4>
+                        </div>
+                      <div class="modal-body">
+                          <center>
+                              <!-- http://www.breaknews.com/imgdata/breaknews_com/200611/2006112239463307.jpg -->
+                          <img id = "modalIImg" src="https://dispatch.cdnserbe.net/wp-content/uploads/2017/09/20170910111543_viewimagem-4.jpg" name="aboutme" width="140" height="140" border="0" class="rounded-circle"></a>
+                          <div id="modalIInfo">
+                            <h3 class="media-heading">Trust Power 
+                              <span id="IPMC" class="glyphicon glyphicon-flash"></span>500
+                            </h3>
+                              <span class="badge badge-pill badge-warning">Marketing</span>
+                              <span class="badge badge-pill badge-info">Security</span>
+                              <span class="badge badge-pill badge-info">Server Engineer</span>
+                              <span class="badge badge-pill badge-success">SW Engineer</span>
+                            </div>
+                          </center>
+                          <hr>
+                          <div id="modalIPublicInfo">
+                            <p>
+                              <strong>Public Info : </strong><br>
+                              &nbsp;중앙고 졸업<br>
+                              &nbsp;대전 옥스퍼드 농대 학사 졸업<br>
+                              <p></p>
+                              &nbsp;삼성전자 SW 멤버십 12.6~15.8<br>
+                              &nbsp;삼성전자 SW 팀 15.8~<br>
+                            </p>
+                        </div>
+                         <hr>
+                          <center>
+                          <p id="modalIBio"><strong>Free Vision: </strong><br>
+                            "끝까지 최선을 다하자."
+                          </p>
+                          <br>
+                          </center> 
+                          <hr>
+                          <p id="modalIPrivateInfo">
+                          <strong>Private Info : </strong><br>
+                            "아무래도 여기까지 해야겠다"
+                          </p>
+                          <hr>
+                          <strong>Private Detail : </strong><br>
+                          <p id="modalIPrivateInfoDetail">
+                          </p>
+                      </div>
+                      <div class="modal-footer">
+                          <center>
+                          <button type="button" class="btn btn-default" data-dismiss="modal">I Checked my profile.</button>
+                          <button type="button" onclick="useGas(250)" class="btn btn-info" data-dismiss="modal" id="modalIMore" disabled="true">More <span class="glyphicon glyphicon-fire"></span>250</button>
+                        </center>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    
+
+    <script src="js/jquery.slim.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    
+    <script src="js/alertify.min.js"></script>
+        
+    <script src="js/main.js"></script>
+
+<!-- <script>
+    if ('addEventListener' in window) {
+      setTimeout(function(){
+        //for non-block
+        //setINTERVIEWEE();
+        drawPeople();
+      },100);
+      window.addEventListener('load', function() { document.body.className = document.body.className.replace(/\bis-loading\b/, ''); });
+      document.body.className += (navigator.userAgent.match(/(MSIE|rv:11\.0)/) ? ' is-ie' : '');
+    } 
+  </script> -->
+
+  </body>
+</html>
+
+
+<!-- 
+frm += "&nbsp;Private Data "+i+' <a href="'+files[i]+'"></a><br>'; 
+-->
