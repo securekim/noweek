@@ -111,7 +111,7 @@ broadcast_loop();
 
 setInterval(function(){
     broadcast_loop();
-},25500);
+},10000);
 
 function broadcast_loop(){
     var options_broad = {
@@ -120,7 +120,7 @@ function broadcast_loop(){
         path: '/', 
         method: 'GET',
         rejectUnauthorized: false,
-        timeout: 3000
+        timeout: 5000
     }
 
     function requestTo(ip){
@@ -134,7 +134,7 @@ function broadcast_loop(){
                 //console.log(res.socket);
                 broadcastList["IP_"+res.connection.remoteAddress] = CN;
                 //console.log(arr);
-                res.setTimeout(3000);
+                res.setTimeout(5000);
                 res.on('timeout',()=>{
                     broadcastList["IP_"+res.connection.remoteAddress] = 'null';
                 });
@@ -144,7 +144,7 @@ function broadcast_loop(){
         })
     
         post_req.on('socket',function(socket){
-            socket.setTimeout(1500);
+            socket.setTimeout(5000);
             socket.on('timeout',()=>{
                 try{
                 var ip = socket._pendingData.split(":")[1].split(" ")[1];

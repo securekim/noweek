@@ -1292,7 +1292,7 @@ function updatePeopleModal(number){
   document.getElementById('modalPeopleBio').style="word-break: break-all;"
 
   if(BLOCKS[number].previousHash==""){
-    document.getElementById('modalPeopleBio').innerHTML = "<strong>Prev Hash: </strong><br>GENESIS BLOCK.<br>" ;
+    document.getElementById('modalPeopleBio').innerHTML = "<strong>Prev Hash: </strong><br>This is GENESIS BLOCK.<br>" ;
   } else {
     document.getElementById('modalPeopleBio').innerHTML = "<strong>Prev Hash: </strong><br>" +BLOCKS[number].previousHash+"<br>";
   }
