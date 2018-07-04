@@ -1302,6 +1302,10 @@ function updatePeopleModal(number){
   frm = "<strong>Signature : </strong><br>"
   frm += BLOCKS[number].signature;
 
+
+  modalPeoplePrivateInfo.style="word-break: break-all;"
+  modalPeoplePrivateInfo.innerHTML = frm;
+
    var modalPeoplePublicInfo = document.getElementById("modalPeoplePublicInfo");
    while (modalPeoplePublicInfo.firstChild) {
     modalPeoplePublicInfo.removeChild(modalPeoplePublicInfo.firstChild);
@@ -1319,8 +1323,6 @@ function updatePeopleModal(number){
     //   frm += "&nbsp;"+PEOPLESDETAIL[number].hideInfo.hideInfoHint[i]+"<br>";
     // }
 
-    modalPeoplePrivateInfo.style="word-break: break-all;"
-    modalPeoplePrivateInfo.innerHTML = frm;
     //frm += &nbsp;
 
     //document.getElementById('modalPeopleMore').setAttribute("onclick","useGas("+PEOPLESDETAIL[number].hideInfo.hideInfoValue+","+number+")");
