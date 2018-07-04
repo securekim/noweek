@@ -293,6 +293,10 @@ function nfcClear(){
     return utils.nfcClear();
 }
 
+function nfcCheck(){
+    return utils.nfcCheck();
+}
+
 function initChain(CN,callback){
     utils.CERT_initCERT(CN,(DATA)=>{
         el_request.request_initBlockchain(JSON.stringify({"CA":DATA.CA,"CN":CN,"PUBKEY":DATA.PUBKEY}),(result)=>{
@@ -322,4 +326,4 @@ function initChain(CN,callback){
     });
 }
 
-module.exports = {nfcClear,nfcTag, confirmPin,clearBlockChain,getBlockChain,broadcast,generatePin,sendWithMutual,initChain};
+module.exports = {nfcCheck,nfcClear,nfcTag, confirmPin,clearBlockChain,getBlockChain,broadcast,generatePin,sendWithMutual,initChain};

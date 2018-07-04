@@ -8,7 +8,7 @@
     <meta name="author" content="">
     <link rel="icon" href="../favicon.ico">
 
-    <title>Pick Me !</title>
+    <title>Blockchain</title>
 
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/alertify.min.css">
@@ -267,10 +267,10 @@
                             <div role="tabpanel">
                               <ul class="nav nav-tabs" role="tablist">
                                   <li class="nav-item">
-                                    <a class="nav-link active" id="profile-tab" data-toggle="tab" href="#profileTab" role="tab" aria-controls="profileTab" aria-selected="true">Profile</a>
+                                    <a class="nav-link active" id="profile-tab" data-toggle="tab" href="#profileTab" role="tab" aria-controls="profileTab" aria-selected="true">BLOCK</a>
                                   </li>
                                   <li class="nav-item" id="interview-item">
-                                    <a class="nav-link" id="interview-tab" data-toggle="tab" href="#interviewTab" role="tab" aria-controls="interviewTab" aria-selected="false">Interview</a>
+                                    <a class="nav-link" id="interview-tab" data-toggle="tab" href="#interviewTab" role="tab" aria-controls="interviewTab" aria-selected="false">RAW DATA</a>
                                   </li>
                                 </ul>
                               <div class="tab-content">
@@ -281,12 +281,19 @@
                                       <h3 class="media-heading">Trust Power 
                                         <span id="peoplePMC" class="glyphicon glyphicon-flash"></span>500
                                       </h3>
-                                        <span class="badge badge-pill badge-warning">Marketing</span>
+                                        <!-- <span class="badge badge-pill badge-warning">Marketing</span>
                                         <span class="badge badge-pill badge-info">Security</span>
                                         <span class="badge badge-pill badge-info">Server Engineer</span>
-                                        <span class="badge badge-pill badge-success">SW Engineer</span>
+                                        <span class="badge badge-pill badge-success">SW Engineer</span> -->
                                       </div>
                                     </center>
+                                    <hr>
+                                    <center>
+                                    <p id="modalPeopleBio"><strong>Free Vision: </strong><br>
+                                      "No data."
+                                    </p>
+                                    <br>
+                                    </center> 
                                     <hr>
                                     <div id="modalPeoplePublicInfo">
                                       <p>
@@ -295,13 +302,6 @@
                                       </p>
                                   </div>
                                   <hr>
-                                    <center>
-                                    <p id="modalPeopleBio"><strong>Free Vision: </strong><br>
-                                      "No data."
-                                    </p>
-                                    <br>
-                                    </center> 
-                                    <hr>
                                     <p id="modalPeoplePrivateInfo">
                                     <strong>Private Info : </strong><br>
                                       "No data."
@@ -317,24 +317,9 @@
                                         <img id = "modalPeopleImg2" src="" name="aboutme" width="140" height="140" border="0" class="rounded-circle"></a>
                                     </center>
                                     
-                                        <div class="form-group">
-                                            <label>Interview has been scheduled for :</label>
-                                            <input type="text" class="form-control" id="DATE" placeholder="Date">
+                                        <div class="form-group" id ="RAWBLOCK">
+                                            <label>RAW BLOCK DATA :</label>
                                         </div>
-                                        <div class="form-group">
-                                            Place for interview :
-                                            <input type="text" class="form-control" id="PLACE" placeholder="Your position">
-                                        </div>
-                                        <div class="form-group">
-                                            Contact :
-                                            <input type="text" class="form-control" id="CONTACT" placeholder="Direct line">
-                                        </div>
-                                        <div class="form-group">
-                                            Interview expenses : <span class="glyphicon glyphicon-fire"></span>
-                                            <input type="text" class="form-control" id="EXPENSES" placeholder="PickMeCoin">
-                                        </div>
-  
-
                                 </div>
                           </div> <!-- tabcontent -->
                         </div><!-- modalbody -->

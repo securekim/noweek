@@ -10,7 +10,7 @@ var NFC_FLAG=0; // 0 or 1.
 
 
 function nfcCheck(){
-    return fs.readFileSync("nfcFlag");
+    return fs.readFileSync("nfcFlag","UTF8");
 }
 
 function nfcTag(){
@@ -25,9 +25,9 @@ function nfcTag(){
 function nfcClear(){
     try{
         fs.writeFileSync("nfcFlag",0);
-        return 1;
-    } catch (e){
         return 0;
+    } catch (e){
+        return 1;
     }
 }
 

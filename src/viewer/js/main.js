@@ -497,96 +497,6 @@ function setModalLoder(loader){
 }
 
 
-function updatePeopleModal(number){ 
-  console.log("updatePeopleModal !!! ");
-  var items = PEOPLES[number].items
-  /*
-      사용자 디테일은 사용자 한명한명 직접 클릭했을때 반영
-  */
-  if(typeof PEOPLESDETAIL[number] == 'undefined'){
-      PEOPLESDETAIL[number] = getDetailProfile(PEOPLES[number].account);
-      PEOPLESDETAIL[number] = PEOPLESDETAIL[number].replace(/'/g, '"');
-      PEOPLESDETAIL[number] = JSON.parse(PEOPLESDETAIL[number]);
-      
-      for(var j in PEOPLESDETAIL[number].profileInfo.careerHistory){
-        if( PEOPLESDETAIL[number].profileInfo.careerHistory[j] == "") continue;
-        PEOPLESDETAIL[number].profileInfo.careerHistory[j] = PEOPLESDETAIL[number].profileInfo.careerHistory[j];
-      }
-      for(var j in PEOPLESDETAIL[number].profileInfo.achievements){
-        if( PEOPLESDETAIL[number].profileInfo.achievements[j] == "") continue;
-        PEOPLESDETAIL[number].profileInfo.achievements[j] = PEOPLESDETAIL[number].profileInfo.achievements[j];
-      }
-      for(var j in PEOPLESDETAIL[number].profileInfo.educationHistory){
-        if( PEOPLESDETAIL[number].profileInfo.educationHistory[j] == "") continue;
-        PEOPLESDETAIL[number].profileInfo.educationHistory[j] = PEOPLESDETAIL[number].profileInfo.educationHistory[j];
-      }
-      for(var j in PEOPLESDETAIL[number].hideInfo.hideInfoHint){
-        if( PEOPLESDETAIL[number].hideInfo.hideInfoHint[j] == "") continue;
-        PEOPLESDETAIL[number].hideInfo.hideInfoHint[j] = PEOPLESDETAIL[number].hideInfo.hideInfoHint[j];
-      }
-  }
-    
-  document.getElementById('modalPeopleName').innerText=items.name;
-  document.getElementById('modalPeopleImg').setAttribute("src",items.picture);
-  document.getElementById('modalPeopleImg2').setAttribute("src",items.picture);
-  var modalPeopleInfo = document.getElementById('modalPeopleInfo');
-  while (modalPeopleInfo.firstChild) {
-    modalPeopleInfo.removeChild(modalPeopleInfo.firstChild);
-  }
-  var h3 = document.createElement('h3');
-    h3.className = "media-heading";
-    modalPeopleInfo.appendChild(h3);
-
-  var frm = 'Trust Power<span id="peoplePMC" class="glyphicon glyphicon-flash"></span>'+items.mvp
-    h3.innerHTML = frm;
-
-   for(var i in items.interestItems){
-     span = document.createElement('span');
-     span.className = "badge badge-pill badge-info";
-     span.innerHTML = hexToString(items.interestItems[i]);
-     modalPeopleInfo.appendChild(span);
-   }
-
-   var modalPeoplePublicInfo = document.getElementById("modalPeoplePublicInfo");
-   while (modalPeoplePublicInfo.firstChild) {
-    modalPeoplePublicInfo.removeChild(modalPeoplePublicInfo.firstChild);
-  }
-
-    frm = "<strong>Public Info : </strong><br>"
-    for (var i in PEOPLESDETAIL[number].profileInfo.educationHistory){
-      if(PEOPLESDETAIL[number].profileInfo.educationHistory[i]!="")
-        frm += "&nbsp;"+PEOPLESDETAIL[number].profileInfo.educationHistory[i]+"<br>";
-    }
-    frm+="<p></p>";
-    for (var i in PEOPLESDETAIL[number].profileInfo.careerHistory){
-      if(PEOPLESDETAIL[number].profileInfo.careerHistory[i]!="")
-      frm += "&nbsp;"+PEOPLESDETAIL[number].profileInfo.careerHistory[i]+"<br>";
-    }
-    frm+="<p></p>";
-    for (var i in PEOPLESDETAIL[number].profileInfo.achievements){
-      if(PEOPLESDETAIL[number].profileInfo.achievements[i]!="")
-      frm += "&nbsp;"+PEOPLESDETAIL[number].profileInfo.achievements[i]+"<br>";
-    }
-    modalPeoplePublicInfo.innerHTML = frm;
-
-    document.getElementById('modalPeopleBio').innerHTML = "<strong>Free Vision: </strong><br>" +PEOPLESDETAIL[number].freeVision;
-
-    var modalPeoplePrivateInfo = document.getElementById("modalPeoplePrivateInfo");
-    frm = "<strong>Private Info : </strong><br>"
-    for (var i in PEOPLESDETAIL[number].hideInfo.hideInfoHint){
-      if(PEOPLESDETAIL[number].hideInfo.hideInfoHint[i]!="")
-      frm += "&nbsp;"+PEOPLESDETAIL[number].hideInfo.hideInfoHint[i]+"<br>";
-    }
-    modalPeoplePrivateInfo.innerHTML = frm;
-    //frm += &nbsp;
-
-    document.getElementById('modalPeopleMore').setAttribute("onclick","useGas("+PEOPLESDETAIL[number].hideInfo.hideInfoValue+","+number+")");
-    //
-    document.getElementById('modalPeopleMore').innerHTML = "More "+PEOPLESDETAIL[number].hideInfo.hideInfoValue+' <span class="glyphicon glyphicon-fire"></span>';
-    
-  drawAllItems("HARD_CODED_SCOUTER",number);
-  
-}
 
 
 function dummyPeople(){
@@ -597,83 +507,83 @@ function dummyPeople(){
 
 
 
-function updateModalI(){
+// function updateModalI(){
 
-    if(typeof MYPROFILE.account =='undefined'){
-      //내 정보가 없는 경우에만 세팅
-      profile = getMyProfile(MYACCOUNT);
-      MYPROFILE.account = MYACCOUNT;
-      MYPROFILE.picture = profile.basicInfo.picture;
-      MYPROFILE.name = profile.basicInfo.name;
-      MYPROFILE.interestItems = profile.basicInfo.interestItems;
-      MYPROFILE.mvp = profile.basicInfo.mvp.c[0];
-      tmp = profile.profileInfo.replace(/'/g, '"')
-      MYPROFILE.peoplesDetail = JSON.parse(tmp);
+//     if(typeof MYPROFILE.account =='undefined'){
+//       //내 정보가 없는 경우에만 세팅
+//       profile = getMyProfile(MYACCOUNT);
+//       MYPROFILE.account = MYACCOUNT;
+//       MYPROFILE.picture = profile.basicInfo.picture;
+//       MYPROFILE.name = profile.basicInfo.name;
+//       MYPROFILE.interestItems = profile.basicInfo.interestItems;
+//       MYPROFILE.mvp = profile.basicInfo.mvp.c[0];
+//       tmp = profile.profileInfo.replace(/'/g, '"')
+//       MYPROFILE.peoplesDetail = JSON.parse(tmp);
 
-    } 
+//     } 
     
-    document.getElementById('modalIName').innerText=MYPROFILE.name;
-    document.getElementById('modalIImg').setAttribute("src",MYPROFILE.picture);
-    var modalPeopleInfo = document.getElementById('modalIInfo');
-    while (modalPeopleInfo.firstChild) {
-      modalPeopleInfo.removeChild(modalPeopleInfo.firstChild);
-    }
-    var h3 = document.createElement('h3');
-      h3.className = "media-heading";
-      modalPeopleInfo.appendChild(h3);
+//     document.getElementById('modalIName').innerText=MYPROFILE.name;
+//     document.getElementById('modalIImg').setAttribute("src",MYPROFILE.picture);
+//     var modalPeopleInfo = document.getElementById('modalIInfo');
+//     while (modalPeopleInfo.firstChild) {
+//       modalPeopleInfo.removeChild(modalPeopleInfo.firstChild);
+//     }
+//     var h3 = document.createElement('h3');
+//       h3.className = "media-heading";
+//       modalPeopleInfo.appendChild(h3);
   
-    var frm = 'Trust Power<span id="IPMC" class="glyphicon glyphicon-flash"></span>'+MYPROFILE.mvp
-      h3.innerHTML = frm;
+//     var frm = 'Trust Power<span id="IPMC" class="glyphicon glyphicon-flash"></span>'+MYPROFILE.mvp
+//       h3.innerHTML = frm;
   
-     for(var i in MYPROFILE.interestItems){
-       span = document.createElement('span');
-       span.className = "badge badge-pill badge-info";
-       span.innerHTML = hexToString(MYPROFILE.interestItems[i]);
-       modalPeopleInfo.appendChild(span);
-     }
+//      for(var i in MYPROFILE.interestItems){
+//        span = document.createElement('span');
+//        span.className = "badge badge-pill badge-info";
+//        span.innerHTML = hexToString(MYPROFILE.interestItems[i]);
+//        modalPeopleInfo.appendChild(span);
+//      }
   
-     var modalPeoplePublicInfo = document.getElementById("modalIPublicInfo");
-     while (modalPeoplePublicInfo.firstChild) {
-      modalPeoplePublicInfo.removeChild(modalPeoplePublicInfo.firstChild);
-    }
+//      var modalPeoplePublicInfo = document.getElementById("modalIPublicInfo");
+//      while (modalPeoplePublicInfo.firstChild) {
+//       modalPeoplePublicInfo.removeChild(modalPeoplePublicInfo.firstChild);
+//     }
   
-      frm = "<strong>Public Info : </strong><br>"
-      for (var i in MYPROFILE.peoplesDetail.profileInfo.educationHistory){
-        if(MYPROFILE.peoplesDetail.profileInfo.educationHistory[i]!="")
-          frm += "&nbsp;"+MYPROFILE.peoplesDetail.profileInfo.educationHistory[i]+"<br>";
-      }
-      frm+="<p></p>";
-      for (var i in MYPROFILE.peoplesDetail.profileInfo.careerHistory){
-        if(MYPROFILE.peoplesDetail.profileInfo.careerHistory[i]!="")
-        frm += "&nbsp;"+MYPROFILE.peoplesDetail.profileInfo.careerHistory[i]+"<br>";
-      }
-      frm+="<p></p>";
-      for (var i in MYPROFILE.peoplesDetail.profileInfo.achievements){
-        if(MYPROFILE.peoplesDetail.profileInfo.achievements[i]!="")
-        frm += "&nbsp;"+MYPROFILE.peoplesDetail.profileInfo.achievements[i]+"<br>";
-      }
-      modalPeoplePublicInfo.innerHTML = frm;
+//       frm = "<strong>Public Info : </strong><br>"
+//       for (var i in MYPROFILE.peoplesDetail.profileInfo.educationHistory){
+//         if(MYPROFILE.peoplesDetail.profileInfo.educationHistory[i]!="")
+//           frm += "&nbsp;"+MYPROFILE.peoplesDetail.profileInfo.educationHistory[i]+"<br>";
+//       }
+//       frm+="<p></p>";
+//       for (var i in MYPROFILE.peoplesDetail.profileInfo.careerHistory){
+//         if(MYPROFILE.peoplesDetail.profileInfo.careerHistory[i]!="")
+//         frm += "&nbsp;"+MYPROFILE.peoplesDetail.profileInfo.careerHistory[i]+"<br>";
+//       }
+//       frm+="<p></p>";
+//       for (var i in MYPROFILE.peoplesDetail.profileInfo.achievements){
+//         if(MYPROFILE.peoplesDetail.profileInfo.achievements[i]!="")
+//         frm += "&nbsp;"+MYPROFILE.peoplesDetail.profileInfo.achievements[i]+"<br>";
+//       }
+//       modalPeoplePublicInfo.innerHTML = frm;
   
-      document.getElementById('modalIBio').innerHTML = "<strong>Free Vision: </strong><br>" +MYPROFILE.peoplesDetail.freeVision;
+//       document.getElementById('modalIBio').innerHTML = "<strong>Free Vision: </strong><br>" +MYPROFILE.peoplesDetail.freeVision;
   
-      var modalPeoplePrivateInfo = document.getElementById("modalIPrivateInfo");
-      frm = "<strong>Private Info : </strong><br>"
-      for (var i in MYPROFILE.peoplesDetail.hideInfo.hideInfoHint){
-        if(MYPROFILE.peoplesDetail.hideInfo.hideInfoHint[i]!="")
-        frm += "&nbsp;"+MYPROFILE.peoplesDetail.hideInfo.hideInfoHint[i]+"<br>";
-      }
-      modalPeoplePrivateInfo.innerHTML = frm;
-      //frm += &nbsp;
+//       var modalPeoplePrivateInfo = document.getElementById("modalIPrivateInfo");
+//       frm = "<strong>Private Info : </strong><br>"
+//       for (var i in MYPROFILE.peoplesDetail.hideInfo.hideInfoHint){
+//         if(MYPROFILE.peoplesDetail.hideInfo.hideInfoHint[i]!="")
+//         frm += "&nbsp;"+MYPROFILE.peoplesDetail.hideInfo.hideInfoHint[i]+"<br>";
+//       }
+//       modalPeoplePrivateInfo.innerHTML = frm;
+//       //frm += &nbsp;
   
-  var files = getHideAppendFile(MYPROFILE.account);
-  frm = "";
+//   var files = getHideAppendFile(MYPROFILE.account);
+//   frm = "";
 
-  for (var i in files){
-    if(files[i]!="")
-      frm += '&nbsp;<a href="'+files[i]+'">첨부링크 클릭 '+i+'</a><br>'; 
-  }
-  document.getElementById("modalIPrivateInfoDetail").innerHTML = frm;
-}
+//   for (var i in files){
+//     if(files[i]!="")
+//       frm += '&nbsp;<a href="'+files[i]+'">첨부링크 클릭 '+i+'</a><br>'; 
+//   }
+//   document.getElementById("modalIPrivateInfoDetail").innerHTML = frm;
+// }
 
 /////////////////////////////
 
@@ -1287,14 +1197,16 @@ function drawPeople(){
     console.log("NO BLOCKS");
   } else {
     for(var i in BLOCKS){
-      addJumbotronToMain("BLOCK NUMBER :"+i,BLOCKS[i].pubkey.CN,"",i,"PERSON");
+      addJumbotronToMain("BLOCK NUMBER :"+i,"DEVICE : '"+BLOCKS[i].pubkey.CN+"'","",i,"PERSON");
       //  addJumbotronToMain("휴지", "Security 전문가입니다.", "http://cfile5.uf.tistory.com/image/99E8E33359DB49394B6E66","http://blog.securekim.com","PEOPLE");
     }
   }
 }
 
-function CNtoIMAGE(){
-  
+function CNtoIMAGE(CN){
+  //todo
+  //if CN == mobile -> imageURL
+  return CN;
 }
 
 
@@ -1339,11 +1251,86 @@ function addJumbotronToMain(name, context, imageURL, number, type){
   var h = document.createElement('h6');
     td2.appendChild(h);
 
-  var myContext = name+' <p class="lead">'+context+'</p>';
+  var myContext = timeBeautiful(BLOCKS[number].timestamp)+' <p class="lead">'+context+'</p>';
     h.innerHTML=myContext;
-  
+    
     if(type=="PERSON"){
-      drawAllItems("HARD_CODED_SCOUTER",number);
+      //drawAllItems("HARD_CODED_SCOUTER",number);
       jumbotron.setAttribute("onclick","updatePeopleModal("+number+")");
     } 
+}
+
+function updatePeopleModal(number){
+  console.log("updatePeopleModal !!! ");
+  //var items = PEOPLES[number].items
+  /*
+      사용자 디테일은 사용자 한명한명 직접 클릭했을때 반영
+  */
+    
+  document.getElementById('modalPeopleName').innerText=BLOCKS[number].pubkey.CN;
+  document.getElementById('modalPeopleImg').setAttribute("src",CNtoIMAGE(BLOCKS[number].pubkey.CN));
+  document.getElementById('modalPeopleImg2').setAttribute("src",CNtoIMAGE(BLOCKS[number].pubkey.CN));
+  var modalPeopleInfo = document.getElementById('modalPeopleInfo');
+  while (modalPeopleInfo.firstChild) {
+    modalPeopleInfo.removeChild(modalPeopleInfo.firstChild);
+  }
+  var h3 = document.createElement('h3');
+    h3.className = "media-heading";
+    modalPeopleInfo.appendChild(h3);
+
+  var frm = '<span id="peoplePMC" class="glyphicon glyphicon-time"></span> '+timeBeautiful(BLOCKS[number].timestamp)
+    h3.innerHTML = frm;
+
+  //  for(var i in items.interestItems){
+  //    span = document.createElement('span');
+  //    span.className = "badge badge-pill badge-info";
+  //    span.innerHTML = hexToString(items.interestItems[i]);
+  //    modalPeopleInfo.appendChild(span);
+  //  }
+
+
+  document.getElementById('modalPeopleBio').style="word-break: break-all;"
+
+  if(BLOCKS[number].previousHash==""){
+    document.getElementById('modalPeopleBio').innerHTML = "<strong>Prev Hash: </strong><br>GENESIS BLOCK.<br>" ;
+  } else {
+    document.getElementById('modalPeopleBio').innerHTML = "<strong>Prev Hash: </strong><br>" +BLOCKS[number].previousHash+"<br>";
+  }
+  document.getElementById('modalPeopleBio').innerHTML += "<br><strong>This Hash: </strong><br>" +BLOCKS[number].hash;
+
+  var modalPeoplePrivateInfo = document.getElementById("modalPeoplePrivateInfo");
+  frm = "<strong>Signature : </strong><br>"
+  frm += BLOCKS[number].signature;
+
+   var modalPeoplePublicInfo = document.getElementById("modalPeoplePublicInfo");
+   while (modalPeoplePublicInfo.firstChild) {
+    modalPeoplePublicInfo.removeChild(modalPeoplePublicInfo.firstChild);
+  }
+
+  modalPeoplePublicInfo.style="word-break: break-all;"
+
+    frm = "<strong>Public Key : </strong><br>"
+    frm += "&nbsp;"+BLOCKS[number].pubkey.PUBKEY+"<br>";
+
+    modalPeoplePublicInfo.innerHTML = frm;
+
+    // for (var i in PEOPLESDETAIL[number].hideInfo.hideInfoHint){
+    //   if(PEOPLESDETAIL[number].hideInfo.hideInfoHint[i]!="")
+    //   frm += "&nbsp;"+PEOPLESDETAIL[number].hideInfo.hideInfoHint[i]+"<br>";
+    // }
+
+    modalPeoplePrivateInfo.style="word-break: break-all;"
+    modalPeoplePrivateInfo.innerHTML = frm;
+    //frm += &nbsp;
+
+    //document.getElementById('modalPeopleMore').setAttribute("onclick","useGas("+PEOPLESDETAIL[number].hideInfo.hideInfoValue+","+number+")");
+    //
+    //document.getElementById('modalPeopleMore').innerHTML = "More "+PEOPLESDETAIL[number].hideInfo.hideInfoValue+' <span class="glyphicon glyphicon-fire"></span>';
+    
+  //drawAllItems("HARD_CODED_SCOUTER",number);
+  
+  var rawBlock = document.getElementById("RAWBLOCK");
+  rawBlock.innerHTML = JSON.stringify(BLOCKS[number]);
+  rawBlock.style="word-break: break-all;"
+
 }
