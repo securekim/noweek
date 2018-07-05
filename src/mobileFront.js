@@ -25,7 +25,7 @@ app.get("/broadcast", (req,res)=>{
 
 try{
 
-app.post("/broadcastAddBlockchain", (req,res)=>{
+app.post("/addBlockchain", (req,res)=>{
     //to do : request just for on targets.
     //        attacker or not, we don't care.
     try{
