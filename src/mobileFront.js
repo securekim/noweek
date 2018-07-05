@@ -23,18 +23,25 @@ app.get("/broadcast", (req,res)=>{
     }
 });
 
-app.get("/addBlockchain", (req,res)=>{
+try{
+
+app.post("/broadcastAddBlockchain", (req,res)=>{
     //to do : request just for on targets.
     //        attacker or not, we don't care.
     try{
-        console.log("Error !!! key is different. This is may be a attack.");
+        console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        console.log("!!!!!! IMPORTANT LOG !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        console.log("!!! Error ! key is different. Verify Fail !!!!!!!!!!!!!!");
+        console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
     }catch(e){
         console.log(e);
     }
-    res.end("You don't have a permission. please setup again.")
+    res.end("You do not have a permission. please setup again.")
 });
 
-
+}catch(e){
+    console.log(e);
+}
 app.get("/nfcCheck", (req,res)=>{
     //to do : request just for on targets.
     //        attacker or not, we don't care.
