@@ -25,14 +25,29 @@ app.get("/broadcast", (req,res)=>{
 
 try{
 
-app.post("/broadcastAddBlockchain", (req,res)=>{
+app.post("/replaceBlockchain", (req,res)=>{
     //to do : request just for on targets.
     //        attacker or not, we don't care.
     try{
-        console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-        console.log("!!!!!! IMPORTANT LOG !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-        console.log("!!! Error ! key is different. Verify Fail !!!!!!!!!!!!!!");
-        console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        console.log("");
+        console.log("");
+        console.log("");
+        console.log("");
+        console.log("************************************************************");
+        console.log("*(_)                               ( )_               ( )_ *");
+        console.log("*| |  ___ ___   _ _      _    _ __ | ,_)   _ _   ___  | ,_)*");
+        console.log("*| |/' _ ` _ `\\( '_`\\  /'_`\\ ( '__)| |   /'_` )/' _ `\\| |  *");
+        console.log("*| || ( ) ( ) || (_) )( (_) )| |   | |_ ( (_| || ( ) || |_ *");
+        console.log("*(_)(_) (_) (_)| ,__/'`\\___/'(_)   `\\__)`\\__,_)(_) (_)`\\__)*");
+        console.log("*              | |                                         *");
+        console.log("*              (_)                                         *");
+        console.log("************************************************************");
+        console.log("*        Error ! key is different. Verify Fail !           *");
+        console.log("************************************************************");
+        console.log("");
+        console.log("");
+        console.log("");    
+        console.log("");
     }catch(e){
         console.log(e);
     }
