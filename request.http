@@ -4,14 +4,18 @@ POST http://localhost:3082/initChain
 Content-Type: application/json
 
 {
-    "CN":"mobile"
+    "CN":"doorbell"
 }
 
 ###
-GET http://192.168.0.110:3082/nfcTag
+GET http://127.0.0.1:3082/nfcTag
 
 ###
-GET http://localhost:3082/pincode/192.168.0.110
+
+GET http://127.0.0.1:3082/nfcCheck
+
+###
+GET http://localhost:3082/pincode/192.168.43.118
 
 ###
 
@@ -19,15 +23,15 @@ POST http://localhost:3082/confirmPin
 Content-Type: application/json
 
 {
-  "pin": "22eec0",
-  "secret": "GsRfc0dfwv8wgIRzeG2f2hiG2KKh1WqJz5s59JrST+evGYepLh+0N065sTaXt2rZhM/b4qkLLnHND1gjroa8bm7HlKMfCZx/wvvqdfv6zbRncp6EV/R2cmBtBDjbPTeXs8eg9Sydya2ACsHOwbg26GAl2iOKqd68Hv1fOl/YZBTvcD2FCpmtCu4gs7SuHO2oiGWMpKtGmPimC7hA3kNqGZ98MJgUlWnEQU9MwA==",
-  "ip": "192.168.0.110",
-  "CN": "robot"
+  "pin": "56ec1b",
+  "secret": "IEVYhZBPWPC8eu1zykU2Pp0Xc76WCN8C85SS7xOuSNYJA/oUANiRt3Sm/AvJJWAWj1dfgtRTI8yuTOKRl/wxde/rZyQWPmHwkqO5d8a1qEavnwyTlHmqxyb+sTqQZAgZlErdHjuRetsvQBC+xjbIAi3U34yMpgvLVDvcgjG02XL98GMiKP/OdCnVw3qmFgAwOKId5HlbfWYY3ZMJts6y9bE5eAD/eNor1y6L/A==",
+  "ip": "192.168.43.118",
+  "CN": "light"
 }
 ###
 
 ###
-GET http://192.168.0.110:3082/nfcClear
+GET http://127.0.0.1:3082/nfcClear
 
 ###
 GET http://localhost:3082/broadcast
@@ -76,13 +80,39 @@ Content-Type: application/json
 
 GET http://localhost:3082/getBlockChain
 
+###
+
+POST http://192.168.43.26:3000/getBlockchain
+
 
 ###
 
-POST http://localhost:3000/getBlockchain
+GET http://localhost:3082/reset
+
 
 
 ###
 
 GET http://localhost:3082/clearBlockChain
 
+
+###
+POST http://127.0.0.1:3082/replaceBlockchain
+Content-Type: application/json
+
+{
+    "blk0":"blocks/0.blk",
+    "blk1":"blocks/1.blk",
+    "blk2":"blocks/2.blk",
+    "blk3":"blocks/3.blk",
+    "blk4":"blocks/4.blk"
+}
+
+###
+POST http://localhost:3082/control
+Content-Type: application/json
+
+{
+    "ip":"192.168.43.225",
+    "data" : "led_control,38,1"
+}

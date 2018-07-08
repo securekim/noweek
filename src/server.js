@@ -118,9 +118,7 @@ var server = https.createServer(options_dh, function (req, res) {
     });
 
     req.on('end', function () {
-        console.log(new Date()+' '+ 
-        +req.method+' '+req.url
-        );
+        //console.log(new Date()+' '+ req.method+' '+req.url);
             if(req.url==="/confirmPin"){
                 try{
                 console.log("/confirmPin in Server");
@@ -190,7 +188,7 @@ var server = https.createServer(options_dh, function (req, res) {
             utils.DH_clean();
             res.end(JSON.stringify({pubkey:server_pubkey,CA:options_dh.ca,CN:CN}));
         }catch(e){
-            console.log("Server : someone search me.")
+            //console.log("Server : someone search me.")
             res.end();
         }
     }

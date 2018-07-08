@@ -3,6 +3,7 @@ const express = require("express"),
 bodyParser = require ("body-parser"),
 morgan = require ("morgan");
 client = require("./client");
+var exec = require( "child_process" ).exec;
 const PORT = 3082; // if doesn't find in environment
 
 const app = express();
@@ -10,6 +11,36 @@ app.use(bodyParser.json());
 app.use(morgan("combined"));
 
 app.get("/broadcast", (req,res)=>{
+    //to do : request just for on targets.
+    //        attacker or not, we don't care.
+    try{
+    client.broadcast((result)=>{
+        console.log("broadcast END !");
+        //console.log(result);
+        res.send(result);
+    });
+    }catch(e){
+        console.log(e);
+    }
+});
+
+
+app.get("/reset", (req,res)=>{
+    //to do : request just for on targets.
+    //        attacker or not, we don't care.
+    try{
+        child = exec("./reset.sh", function(error, stdout, stderr) {
+            if(error !== null){
+                console.log("[ERROR] " + error);
+            }
+        });
+    }catch(e){
+        console.log(e);
+    }
+});
+
+
+app.get("/start", (req,res)=>{
     //to do : request just for on targets.
     //        attacker or not, we don't care.
     try{
