@@ -87,8 +87,16 @@ POST http://192.168.43.26:3000/getBlockchain
 
 ###
 
-GET http://localhost:3082/reset
+GET http://192.168.43.100:3082/reset
 
+###
+
+GET http://192.168.43.107:3082/reset
+
+
+###
+
+GET http://192.168.43.106:3082/reset
 
 
 ###
@@ -97,7 +105,7 @@ GET http://localhost:3082/clearBlockChain
 
 
 ###
-POST http://127.0.0.1:3082/replaceBlockchain
+POST http://192.168.43.1:3082/replaceBlockchain
 Content-Type: application/json
 
 {

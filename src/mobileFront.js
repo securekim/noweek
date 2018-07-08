@@ -32,10 +32,14 @@ app.get("/reset", (req,res)=>{
         child = exec("./reset.sh", function(error, stdout, stderr) {
             if(error !== null){
                 console.log("[ERROR] " + error);
+                res.send("Fail");
+            } else {
+                res.send("Success");
             }
         });
     }catch(e){
         console.log(e);
+        res.send("Fail");
     }
 });
 
