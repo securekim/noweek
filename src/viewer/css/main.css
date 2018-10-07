@@ -663,3 +663,74 @@ filter: blur(2px);
  -o-filter: brightness(0.2);
  -ms-filter: brightness(0.2);
  }
+
+ .jumbotron {
+  animation-duration: 1.5s;
+  animation-name: slidein;
+  animation-iteration-count: 1;
+}
+
+@keyframes slidein {
+  from {
+    margin-top: 100%;
+    weight: 300%
+  }
+
+  to {
+    margin-top: 0%;
+    weight: 100%;
+  }
+}
+
+table {
+  border-collapse:seperate;
+}
+
+.blockchain{
+  padding: 0;
+  border: 0;
+  outline: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+  display: block;
+}
+
+
+.block {
+  line-height: 150px;
+  color: #2eb9d6;
+  text-align: center;
+  position: relative;
+  float: left;
+  top: 0;
+  height: 70px;
+  width: 70px;
+  border-radius: 15px;
+  opacity: 5;
+  background : white;
+  border: rgb(68,68,68) solid 2px;
+  font-size: 50px;
+  transition: background-color .5s ease;
+  font-weight: 700;
+  display: block;
+  left:0;
+  margin: 5px;
+  top: 5px;
+  padding: 0;
+  outline: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+
+.block:hover { 
+  border: rgb(29, 59, 87) solid 3px;
+}
+.blockImage {
+  margin-top:5px
+}
+
+.chain {
+  position: absolute;
+}

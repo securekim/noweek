@@ -1,6 +1,5 @@
 <!doctype html>
 <html lang="en">
-<!-- http://htmlpreview.github.io/?https://github.com/securekim/pickme/blob/master/main/main.html -->
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, shrink-to-fit=no">
@@ -20,87 +19,76 @@
     <nav class="navbar navbar-expand-md navbar-dark fixed-top " style="background: white; border-bottom: solid;border-bottom-color: gray; border-bottom-width: 0.2px;">
      
   </nav>    
-    <!-- <nav class="navbar navbar-expand-md navbar-dark fixed-top" style="background-color:white; border-bottom: solid;border-bottom-color: gray; border-bottom-width: 0.2px;">
+    
+    <div id="blockchain" class="blockchain" style="position: relative; padding-top:15px; padding-bottom:90px; border-bottom:solid; border-bottom-color:gray; border-bottom-width : 0.2px">
+          <!-- Add content Dynamically -->
 
+           <!-- if zero block . left : 20, 75, 155, 235, 315, 395-->
+           <!-- <img class="chain" src="images/LastChain.png" style="left:20px"> 
+           <div class="block" style="opacity:1">
+           </div> -->
 
-
-      <div class="btn-group">
-        <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="margin-right:10px">
-            
-            <span class="glyphicon glyphicon-tag"></span> Tags
-          
-        </button>
-
-        <div class="dropdown-menu">
-          
-          <a class="dropdown-item" href="#" data-value="option1" tabIndex="-1">
-              <input type="checkbox"/> Marketing
-          </a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#" data-value="option1" tabIndex="-1">
-              <input type="checkbox"/> Server Engineer
-          </a>
-          <a class="dropdown-item" href="#" data-value="option1" tabIndex="-1">
-              <input type="checkbox"/> SW Engineer
-          </a>
-          <div class="dropdown-divider"></div>
+           <!-- if one block .-->
+           <!-- <img class="chain" src="images/FirstChain.png" style="left:20px"> 
+          <img class="chain" src="images/MiddleChain.png" style="left:75px">
+          <img class="chain" src="images/LastChain.png" style="left:155px">
+           <div class="block" style="opacity:0">
+          </div>
+            <div class="block">
+              <img class="blockImage" src="images/washer.png" alt="BLOCK NUMBER :0" height="55" width="55">
+          </div> -->
+        <!-- if two block .-->
+        <!-- <img class="chain" src="images/FirstChain.png" style="left:20px"> 
+        <img class="chain" src="images/MiddleChain.png" style="left:75px">
+        <img class="chain" src="images/MiddleChain.png" style="left:155px">
+        <img class="chain" src="images/LastChain.png" style="left:235px">
+         <div class="block" style="opacity:0">
         </div>
-        
-      </div>
+          <div class="block">
+            <img class="blockImage" src="images/washer.png" alt="BLOCK NUMBER :0" height="55" width="55">
+        </div>
+        <div class="block">
+            <img class="blockImage" src="images/webcam.png" alt="BLOCK NUMBER :1" height="55" width="55">
+        </div> -->
 
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item active">
-          <button href="#" class="btn btn-outline-info my-2 my-sm-0" onclick="updateModalI()" data-toggle="modal" data-target="#modalI"><span class="glyphicon glyphicon-user"></span> Profile</button>           
-        </li>
-      </ul>
-      <button class="navbar-toggler" onclick="updateMyPMC()" style="background-color:gray" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon" style="background-color:gray"></span>
-      </button>
+          <img class="chain" src="images/FirstChain.png" style="left:20px">
+          <img class="chain" src="images/MiddleChain.png" style="left:75px">
+          <img class="chain" src="images/MiddleChain.png" style="left:155px">
+          <img class="chain" src="images/MiddleChain.png" style="left:235px">
+          <img class="chain" src="images/MiddleChain.png" style="left:315px">
+          <img class="chain" src="images/LastChain.png" style="left:395px">
 
-      <div class="collapse navbar-collapse" id="navbarCollapse" style="background-color:white; ">
-      
-        
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item">
-          <a class="nav-link disabled" href="https://pickmed.github.io" id="myPMC" style="color:gray">My PMC <span class="glyphicon glyphicon-fire"></span></a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link disabled" href="https://pickmed.github.io" style="color:gray">My Wallet <span class="sr-only">(current)</span></a>
-        </li>
-        <li class="nav-item disabled">
-          <a class="nav-link" href="https://pickmed.github.io" style="color:gray">Change Password <span class="sr-only">(current)</span></a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link disabled" href="https://pickmed.github.io" style="color:gray">Interview <span class="sr-only">(current)</span></a>
-        </li>
-        <li class="nav-item active">
+          <div class="block" style="opacity:0">
+          </div>
+          <div class="block">
+              <img class="blockImage" src="images/washer.png" alt="BLOCK NUMBER :0" height="55" width="55">
+          </div>
+          <div class="block">
+              <img class="blockImage" src="images/webcam.png" alt="BLOCK NUMBER :1" height="55" width="55">
+          </div>
           
-            
-          <a class="nav-link" href="#" data-toggle="modal" data-target="#myModal" style="color:rgb(56, 56, 56)">My profile <span class="sr-only">(current)</span></a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link disabled" href="https://pickmed.github.io" style="color:gray">Black List <span class="sr-only">(current)</span></a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link disabled" href="https://pickmed.github.io" style="color:gray">Exchange <span class="sr-only">(current)</span></a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link disabled" href="#" style="color:gray">Terms of Use</a>
-        </li>
-      </ul>
+          <div class="block">
+            <img class="blockImage" src="images/webcam.png" alt="BLOCK NUMBER :1" height="55" width="55">
+        </div>
 
-        <form class="form-inline mt-2 mt-md-0">
-          <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
-          <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><span class="glyphicon glyphicon-search"></span> Search</button>
+        <div class="block">
+          <img class="blockImage" src="images/webcam.png" alt="BLOCK NUMBER :1" height="55" width="55">
+      </div> 
+            <!--
+              QR 코드 추가
+              새로 추가된 블록만 추가 되도록 ( 한번 요청시 전체 요청 노노 )
+              박스 좀 더 키우고
+              밑에는 없애 버리고 마지막에 추가된 사항이 보여지도록.
+              좌측, 중간, 우측에 내용나누기
+              사슬 
+              스크롤
+            -->
+          </div>
 
-        </form>
-      </div>
-    </nav>
 
-         -->
+        </div>
     
-    
-    <main role="main" id="main" class="container" style="padding-top:100px; padding-bottom:100px;">
+    <main role="main" id="main" class="container" style="padding-top:10px; padding-bottom:100px;">
       <!-- Add content Dynamically -->
     </main>
 
