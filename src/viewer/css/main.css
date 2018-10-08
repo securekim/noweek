@@ -666,11 +666,12 @@ filter: blur(2px);
 
  .jumbotron {
   animation-duration: 1.5s;
-  animation-name: slidein;
+  animation-name: slideleft;
   animation-iteration-count: 1;
 }
 
-@keyframes slidein {
+
+@keyframes slideup {
   from {
     margin-top: 100%;
     weight: 300%
@@ -682,18 +683,62 @@ filter: blur(2px);
   }
 }
 
-table {
-  border-collapse:seperate;
+@keyframes slidedown {
+  from {
+    margin-top: -5px;
+  }
+  to {
+    margin-top: 0%;
+  }
 }
 
-.blockchain{
-  padding: 0;
-  border: 0;
-  outline: 0;
-  font-size: 100%;
-  font: inherit;
-  vertical-align: baseline;
-  display: block;
+@keyframes slideleft {
+  from {
+    margin-left: 5%;
+    weight: 300%;
+  }
+
+  to {
+    weight: 100%;
+  }
+}
+
+@keyframes slideright {
+  from {
+    margin-left: -30px;
+    weight: 300%;
+  }
+
+  to {
+    weight: 100%;
+  }
+}
+
+
+@keyframes slidechain {
+  from {
+    width: 0px;
+  }
+
+  to {
+    width: 80px;
+  }
+}
+
+
+@keyframes fadein {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+
+table {
+  border-collapse:seperate;
 }
 
 
@@ -710,27 +755,69 @@ table {
   opacity: 5;
   background : white;
   border: rgb(68,68,68) solid 2px;
-  font-size: 50px;
-  transition: background-color .5s ease;
-  font-weight: 700;
-  display: block;
-  left:0;
   margin: 5px;
   top: 5px;
   padding: 0;
   outline: 0;
-  font-size: 100%;
   font: inherit;
-  vertical-align: baseline;
+  animation: slidedown 0.5s, fadein 0.3s;
+
 }
 
 .block:hover { 
   border: rgb(29, 59, 87) solid 3px;
 }
 .blockImage {
-  margin-top:5px
+  margin-top : 5px;
+  height : 55px;
+  width : 55px;
 }
 
 .chain {
+  font-size:0;
+  margin:0;
+  padding:0;
+  border: 0;
+  float:left;
+  animation: slidechain 1s, fadein 1s 1s;
+}
+
+
+.blockchain{
+  padding: 0;
+  border: 0;
+  outline: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+  display: block;
+  position: relative; padding-top:15px; padding-bottom:90px; border-bottom:solid; border-bottom-color:gray; border-bottom-width : 0.2px
+}
+
+
+#blockContainer {
+  padding: 0;
+  border: 0;
+  outline: 0;
+  font-size: 100%;
+  width: 100%;
+  font: inherit;
+  vertical-align: baseline;
+  display: block;
   position: absolute;
+  animation: fadein 1s linear;
+}
+
+#chainContainer {
+  padding: 0;
+  opacity: 0;
+  border: 0;
+  outline: 0;
+  font-size: 100%;
+  width: 100%;
+  font: inherit;
+  vertical-align: baseline;
+  display: block;
+  position: absolute;
+  animation: fadein 4s linear;
 }

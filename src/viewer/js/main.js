@@ -9,153 +9,14 @@ var MYPRIVATEKEY;
 var BLOCKS=[];
 var BLOCKS_LENGTH="";
 
-var HARD_CODED_ACCOUNT = "0x731a765dff550d11b7c880af145066bc1bdd3127";
-var HARD_CODED_ACCOUNT_PRIVATEKEY = "2269b98525af6803b23779eefee1d1ee7293547cca8cb14f1ca12df9bfbfb7f5";
-
-var HARD_CODED_SCOUTER = "0x6f213a598be7058a4248eaf0a2593210fa8b71c3";
-var HARD_CODED_SCOUTER_PRIVATEKEY = "d816e5e0eab23dc5573968edaed1443787b03a5dddf4b82e48818ad3634a894a";
-
-var HARD_CODED_SCOUTER_NUMBER =2 ;
-var HARD_CODED_ACCOUNT_NUMBER = 0;
-var ScouterAccessHideInfoYn = {};
-
 ///////////INTERVIEW STATUS
   var ING="1";                    //INTERVEWEE ONLY
   var QUIT="2";                   //INTERVIEWER & SCOUTER  
   var WAIT ="0"; PASS="3"; FAIL="4";  //SCOUTER ONLY
   
-    
-  
-
-///////////////////////////////////////////////////
-//https://loading.io/css/
-// 모두 캐시 해야 됨
-// 이래가지고는 안된다.
-// 전부 로컬스토리지에 넣어놓고
-// 주기적으로 갱신 해야 한다
-// 구조는 ?
-
-// myaccount : {privatekey, number}
-// {account} : {구매했는지, 파일명이뭔지,  }
-// 
-//느린 주범 1. 
-// initUser
-// PEOPLES = initUser(1);
-// PEOPLES = PEOPLES.replace(/'/g, '"');
-// PEOPLES = JSON.parse(PEOPLES);
-//
-// 0. 한번 접근하면 로컬스토리지에 저장한다.
-// 1. 로컬스토리지에 접근해서 PEOPLES를 가져온다.
-// 2. 값이 없으면 initUser 진행, 값이 있으면 리턴.
-// 3. 주기적으로 initUser 를 호출해준다.
-//
-//느린 주범 2.
-//getScouterAccessHideInfoYn
-//var files = getScouterAccessHideInfoYn(account,PEOPLES[number].account)
-//if(files[0]!=""){
-//
-//느린 주범 3.
-//getScouterPurchaseAccountList
-//
-// //
-// var scouterPurchaseAccountList = getScouterPurchaseAccountList(account);
-// var paid = false;
-// for (var i in scouterPurchaseAccountList[0]){
-//   if(typeof PEOPLES[number].account!='undefined' && scouterPurchaseAccountList[0][i] == PEOPLES[number].account) paid = true;
-// }
-////////////////////////////////////////////////////
-
-
-function initMyPMC(){
-  if(typeof MYPROFILE.myPMC=='undefined'){
-    MYPROFILE.myPMC=getPMCBalance(MYPROFILE.account);
-    document.getElementById('myPMC').innerHTML='My PMC : '+MYPROFILE.myPMC+' <span class="glyphicon glyphicon-fire"></span>';
-  }
-}
-
-function updateMyPMC(){
-  MYPROFILE.myPMC=getPMCBalance(MYPROFILE.account);
-  document.getElementById('myPMC').innerHTML='My PMC : '+MYPROFILE.myPMC+' <span class="glyphicon glyphicon-fire"></span>';
-}
-
-function insertPrivateContent(){
-  var tables = document.getElementById('tables');
-  
-  var table = document.createElement('table');  
-    table.className = "contents_table";
-    table.width = "350px";
-    table.style = "margin: 0px auto; padding-top:10px"
-    table.bgcolor="#FFFFFF";
-    table.border="0";
-    tables.appendChild(table);
-    
-  var tbody = document.createElement('tbody'); 
-    table.appendChild(tbody);
-
-  var tr1 = document.createElement('tr');
-    tbody.appendChild(tr1);
-
-  var td1 = document.createElement('td');
-    tr1.appendChild(td1);  
-  
-  var frmTag1 = '<input type=text name=addText style="width:300px; height:30px;" placeholder="Content Name">';
-    td1.innerHTML=frmTag1;
-
-  var td2 = document.createElement('td');
-    td2.rowSpan="2";
-    tr1.appendChild(td2);  
-
-  var frmTag2 = '<button class="btn btn-outline-danger my-2 my-sm-0" type=button value="삭제" onClick="deletePrivateContent($(this))" style="cursor:hand; height:50px;">X</button>';
-    td2.innerHTML=frmTag2;  
-
-  var tr2 = document.createElement('tr');
-    tr2.style="padding-bottom:10px";
-    tbody.appendChild(tr2);
-
-  var frmTag3 = '<input type=text name=addText style="width:300px; height:30px;" placeholder="Content URL">';
-    td3.innerHTML=frmTag3;  
-}
-
-function deletePrivateContent(td) {
-  console.log(td.parent().parent().parent().parent().remove());
-}
-
-
-  //value == COIN
-  //_계좌 사용자
-  //_계좌 스카우터
-  //prikey : d816e5e0eab23dc5573968edaed1443787b03a5dddf4b82e48818ad3634a894a
-  //function sendPmcForOpenHideInfo(gas, value, _to, _from, priKey){
-
-function useGas(coin,number){
-  alertify.prompt('<H4>'+coin+' <span class="glyphicon glyphicon-fire"></span>  will be paid.</H4> <br>And It takes some time. <br> Speed is depend on GAS :', "50",
-  function(evt, value ){
-    alertify.confirm("Are you sure ? Coin :"+coin+" Gas :"+value+ " <br>Will be paid for private info.",
-      function(){
-        sendPmcForOpenHideInfo(value, coin, PEOPLES[number].account, MYPROFILE.account, MYPROFILE.priKey)
-        console.log(value, coin, PEOPLES[number].account, MYPROFILE.account, MYPROFILE.priKey);
-        setJumboButton(number,"YELLOW");
-        alertify.success('Ok');
-      },
-      function(){
-        alertify.error('Cancel');
-      }).set('labels', {ok:'Comfirm', cancel:'Cancel'});
-  },
-  function(){
-    alertify.error('Cancel');
-  })
-}
-
-function drawScout(){
-  list = getRecruitRequestList(MYPROFILE.account,1);
-  list = list.replace(/'/g, '"');
-  list = JSON.parse(list);
-  //for(var i in list){}
-  removeAllJumbotrons();
-  for(var i in list){
-    addScoutJumbotronToMain(list[i]);
-  }
-}
+setTimeout(function(){
+  document.getElementById("chainContainer").style="opacity:1";
+},4000);
 
 function addScoutJumbotronToMain(myScoutersInfo){
   //내 어카운트를 넣으면 면접정보가 나온다
@@ -676,4 +537,33 @@ function updatePeopleModal(number){
   rawBlock.innerHTML = JSON.stringify(BLOCKS[number]);
   rawBlock.style="word-break: break-all;"
 
+}
+
+function addMiddleChain(){
+  let middleChain = document.getElementById("middleChain");
+
+  let chain = document.createElement('div');
+    chain.className = "chain";
+    middleChain.appendChild(chain);
+
+  let img = document.createElement('img');
+    img.className = "chainImage";
+    img.src = "images/MiddleChain.png";
+    chain.appendChild(img);
+}
+
+function addBlock(number) {
+  let blockContainer = document.getElementById("blockContainer");
+  
+  let block = document.createElement('div');
+    block.className = "block";
+    blockContainer.appendChild(block);
+
+  let img = document.createElement('img');
+    img.className = "blockImage";
+    img.src = "images/"+BLOCKS[number].pubkey.CN+".png";
+    img.setAttribute("onclick",'getBlock('+number+')');
+    block.appendChild(img);
+  
+  addMiddleChain()
 }

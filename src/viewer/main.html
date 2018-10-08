@@ -20,7 +20,7 @@
      
   </nav>    
     
-    <div id="blockchain" class="blockchain" style="position: relative; padding-top:15px; padding-bottom:90px; border-bottom:solid; border-bottom-color:gray; border-bottom-width : 0.2px">
+    <div id="blockchain" class="blockchain" style="">
           <!-- Add content Dynamically -->
 
            <!-- if zero block . left : 20, 75, 155, 235, 315, 395-->
@@ -51,29 +51,26 @@
             <img class="blockImage" src="images/webcam.png" alt="BLOCK NUMBER :1" height="55" width="55">
         </div> -->
 
-          <img class="chain" src="images/FirstChain.png" style="left:20px">
-          <img class="chain" src="images/MiddleChain.png" style="left:75px">
-          <img class="chain" src="images/MiddleChain.png" style="left:155px">
-          <img class="chain" src="images/MiddleChain.png" style="left:235px">
-          <img class="chain" src="images/MiddleChain.png" style="left:315px">
-          <img class="chain" src="images/LastChain.png" style="left:395px">
-
-          <div class="block" style="opacity:0">
+        <div id="chainContainer">
+          <div id="firstChain" class="chain"><img src="images/FirstChain.png" /></div>
+          <div id="middleChain">
+          <div class="chain"><img class="chainImage" src="images/MiddleChain.png"/></div>
+          <div class="chain"><img class="chainImage" src="images/MiddleChain.png"/></div>
           </div>
-          <div class="block">
-              <img class="blockImage" src="images/washer.png" alt="BLOCK NUMBER :0" height="55" width="55">
-          </div>
-          <div class="block">
-              <img class="blockImage" src="images/webcam.png" alt="BLOCK NUMBER :1" height="55" width="55">
-          </div>
-          
-          <div class="block">
-            <img class="blockImage" src="images/webcam.png" alt="BLOCK NUMBER :1" height="55" width="55">
+          <div id="lastChain"  class="chain"><img src="images/LastChain.png"  /></div>
         </div>
-
-        <div class="block">
-          <img class="blockImage" src="images/webcam.png" alt="BLOCK NUMBER :1" height="55" width="55">
-      </div> 
+        
+        <div id="blockContainer">
+            <!-- ZERO BLOCK. It's Necessary. -->
+            <div class="block" style="visibility:hidden">
+            </div>
+            <div class="block">
+                <img class="blockImage" src="images/washer.png" alt="BLOCK NUMBER :0" height="55" width="55">
+            </div>
+            <div class="block">
+                <img class="blockImage" src="images/webcam.png" alt="BLOCK NUMBER :1" height="55" width="55">
+            </div>
+      </div>
             <!--
               QR 코드 추가
               새로 추가된 블록만 추가 되도록 ( 한번 요청시 전체 요청 노노 )
@@ -84,8 +81,6 @@
               스크롤
             -->
           </div>
-
-
         </div>
     
     <main role="main" id="main" class="container" style="padding-top:10px; padding-bottom:100px;">
