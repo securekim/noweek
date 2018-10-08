@@ -775,11 +775,13 @@ table {
 
 .chain {
   font-size:0;
+  opacity:0;
   margin:0;
   padding:0;
   border: 0;
   float:left;
-  animation: slidechain 1s, fadein 1s 1s;
+  animation: slidechain 0.5s, fadein 2s;
+  
 }
 
 
@@ -819,5 +821,5 @@ table {
   vertical-align: baseline;
   display: block;
   position: absolute;
-  animation: fadein 4s linear;
+  
 }

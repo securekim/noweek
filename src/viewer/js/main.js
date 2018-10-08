@@ -14,9 +14,6 @@ var BLOCKS_LENGTH="";
   var QUIT="2";                   //INTERVIEWER & SCOUTER  
   var WAIT ="0"; PASS="3"; FAIL="4";  //SCOUTER ONLY
   
-setTimeout(function(){
-  document.getElementById("chainContainer").style="opacity:1";
-},4000);
 
 function addScoutJumbotronToMain(myScoutersInfo){
   //내 어카운트를 넣으면 면접정보가 나온다
@@ -287,78 +284,7 @@ function iNeedYou(number){
 
   // ***************************************************** //
 
-function httpGetAsync(theUrl, callback)
-{
-    var xmlHttp = new XMLHttpRequest();
-    xmlHttp.onreadystatechange = function() { 
-        if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
-            callback(xmlHttp.responseText);
-    }
-    xmlHttp.open("GET", theUrl, true); // true for asynchronous 
-    xmlHttp.send(null);
-}
 
-httpGetAsync("/getBlockChain",function(data){
-  console.log("/getBlockChain");
-  dt=JSON.parse(data);
-  for (var i in dt.data){
-    dt.data[i].pubkey=JSON.parse(dt.data[i].pubkey) 
-  }
-
-  if(BLOCKS==null 
-    || typeof BLOCKS == "undefined" 
-    || BLOCKS.length == 0)
-    {
-      BLOCKS=dt.data;
-      drawPeople();
-    } else {
-        for (var i in BLOCKS){
-          if (BLOCKS[i].hash == dt.data[i].hash){
-            console.log("Same block");
-        } else {
-          console.log("not same block");
-          BLOCKS=dt.data;
-          drawPeople();
-          break;
-        }
-      }
-    }
-})
-
-setInterval(function(){
-httpGetAsync("/getBlockChain",function(data){
-  console.log("/getBlockChain");
-  dt=JSON.parse(data);
-  for (var i in dt.data){
-    dt.data[i].pubkey=JSON.parse(dt.data[i].pubkey) 
-  }
-  httpGetAsync("/getBlockChain",function(data){
-    console.log("/getBlockChain");
-    dt=JSON.parse(data);
-    for (var i in dt.data){
-      dt.data[i].pubkey=JSON.parse(dt.data[i].pubkey) 
-    }
-  
-    if(BLOCKS==null 
-      || typeof BLOCKS == "undefined" 
-      || BLOCKS.length == 0)
-      {
-        BLOCKS=dt.data;
-        drawPeople();
-      } else {
-          for (var i in BLOCKS){
-            if (BLOCKS[i].hash == dt.data[i].hash){
-              console.log("Same block");
-          } else {
-            console.log("not same block");
-            BLOCKS=dt.data;
-            drawPeople();
-            break;
-          }
-        }
-      }
-  })
-  })},4000);
 
 function timeBeautiful(timestamp){
   date = new Date(timestamp),
@@ -553,6 +479,10 @@ function addMiddleChain(){
 }
 
 function addBlock(number) {
+
+  if(typeof BLOCKS[number] == "undefined" 
+  || typeof BLOCKS[number].pubkey == "undefined") return false;
+
   let blockContainer = document.getElementById("blockContainer");
   
   let block = document.createElement('div');
@@ -565,5 +495,86 @@ function addBlock(number) {
     img.setAttribute("onclick",'getBlock('+number+')');
     block.appendChild(img);
   
-  addMiddleChain()
+  if(number != 0){
+    addMiddleChain();
+  } else {
+    document.getElementById("chainContainer").style="display:contents";
+  }
+  $('.chain').css('opacity', '1'); // 꼭 들어가야한다.
 }
+
+
+function httpGetAsync(theUrl, callback)
+{
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.onreadystatechange = function() { 
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+            callback(xmlHttp.responseText);
+    }
+    xmlHttp.open("GET", theUrl, true); // true for asynchronous 
+    xmlHttp.send(null);
+}
+
+function isSameChain(chain1, chain2){
+  try {
+    if(chain1.length != chain2.length) return false;
+    for(var i in chain1) {
+      if(typeof chain1[i].index == "undefined"
+      || typeof chain2[i].index == "undefined"
+      || chain1[i].index != chain2[i].index
+      ) return false;
+    }
+  } catch (e) {
+    console.log("Is not same chain! Change it");
+    return false;
+  }
+  return true;
+}
+
+function getNewBlockIndex(callback){ 
+  // return new block index
+  // -1 : no new block.
+  // 0 : initialized. redraw all things.
+  httpGetAsync("/getBlockChain",function(data){
+    try {
+      dt=JSON.parse(data);
+      for (var i in dt.data){
+        dt.data[i].pubkey=JSON.parse(dt.data[i].pubkey) 
+      }
+      if (isSameChain(BLOCKS, dt.data)){
+        callback(-1);
+        return;
+      } else if(BLOCKS.length < dt.data.length) {
+        let ret = BLOCKS.length;
+        BLOCKS=dt.data;
+        callback(ret);
+        return;
+      } else if(BLOCKS.length > dt.data.length) {
+        console.log("Block is deleted.");
+        BLOCKS=dt.data;
+      }
+      BLOCKS=dt.data;
+      callback(0);
+      return;
+    } catch (e) {
+      BLOCKS=dt.data;
+      callback(0);
+      return;
+    }
+  })
+}
+
+
+
+setInterval(function(){
+  getNewBlockIndex(function(idx){
+
+    console.log(" idx :"+idx);
+    if(idx != -1 ){
+      for(var i=idx; i<BLOCKS.length; i++) {
+        console.log("Add Block");
+        addBlock(i);
+      }
+    }
+  });
+},4000);
