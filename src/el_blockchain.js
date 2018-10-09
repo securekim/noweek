@@ -100,16 +100,16 @@ const setBlock = (index, timestamp, previousHash, pubkey) => new Block(
 
 const isBlockValid = (candidateBlock, latestBlock) => {
     if (!isBlockStructureValid(candidateBlock)) {
-        console.log("The candidate block structure is not valid");
+        console.log("[BRO][isBlockValid] The candidate block structure is not valid");
         return false;
     } else if (latestBlock.index + 1 !== candidateBlock.index) {
-        console.log("The candidate block doesnt have a valid index");
+        console.log("[BRO][isBlockValid] The candidate block doesnt have a valid index");
         return false;
     } else if (latestBlock.hash !== candidateBlock.previousHash) {
-        console.log("The previousHash of the candidate block is not the hash of the latest block");
+        console.log("[BRO][isBlockValid] The previousHash of the candidate block is not the hash of the latest block");
         return false;
     } else if (getBlocksHash(candidateBlock) !== candidateBlock.hash) {
-        console.log("The hash of this block is invalid");
+        console.log("[BRO][isBlockValid] The hash of this block is invalid");
         return false;
     } else if (!isTimeStampValid(candidateBlock, latestBlock)) {
         //console.log("The timestamp of this block is dodgy");
@@ -131,7 +131,7 @@ const isBlockStructureValid = (block) => {
         typeof block.index === "number" &&
         typeof block.timestamp === "number" &&
         typeof block.previousHash === "string" &&
-        typeof block.pubkey === "string"&&
+        typeof block.pubkey.PUBKEY === "string"&&
         typeof block.hash === "string" &&
         typeof block.signature === "string"
     );
@@ -270,14 +270,22 @@ const blockchain_init = (pubkey) => {
 };
 
 const blockchain_add = (newBlock) => {
-    if(BLOCKCHAIN.length === 0)
+    
+    console.log("[Bro] newBlock :");
+    console.log(newBlock);
+    if(BLOCKCHAIN.length === 0){
+        console.log("[Bro] Blockchain Length is 0");
         return false;
-
+    }
+        
     if(!isBlockValid(newBlock, getLatestBlock())){
         //request: broadcast_getBlockchain
+        console.log("[Bro] Blockchain is not valid");
         broadcast_getBlockchain();
         return false;
     }
+
+    console.log("[Bro] Go !");
 
     BLOCKCHAIN.push(newBlock);
     block_mem2file(newBlock.index, newBlock);

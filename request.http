@@ -1,10 +1,38 @@
 
 ###
-POST http://192.168.219.100:3082/initChain
+POST http://localhost:3082/initChain
 Content-Type: application/json
 
 {
-    "CN":"webcam"
+    "CN":"robot"
+}
+
+###
+POST http://localhost:3000/makeBlock
+Content-Type: application/json
+
+{
+    "publicKey": { "CA": "TEST", "CN": "TEST", "PUBKEY": "046925288ba597a889c6cba4d0123a028e6b1446fdc346fb70c43a8d643cf638" }
+}
+
+###
+
+POST http://localhost:3000/addBlock
+Content-Type: application/json
+
+{
+    "block":{
+  "index": 1,
+  "timestamp": 1539090746906,
+  "previousHash": "b5c069de73f93dc4eb8ce8925e16b9103aafec1c698005c866f5d710145bbcf7",
+  "pubkey": {
+    "CA": "TEST",
+    "CN": "TEST",
+    "PUBKEY": "046925288ba597a889c6cba4d0123a028e6b1446fdc346fb70c43a8d643cf638"
+  },
+  "hash": "041286eea2265ebe80d5f5168093ba2ed165293e7b65d409c3b726b363486299",
+  "signature": "Cp5NYQNduxWQ/YFWwENdgnQMvOk3Vv3O/2SNJEoMiRoyywQhOEH7uf43WObaBNKisU4QlujAKsDxyLhya3a5aM2Dra6XXSC/07BV8FONZ2kFTbBimz+fZ5pvJ+Xy1XS9Ldbm3QpQE/BKxNm/b9NJ7ucquaTexzlTvG8G0UGzPfh3rjGIx2UEPumW3FUagSNYtDs5UYhyeXevYrOptH5swT3HfjcbdFteBP3Gk+33HVknYefBxghY8g8qGickh7ltFDDUIaKNs14NO+JDXVwfrhjnSfZ+NAM6krqteaDtn1hsKEEy9tdAwPmdZygXjP0pzgmkFB8PUDldMnWvTHWC9M+BaWm7B1YvigGf6zmGC0NNKbit39OE2xcrpWy01vMUSY+q3mbCwUS/Vy58lL2HxeEX1EZNVFNdeWc2nr8n4dUizNCgZT9xpY35qy0Be/mykb1ud8azyuGn6Fe5f/nuVWOp01cLNzAR1zn8rpCBGofjLOHD8NugNYbYlvkGkh6KNt5qdTa/bNCboHgQCZgBlkPB++HR0f1751Rh2tLyyYOhFWgOZue/zrCyK8zNGT3/6Ll4oI0Mv8bVO2dKyQsP2XZ8MNAA8ZCLjUHxgOzHIiYaU6UyztbYSrhJrq6xShzPSnyr0iJ0Xuzp6r4TIYPrfZF7yHNejUYpLW2rcfD8neo="
+}
 }
 
 ###
@@ -78,11 +106,11 @@ Content-Type: application/json
 
 ###
 
-GET http://localhost:3082/getBlockChain
+GET http://192.168.219.151:3082/getBlockChain
 
 ###
 
-POST http://192.168.43.26:3000/getBlockchain
+POST http://192.168.219.151:3000/getBlockchain
 
 
 ###
