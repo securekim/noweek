@@ -2,6 +2,9 @@
 /*
 
 */
+.slideup {
+  animation: slideup 1s, fadein 1.5s;
+}
 
 .read-more-state {
   display: none;
@@ -43,6 +46,7 @@
 
 p {
   padding: 2%;
+  word-break:break-all;
 }
 
 /*-------------------------------------------
@@ -720,12 +724,10 @@ filter: blur(2px);
 @keyframes slideup {
   from {
     margin-top: 100%;
-    weight: 300%
   }
 
   to {
-    margin-top: 0%;
-    weight: 100%;
+    margin-top: 30px;
   }
 }
 
@@ -752,11 +754,9 @@ filter: blur(2px);
 @keyframes slideright {
   from {
     margin-left: -30px;
-    weight: 300%;
   }
 
   to {
-    weight: 100%;
   }
 }
 
@@ -811,6 +811,14 @@ table {
 
 }
 
+.mainImage {
+  height : 120px;
+  width : 120px;
+  max-height: 120px;
+  max-width : 120px;
+  animation: slidedown 0.5s, fadein 0.3s;
+}
+
 .block:hover { 
   border: rgb(29, 59, 87) solid 3px;
 }
@@ -828,7 +836,6 @@ table {
   border: 0;
   float:left;
   animation: slidechain 0.5s, fadein 2s;
-  
 }
 
 
