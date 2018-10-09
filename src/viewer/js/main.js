@@ -41,14 +41,51 @@ function addMiddleChain(){
     chain.appendChild(img);
 }
 
+function removeMiddleChain() {
+  let middleChain = document.getElementById("middleChain");
+  middleChain.removeChild(middleChain.childNodes[0]); 
+  middleChain.removeChild(middleChain.childNodes[0]); 
+}
+
+function removeBlock(number) {
+ //if (document.getElementById("zeroBlock")==null)         
+  if(typeof BLOCKS[number] == "undefined" 
+  || typeof BLOCKS[number].pubkey == "undefined") return false;
+  
+  let _block = document.getElementById("block_"+number);
+  //BLOCKS[number] = "";
+  BLOCKS[number].view = false;
+  _block.remove();
+  //removeMiddleChain();
+}
+
+function isFull(){
+  let width = document.getElementById("blockContainer").offsetWidth;
+  console.log("width :"+width);
+  let viewWidth = 160;
+  for(var i in BLOCKS){
+    if(typeof BLOCKS[i].view!="undefined" && BLOCKS[i].view){
+      viewWidth += 80;
+    } 
+  }
+  console.log("viewWidth :" +viewWidth);
+  return viewWidth >= width
+}
+
+let deletedNumber = 0;
+
 function addBlock(number) {
 
   if(typeof BLOCKS[number] == "undefined" 
   || typeof BLOCKS[number].pubkey == "undefined") return false;
+  
+  if(typeof BLOCKS[number].view == "undefined")
+    BLOCKS[number].view = true;
 
   let blockContainer = document.getElementById("blockContainer");
   
   let block = document.createElement('div');
+    block.id = "block_"+number;
     block.className = "block";
     blockContainer.appendChild(block);
 
@@ -59,12 +96,18 @@ function addBlock(number) {
     img.setAttribute("onmouseover",'updateBlock('+number+')');
     block.appendChild(img);
   
-  if(number != 0){
+  let fullFlag = isFull();  
+  if(number != 0 && !fullFlag){
     addMiddleChain();
   } else {
     document.getElementById("chainContainer").style="display:contents";
   }
   $('.chain').css('opacity', '1'); // 꼭 들어가야한다.
+  if(fullFlag){
+    console.log("Ful Flag !! delete :"+deletedNumber);
+    removeBlock(deletedNumber++);
+  } 
+
   updateBlock(number);
 }
 
@@ -139,7 +182,10 @@ function drawBlock(){
     }
   });
 }
-drawBlock();
+
+setTimeout (()=>{
+  drawBlock();
+},1000)
 
 setInterval(function(){
   drawBlock();
@@ -158,10 +204,6 @@ const maxLength = 250;
 var update = {
 image_CN : (number)=>{
   let _image_CN = document.getElementById("image_CN");
-
-  //_image_CN.removeChild(image_CN.childNodes[0]); //remove png
-  //_image_CN.removeChild(image_CN.childNodes[0]); //remove CN
-
     //<img src="images/mobile.png" alt="BLOCK NUMBER :0" height="80" width="80" class="chain">Mobile
 
     _image_CN.innerHTML = '<img src="images/'+BLOCKS[number].pubkey.CN+'.png" class="mainImage">'+BLOCKS[number].pubkey.CN
@@ -204,4 +246,12 @@ function readmore(str){
   + readMore
   + str.substring(maxLength)
   + "</span>";
+}
+
+function test(){
+  for(var i=0; i<20; i++){
+    setTimeout(()=>{
+      addBlock(1);
+    },i*300);
+  }
 }

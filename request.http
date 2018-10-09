@@ -1,10 +1,10 @@
 
 ###
-POST http://localhost:3082/initChain
+POST http://192.168.219.100:3082/initChain
 Content-Type: application/json
 
 {
-    "CN":"washer"
+    "CN":"webcam"
 }
 
 ###
