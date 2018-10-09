@@ -10,6 +10,11 @@ const app = express();
 app.use(bodyParser.json());
 app.use(morgan("combined"));
 
+//todo : block 을 돌면서 최초 테스트 모바일 이후 block 을 모두 삭제한다.
+app.get("/hardFork", (req,res)=>{
+    
+});
+
 app.get("/broadcast", (req,res)=>{
     //to do : request just for on targets.
     //        attacker or not, we don't care.

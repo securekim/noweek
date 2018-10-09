@@ -53,6 +53,8 @@ app.post("/makeBlock", (req,res) => {
 });
 
 app.post("/addBlock", (req, res) => {
+    console.log("[BRO] addBlock :")
+    console.log(req.body);
     block = req.body.block;
 
     if(blockchain_add(block))

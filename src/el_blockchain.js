@@ -131,7 +131,7 @@ const isBlockStructureValid = (block) => {
         typeof block.index === "number" &&
         typeof block.timestamp === "number" &&
         typeof block.previousHash === "string" &&
-        typeof block.pubkey.PUBKEY === "string"&&
+        //typeof block.pubkey.PUBKEY === "string"&&
         typeof block.hash === "string" &&
         typeof block.signature === "string"
     );
