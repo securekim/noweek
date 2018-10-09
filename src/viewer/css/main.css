@@ -1,4 +1,50 @@
 
+/*
+
+*/
+
+.read-more-state {
+  display: none;
+}
+
+.read-more-target {
+  opacity: 0;
+  max-height: 0;
+  font-size: 0;
+  transition: .25s ease;
+}
+
+.read-more-state:checked ~ .read-more-wrap .read-more-target {
+  opacity: 1;
+  font-size: inherit;
+  max-height: 999em;
+}
+
+.read-more-state ~ .read-more-trigger:before {
+  content: 'Show more';
+}
+
+.read-more-state:checked ~ .read-more-trigger:before {
+  content: 'Show less';
+}
+
+.read-more-trigger {
+  cursor: pointer;
+  display: inline-block;
+  padding: 0 .5em;
+  color: #666;
+  font-size: .9em;
+  line-height: 2;
+  border: 1px solid #ddd;
+  border-radius: .25em;
+}
+
+/* Other style */ 
+
+p {
+  padding: 2%;
+}
+
 /*-------------------------------------------
     $ Loaders
 -------------------------------------------*/
@@ -761,6 +807,7 @@ table {
   outline: 0;
   font: inherit;
   animation: slidedown 0.5s, fadein 0.3s;
+  box-shadow: 1px 1px 3px rgba(0,0,0,0.5);
 
 }
 
@@ -808,6 +855,8 @@ table {
   display: block;
   position: absolute;
   animation: fadein 1s linear;
+  box-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+  height:90px;
 }
 
 #chainContainer {
@@ -821,5 +870,24 @@ table {
   vertical-align: baseline;
   display: block;
   position: absolute;
-  
+}
+
+#lastChain.hover {
+
+}
+
+
+.swing.hover {
+  animation: swing ease-in-out 1s infinite alternate;
+  float:left;
+}
+
+@keyframes swing {
+  0% { margin-top: -3px; }
+  50% { margin-bottom: 0px; }
+  100% { margin-top: 3px; }
+}
+
+.box {
+  box-shadow: 1px 1px 3px rgba(0,0,0,0.5);
 }

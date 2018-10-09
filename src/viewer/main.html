@@ -20,7 +20,7 @@
      
   </nav>    
     
-    <div id="blockchain" class="blockchain" style="">
+    <div id="blockchain" class="blockchain">
           <!-- Add content Dynamically -->
 
            <!-- if zero block . left : 20, 75, 155, 235, 315, 395-->
@@ -56,14 +56,15 @@
           <div id="middleChain" >
             <div class="chain" style="opacity:0"><img class="chainImage" src="images/MiddleChain.png"/></div>
           </div>
-          <div id="lastChain"  class="chain" style="opacity:0"><img src="images/LastChain.png"  /></div>
+          <div id="lastChain"  class="chain swing" style="opacity:0"><img src="images/LastChain.png"  /></div>
         </div>
         
         <div id="blockContainer">
             <!-- ZERO BLOCK. It's Necessary. -->
             <div class="block" style="visibility:hidden">
             </div>
-      </div>
+        </div>
+
             <!--
               QR 코드 추가
               새로 추가된 블록만 추가 되도록 ( 한번 요청시 전체 요청 노노 )
@@ -76,8 +77,58 @@
           </div>
         </div>
     
-    <main role="main" id="main" class="container" style="padding-top:10px; padding-bottom:100px;">
+
+    <main role="main" id="main" class="container box" style="margin-top:30px; padding-top:10px; padding-bottom:100px;">
       <!-- Add content Dynamically -->
+      <div class="jumbotron">
+          <div class="container" style="background:white;">
+            
+            <!-- <p id="CN_CONTEXT"> -->
+              <table style="width: 100%;"><td style="padding: 20px; width: 40%;">
+                <h1 class="display-3" id="image_CN"><img src="images/mobile.png" alt="BLOCK NUMBER :0" height="80" width="80" class="chain">Mobile</h1>
+              </td><td style="vertical-align: middle;"><h1 id="time">2018/10/6 14:49:54</h1>
+              </td>
+              <td id="load" style="vertical-align: middle; height: 80px; width: 80px;">
+                <div class="lds-grid"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+              </td>
+              </table>
+
+            <!-- </p> -->
+          </div>
+        </div>
+        
+      <div class="container">
+          <!-- Example row of columns -->
+          <div class="row">
+            <div class="col-md-4">
+              <h2>Certificate</h2>
+              <div>
+                  <input type="checkbox" class="read-more-state" id="_certificate"/>
+                  <p id="certificate" class="read-more-wrap box">Lorem ipsum dolor sit amet, consectetur adipisicing elit. <span class="read-more-target">Libero fuga facilis vel consectetur quos sapiente deleniti eveniet dolores tempore eos deserunt officia quis ab? Excepturi vero tempore minus beatae voluptatem!</span></p>
+                  <label for="_certificate" class="read-more-trigger"></label>
+                </div>
+            </div>
+            <div class="col-md-4">
+              <h2>Public Key</h2>
+              <input type="checkbox" class="read-more-state" id="_publickey" />
+              <p id="publickey" class="read-more-wrap box">Donec id elit non mi porta gravida at eget metus. Fusce dapibus,<span class="read-more-target">tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </span></p>
+              <label for="_publickey" class="read-more-trigger"></label>
+            </div>
+            <div class="col-md-4">
+              <h2>Hash</h2>
+              <input type="checkbox" class="read-more-state" id="_hash"/>
+              <p id="hash" class="read-more-wrap box">Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, <span class="read-more-target">egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</span></p>
+              <label for="_hash" class="read-more-trigger"></label>
+            </div>
+          </div>
+          <div>
+            <h2>Raw Data</h2>
+            <input type="checkbox" class="read-more-state" id="_rawdata"/>
+            <p id="rawdata" style="background:rgb(206, 245, 255)" class="read-more-wrap box">Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, <span class="read-more-target">egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</span></p>
+            <label for="_rawdata" class="read-more-trigger"></label>
+          </div>
+  
+        </div>
     </main>
 
     <!--  !!!!!!!!!!!!!!!!!!! MODAL !!!!!!!!!!!!!!!!!!!!  -->
@@ -384,6 +435,7 @@
     <script src="js/jquery.slim.min.js"></script>
     <script src="js/popper.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
+    <script src="js/readmore.min.js"></script>
     
     <script src="js/alertify.min.js"></script>
         

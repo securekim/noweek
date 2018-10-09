@@ -564,12 +564,8 @@ function getNewBlockIndex(callback){
   })
 }
 
-
-
-setInterval(function(){
+function drawBlock(){
   getNewBlockIndex(function(idx){
-
-    console.log(" idx :"+idx);
     if(idx != -1 ){
       for(var i=idx; i<BLOCKS.length; i++) {
         console.log("Add Block");
@@ -577,4 +573,38 @@ setInterval(function(){
       }
     }
   });
+}
+drawBlock();
+
+setInterval(function(){
+  drawBlock();
 },4000);
+
+//todo getBlock(number);
+
+
+$('#read').readmore({
+  speed: 75,
+  maxHeight: 2
+});
+
+var update = {
+image : (number)=>{
+
+},
+CN : (number)=>{
+
+},
+loading : (number) => {
+
+},
+publickKey : (number) => {
+
+},
+hash : (number) => {
+
+},
+rawData : (number) => {
+
+}
+}
