@@ -326,4 +326,6 @@ function initChain(CN,callback){
     });
 }
 
+
+
 module.exports = {nfcCheck,nfcClear,nfcTag, confirmPin,clearBlockChain,getBlockChain,broadcast,generatePin,sendWithMutual,initChain};
