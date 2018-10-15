@@ -405,4 +405,51 @@ function getCA(CN){
     return fs.readFileSync('certs/'+CN+'-CA.pem','utf8');
 }
 
-module.exports = {nfcCheck, nfcClear, nfcTag, getCA, DH_encrypt, DH_decrypt, getIPABC,startServer,restartServer,CERT_initCERT,makeBundle,DH_clean,clientPrime,DH_getMyPubKey,generatePin,DH_generate,sha256,loadPubkeys,getModHash,verifyKey};
+function getDateTime() {
+    var date = new Date();
+    var hour = date.getHours();
+    hour = (hour < 10 ? "0" : "") + hour;
+    var min  = date.getMinutes();
+    min = (min < 10 ? "0" : "") + min;
+    var sec  = date.getSeconds();
+    sec = (sec < 10 ? "0" : "") + sec;
+    var year = date.getFullYear();
+    var month = date.getMonth() + 1;
+    month = (month < 10 ? "0" : "") + month;
+    var day  = date.getDate();
+    day = (day < 10 ? "0" : "") + day;
+    return year + ":" + month + ":" + day + ":" + hour + ":" + min + ":" + sec;
+}
+
+function isTimeover(sec, past) { // if past is null, (not "null"), error is occure
+    try{
+        return getDateTime().replace(/:/gi,"") - past.replace(/:/gi,"") > sec;
+    } catch(e){
+        return false;
+    }
+}
+
+module.exports = {
+    nfcCheck, 
+    nfcClear, 
+    nfcTag, 
+    getCA, 
+    DH_encrypt, 
+    DH_decrypt,
+    getIPABC,
+    startServer,
+    restartServer,
+    CERT_initCERT,
+    makeBundle,
+    DH_clean,
+    clientPrime,
+    DH_getMyPubKey,
+    generatePin,
+    DH_generate,
+    sha256,
+    loadPubkeys,
+    getModHash,
+    verifyKey,
+    getDateTime,
+    isTimeover
+};

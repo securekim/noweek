@@ -11,6 +11,8 @@ var crypto = require('crypto');
 var forge = require('node-forge');
 var pki = forge.pki;
 var latestSecret;
+const TIMEOUT = 10; //second. if TIMEOUT LATER, 연결이 끊긴 것으로 알거야.
+
 //const {sha256} = utils;
 try{
     var CN = fs.readFileSync("myProfile.txt",'utf8');
@@ -68,8 +70,6 @@ function sendWithMutual(ip,data,callback){
             'Content-Length': postData.length
         } 
     }; 
-    
-
 
     options_mutual.agent = new https.Agent(options_mutual);
 
@@ -87,9 +87,7 @@ function sendWithMutual(ip,data,callback){
             //process.stdout.write(data); 
             callback(chunk);
         }); 
-        
     }); 
-
     
     req_mutual.write(postData);
     req_mutual.end(); 
@@ -111,69 +109,22 @@ broadcast_loop();
 
 setInterval(function(){
     broadcast_loop();
-},15000);
+},TIMEOUT);
+
+function fillNull(i) {
+    broadcastList[i].CN = "null";
+    broadcastList[i].mac = "null";
+    broadcastList[i].dateTime = "null";
+}
 
 function broadcast_loop(){
-    var options_broad = {
-        hostname: "", 
-        port: PORT_DH, 
-        path: '/', 
-        method: 'GET',
-        rejectUnauthorized: false,
-        timeout: 5000
-    }
-
-    function requestTo(ip){
-        options_broad.hostname = ipabc+"."+ip
-        
-        var post_req = https.request(options_broad, function(res){
-            try{
-                res.setEncoding('utf8');
-                var CN = res.socket.getPeerCertificate().subject.CN;
-                console.log(CN);
-                //console.log(res.socket);
-                broadcastList["IP_"+res.connection.remoteAddress] = CN;
-                //console.log(arr);
-                res.setTimeout(5000);
-                res.on('timeout',()=>{
-                    broadcastList["IP_"+res.connection.remoteAddress] = 'null';
-                });
-            }catch(e){
-
+    for (var i in broadcastList) {
+        if(typeof broadcastList[i].dateTime != "undefined") {
+            if(utils.isTimeover(TIMEOUT, broadcastList[i].dateTime)){
+                fillNull(i);
             }
-        })
-    
-        post_req.on('socket',function(socket){
-            socket.setTimeout(5000);
-            socket.on('timeout',()=>{
-                try{
-                var ip = socket._pendingData.split(":")[1].split(" ")[1];
-                broadcastList["IP_"+ip] = 'null';
-                post_req.abort();
-                }catch(e){
-
-                }
-            });
-        })
-
-        post_req.on('error',(e)=>{
-            //broadcastList["IP_"+post_req.socket.connection.remoteAddress] = 'null';
-            post_req.abort();
-        });
-        // post_req.on('error',()=>{
-        //     console.log("error");
-        //     startIP++;
-        //     return next();
-        // });
-        post_req.write("");
-        post_req.end();
-    }
-
-    if(ipabc==="127.0.0"){
-        requestTo(1);
-    } else {
-        for(var i =1; i<255; i++){
-            requestTo(i);
+        } else {
+            fillNull(i);
         }
     }
 }
@@ -327,5 +278,70 @@ function initChain(CN,callback){
 }
 
 
+///////////////////////////////////////// BROADCAST CLIENT//////////////
 
+var dgram = require('dgram'); 
+var client = dgram.createSocket("udp4"); 
+var os = require('os');
+var ip = os.networkInterfaces()//.address.split('.');
+
+var mac="te:st:te:st:te:st";
+
+//DEFAULT SETTING
+try {
+for(var i in ip){
+    var mac = ip[i][0].mac;
+    var ipABC = ip[i][0].address.split('.');
+    ipABC = ipABC[0] + "." + ipABC[1] + "." + ipABC[2];
+}
+} catch (e){
+    console.log(e);
+}
+
+var PORT = 6024;
+
+client.bind(function() {
+    client.setBroadcast(true);
+    setInterval(broadcastNew, 3000);
+});
+
+function broadcastNew() {
+    var message = new Buffer(JSON.stringify({CN:CN, mac:mac}));
+    client.send(message, 0, message.length, PORT, ipABC+".255", function() {
+        //console.log("Sent CN '" + message + "' to "+ipABC+".255");
+    });
+}
+
+///////////////////////////////////////// BROADCAST SERVER//////////////
+
+var server = dgram.createSocket('udp4');
+var mac = "tt:tt:te:st:tt:tt";
+
+for (var i=1; i<255; i++) {
+    broadcastList["IP_"+ipABC+"."+i] = {CN:"null", mac:"null", dateTime:"null"};
+}
+
+server.on('listening', function () {
+    var address = server.address();
+    console.log('UDP server listening on ' + address.address + ":" + address.port);
+    server.setBroadcast(true);
+});
+
+server.on('message', function (message, rinfo) {
+    try { 
+        console.log(mac);
+        message = JSON.parse(message);
+        mac = message.mac;
+        dateTime = utils.getDateTime();
+        console.log('UDP : ' + rinfo.address + ':' + rinfo.port +' - ' + message.CN + ":"+message.mac +" at "+dateTime);
+        broadcastList["IP_"+rinfo.address] = {CN:message.CN, mac:message.mac, dateTime:dateTime};
+    } catch (e){
+        console.log(e);
+    }
+});
+
+server.bind(PORT);
+
+
+////////////////////////////////////////////////////////////////////////
 module.exports = {nfcCheck,nfcClear,nfcTag, confirmPin,clearBlockChain,getBlockChain,broadcast,generatePin,sendWithMutual,initChain};
