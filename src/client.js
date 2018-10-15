@@ -97,19 +97,10 @@ function sendWithMutual(ip,data,callback){
 }
 
 var broadcastList = {};
-var ipabc;
 
 function broadcast(callback){
-    ipabc = utils.getIPABC();
     callback(broadcastList);
 }
-
-ipabc = utils.getIPABC();
-broadcast_loop();
-
-setInterval(function(){
-    broadcast_loop();
-},TIMEOUT);
 
 function fillNull(i) {
     broadcastList[i].CN = "null";
@@ -290,7 +281,7 @@ var mac="te:st:te:st:te:st";
 //DEFAULT SETTING
 try {
 for(var i in ip){
-    var mac = ip[i][0].mac;
+    mac = ip[i][0].mac;
     var ipABC = ip[i][0].address.split('.');
     ipABC = ipABC[0] + "." + ipABC[1] + "." + ipABC[2];
 }
@@ -308,14 +299,13 @@ client.bind(function() {
 function broadcastNew() {
     var message = new Buffer(JSON.stringify({CN:CN, mac:mac}));
     client.send(message, 0, message.length, PORT, ipABC+".255", function() {
-        //console.log("Sent CN '" + message + "' to "+ipABC+".255");
     });
+    broadcast_loop();
 }
 
 ///////////////////////////////////////// BROADCAST SERVER//////////////
 
 var server = dgram.createSocket('udp4');
-var mac = "tt:tt:te:st:tt:tt";
 
 for (var i=1; i<255; i++) {
     broadcastList["IP_"+ipABC+"."+i] = {CN:"null", mac:"null", dateTime:"null"};
@@ -329,7 +319,6 @@ server.on('listening', function () {
 
 server.on('message', function (message, rinfo) {
     try { 
-        console.log(mac);
         message = JSON.parse(message);
         mac = message.mac;
         dateTime = utils.getDateTime();
