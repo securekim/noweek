@@ -3,13 +3,9 @@ var fs = require('fs');
 var tls = require('tls');
 var https = require('https'); 
 var utils = require('./utils');
-var async = require('async');
 var el_request = require('./el_request'); 
-var el_server = require('./el_server'); 
 const querystring = require('querystring');
-var crypto = require('crypto');  
 var forge = require('node-forge');
-var pki = forge.pki;
 var latestSecret;
 const TIMEOUT = 10; //second. if TIMEOUT LATER, 연결이 끊긴 것으로 알거야.
 
@@ -108,7 +104,9 @@ function fillNull(i) {
     broadcastList[i].dateTime = "null";
 }
 
-function broadcast_loop(){
+setInterval(broadcast_garbageCollector, 5000);
+
+function broadcast_garbageCollector(){
     for (var i in broadcastList) {
         if(typeof broadcastList[i].dateTime != "undefined") {
             if(utils.isTimeover(TIMEOUT, broadcastList[i].dateTime)){
@@ -300,7 +298,6 @@ function broadcastNew() {
     var message = new Buffer(JSON.stringify({CN:CN, mac:mac}));
     client.send(message, 0, message.length, PORT, ipABC+".255", function() {
     });
-    broadcast_loop();
 }
 
 ///////////////////////////////////////// BROADCAST SERVER//////////////
@@ -320,7 +317,6 @@ server.on('listening', function () {
 server.on('message', function (message, rinfo) {
     try { 
         message = JSON.parse(message);
-        mac = message.mac;
         dateTime = utils.getDateTime();
         console.log('UDP : ' + rinfo.address + ':' + rinfo.port +' - ' + message.CN + ":"+message.mac +" at "+dateTime);
         broadcastList["IP_"+rinfo.address] = {CN:message.CN, mac:message.mac, dateTime:dateTime};
