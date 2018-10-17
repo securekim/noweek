@@ -2,8 +2,12 @@
 /*
 
 */
+.blink {
+  animation: fadein 0.8s linear infinite;
+} 
+
 .slideup {
-  animation: slideup 1s, fadein 1.5s;
+  animation: slideup 0.5s, fadein 1.0s;
 }
 
 .read-more-state {
@@ -723,7 +727,7 @@ filter: blur(2px);
 
 @keyframes slideup {
   from {
-    margin-top: 100%;
+    margin-top: 30%;
   }
 
   to {

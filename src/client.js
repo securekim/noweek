@@ -5,6 +5,7 @@ var https = require('https');
 var utils = require('./utils');
 var el_request = require('./el_request'); 
 const querystring = require('querystring');
+var el_server = require('./el_server');  //이거 삭제했다가 서버 안켜져서 곤욕을 치룸
 var forge = require('node-forge');
 var latestSecret;
 const TIMEOUT = 10; //second. if TIMEOUT LATER, 연결이 끊긴 것으로 알거야.
@@ -36,7 +37,6 @@ function getBlockChain(callback){
     }
     });
 }
-
 
 function sendWithMutual(ip,data,callback){
 
@@ -239,10 +239,10 @@ function nfcCheck(){
 
 function initChain(CN,callback){
     utils.CERT_initCERT(CN,(DATA)=>{
+        console.log("A");
         el_request.request_initBlockchain(JSON.stringify({"CA":DATA.CA,"CN":CN,"PUBKEY":DATA.PUBKEY}),(result)=>{
-            
-            callback(result);
 
+            callback(result);
             el_request.request_getBlockchain((result)=>{
                 console.log(result);
                 try{
@@ -291,7 +291,7 @@ var PORT = 6024;
 
 client.bind(function() {
     client.setBroadcast(true);
-    setInterval(broadcastNew, 3000);
+    setInterval(broadcastNew, 3*1000);
 });
 
 function broadcastNew() {
@@ -318,7 +318,6 @@ server.on('message', function (message, rinfo) {
     try { 
         message = JSON.parse(message);
         dateTime = utils.getDateTime();
-        console.log('UDP : ' + rinfo.address + ':' + rinfo.port +' - ' + message.CN + ":"+message.mac +" at "+dateTime);
         broadcastList["IP_"+rinfo.address] = {CN:message.CN, mac:message.mac, dateTime:dateTime};
     } catch (e){
         console.log(e);

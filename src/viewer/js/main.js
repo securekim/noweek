@@ -1,5 +1,6 @@
 
 var BLOCKS=[];
+var BLOCKS_VIEW=[];
 var BLOCKS_LENGTH="";
 
   // ***************************************************** //
@@ -54,9 +55,9 @@ function removeBlock(number) {
   
   let _block = document.getElementById("block_"+number);
   //BLOCKS[number] = "";
-  BLOCKS[number].view = false;
+  BLOCKS_VIEW[number] = false;
   _block.remove();
-  //removeMiddleChain();
+  removeMiddleChain();
 }
 
 function isFull(){
@@ -64,7 +65,7 @@ function isFull(){
   console.log("width :"+width);
   let viewWidth = 160;
   for(var i in BLOCKS){
-    if(typeof BLOCKS[i].view!="undefined" && BLOCKS[i].view){
+    if(typeof BLOCKS_VIEW[i]!="undefined" && BLOCKS_VIEW[i]){
       viewWidth += 80;
     } 
   }
@@ -79,8 +80,8 @@ function addBlock(number) {
   if(typeof BLOCKS[number] == "undefined" 
   || typeof BLOCKS[number].pubkey == "undefined") return false;
   
-  if(typeof BLOCKS[number].view == "undefined")
-    BLOCKS[number].view = true;
+  if(typeof BLOCKS_VIEW[number] == "undefined")
+    BLOCKS_VIEW[number] = true;
 
   let blockContainer = document.getElementById("blockContainer");
   
@@ -104,7 +105,7 @@ function addBlock(number) {
   }
   $('.chain').css('opacity', '1'); // 꼭 들어가야한다.
   if(fullFlag){
-    console.log("Ful Flag !! delete :"+deletedNumber);
+    console.log("Full Flag !! delete :"+deletedNumber);
     removeBlock(deletedNumber++);
   } 
 
@@ -127,18 +128,20 @@ function isSameChain(chain1, chain2){
   try {
     if(chain1.length != chain2.length) return false;
     for(var i in chain1) {
-      if(typeof chain1[i].index == "undefined"
-      || typeof chain2[i].index == "undefined"
-      || chain1[i].index != chain2[i].index
+      if(typeof chain1[i].hash == "undefined"
+      || typeof chain2[i].hash == "undefined"
+      || chain1[i].hash != chain2[i].hash
       ) return false;
     }
   } catch (e) {
     console.log("Is not same chain! Change it");
     return false;
   }
+  console.log("It is same chain! Do not Change it");
   return true;
 }
 
+var dt;
 function getNewBlockIndex(callback){ 
   // return new block index
   // -1 : no new block.
@@ -147,8 +150,13 @@ function getNewBlockIndex(callback){
     try {
       dt=JSON.parse(data);
       for (var i in dt.data){
-        dt.data[i].pubkey=JSON.parse(dt.data[i].pubkey) 
+        try {
+          dt.data[i].pubkey=JSON.parse(dt.data[i].pubkey) 
+        } catch (e) {
+
+        }
       }
+      console.log("Check for draw chain")
       if (isSameChain(BLOCKS, dt.data)){
         callback(-1);
         return;
@@ -159,21 +167,31 @@ function getNewBlockIndex(callback){
         return;
       } else if(BLOCKS.length > dt.data.length) {
         console.log("Block is deleted.");
+        console.log("Hard forked!");
+        window.location.reload()
+
+        for(var i=0; i<BLOCKS.length; i++) {
+          console.log("Remove Block");
+          removeBlock(i);
+        }
         BLOCKS=dt.data;
+        callback(0);
+        return;
       }
       BLOCKS=dt.data;
       callback(0);
       return;
     } catch (e) {
       BLOCKS=dt.data;
-      callback(0);
+      callback(-1);
       return;
     }
   })
 }
 
-function drawBlock(){
-  getNewBlockIndex(function(idx){
+function drawBlock() {
+  getNewBlockIndex ((idx) => {
+    console.log("New Block Index :"+idx);
     if(idx != -1 ){
       for(var i=idx; i<BLOCKS.length; i++) {
         console.log("Add Block");
@@ -185,7 +203,7 @@ function drawBlock(){
 
 setTimeout (()=>{
   drawBlock();
-},1000)
+},800)
 
 setInterval(function(){
   drawBlock();

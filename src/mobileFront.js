@@ -11,10 +11,41 @@ app.use(bodyParser.json());
 app.use(morgan("combined"));
 
 //todo : block 을 돌면서 최초 테스트 모바일 이후 block 을 모두 삭제한다.
-app.get("/hardFork", (req,res)=>{
-    
+//삭제 후 리셋한다.
+app.get("/hardFork/:block", (req,res)=>{
+    try{ 
+        //touch 0.blk 1.blk 2.blk 3.blk 5.blk 8.blk
+       // var command = "for ((i="+req.params.block+", j=`ls blocks | grep blk | tail -n 1 | cut -d'.' -f1`;i<=j;i++)); do rm -f blocks/$i.blk; done";
+        if(isNaN(Number(req.params.block))){
+            res.send("That is not a number" + req.params.block);
+        } else {
+            exec("./reset.sh "+req.params.block, function(error, stdout, stderr) {
+                console.log(stdout);
+                if(error !== null){
+                    console.log("[ERROR] " + error);
+                    res.send("Fail");
+                } else {
+                    res.send("Success");
+                }
+            });   
+        }
+    }catch(e){
+        console.log(e);
+        res.send("Fail with error");
+    }
 });
 
+/*
+
+app.get("/pincode/:ip", (req,res)=>{
+    console.log("IP IS : "+req.params.ip);
+    client.generatePin(req.params.ip,(dh)=>{
+        console.log(dh);
+        res.send(dh);
+        //dh => {pin, secret, ip}
+    });
+})
+*/
 app.get("/broadcast", (req,res)=>{
     //to do : request just for on targets.
     //        attacker or not, we don't care.
