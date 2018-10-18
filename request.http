@@ -8,7 +8,7 @@ Content-Type: application/json
 }
 
 ###
-POST http://localhost:4000/makeBlock
+POST http://localhost:3000/makeBlock
 Content-Type: application/json
 
 {
@@ -17,21 +17,21 @@ Content-Type: application/json
 
 ###
 
-POST http://localhost:4000/addBlock
+POST http://localhost:3000/addBlock
 Content-Type: application/json
 
 {
     "block":{
-  "index": 1,
-  "timestamp": 1539090746906,
-  "previousHash": "b5c069de73f93dc4eb8ce8925e16b9103aafec1c698005c866f5d710145bbcf7",
+  "index": 3,
+  "timestamp": 1539797894851,
+  "previousHash": "d7feda78938025690145c935c62c53514420ba506b0b4099656de5559af72649",
   "pubkey": {
     "CA": "TEST",
     "CN": "TEST",
     "PUBKEY": "046925288ba597a889c6cba4d0123a028e6b1446fdc346fb70c43a8d643cf638"
   },
-  "hash": "041286eea2265ebe80d5f5168093ba2ed165293e7b65d409c3b726b363486299",
-  "signature": "Cp5NYQNduxWQ/YFWwENdgnQMvOk3Vv3O/2SNJEoMiRoyywQhOEH7uf43WObaBNKisU4QlujAKsDxyLhya3a5aM2Dra6XXSC/07BV8FONZ2kFTbBimz+fZ5pvJ+Xy1XS9Ldbm3QpQE/BKxNm/b9NJ7ucquaTexzlTvG8G0UGzPfh3rjGIx2UEPumW3FUagSNYtDs5UYhyeXevYrOptH5swT3HfjcbdFteBP3Gk+33HVknYefBxghY8g8qGickh7ltFDDUIaKNs14NO+JDXVwfrhjnSfZ+NAM6krqteaDtn1hsKEEy9tdAwPmdZygXjP0pzgmkFB8PUDldMnWvTHWC9M+BaWm7B1YvigGf6zmGC0NNKbit39OE2xcrpWy01vMUSY+q3mbCwUS/Vy58lL2HxeEX1EZNVFNdeWc2nr8n4dUizNCgZT9xpY35qy0Be/mykb1ud8azyuGn6Fe5f/nuVWOp01cLNzAR1zn8rpCBGofjLOHD8NugNYbYlvkGkh6KNt5qdTa/bNCboHgQCZgBlkPB++HR0f1751Rh2tLyyYOhFWgOZue/zrCyK8zNGT3/6Ll4oI0Mv8bVO2dKyQsP2XZ8MNAA8ZCLjUHxgOzHIiYaU6UyztbYSrhJrq6xShzPSnyr0iJ0Xuzp6r4TIYPrfZF7yHNejUYpLW2rcfD8neo="
+  "hash": "801ee26e36b83360394f231530a52477dd91930439a7890c7c79b7946b610e72",
+  "signature": "A2rYlSNTD0RnFiSrDrbFiq42tuothbrWb3LcLX0o4UAzykVmavrmY4n3j94C0TiYdRXPzjiC9b2HMYPQWdOzjn2+KiTMa3I5plxTwBITuLD/9aUQY7Y5aygGELleIwtMjN4Hmg8Q+5cmkitfeP6fB4M8s88RxI7jbPYoeMRnr0b3j0UnblIt267EjRmhEhSh8Yhbm6KyJGhOtmyFld6ILNQITGkhiJ4xHiC6g5WrAadCO9bPZyb+YZqGU3b+vhce3Z8BtHiKslvcXtlur/VUOgFZWScZQGg/Uzqtlo6z5MqYLcZChZp9dd7gd/nhrkOkA2tvh4pcoAPUfvX6VgtZxox/21ilGZxYssKFFCVy43599X+r3S93mybPqNOWpIHUfIgy9W6xX/JVEtlnGr5oQ6nmHRhQv4BlUEmDZ3utmSl6MZ2Qb0V9Umziqpa02X1RqElJkJabcwqIGWinZphJ02K06pf8S20riL2apwublbUHahhVGWv+SKVIb5G4W86dyHUjF8fW8DRVB8tfF6tBkKaTV0SW2PoA43gI/cENo189hlBNrnQPbzfI4qhK4GF4WuWMYKbKp7iaell9I64d3kKrJbKsQ74zf6wwmqsgfRJNfQtUp6QxGEZLgOJUefPLDLa/HItJFhRiwJI5q6kKEgCNKfQ+djyQ91LCTxGKgMw="
 }
 }
 
@@ -110,7 +110,7 @@ GET http://192.168.219.151:3082/getBlockChain
 
 ###
 
-POST http://192.168.219.151:4000/getBlockchain
+POST http://192.168.219.151:3000/getBlockchain
 
 
 ###
@@ -129,8 +129,7 @@ GET http://192.168.43.106:3082/reset
 
 ###
 
-GET http://localhost:3082/hardFork/0
-
+GET http://localhost:3082/hardFork/1
 
 ###
 

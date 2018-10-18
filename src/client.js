@@ -21,7 +21,7 @@ if(typeof CN ==="string") CN = CN.replace(/(\r\n\t|\n|\r\t)/gm,"");
     
 const PORT_MUTUAL = 4433
 const PORT_DH = 4444;
-
+` `
 console.log("[CLIENT] I Will Start the server");
 utils.startServer((result)=>{
     console.log("[CLIENT] Start Server Automatically");  // if server is started already, error will be occured.
@@ -239,7 +239,6 @@ function nfcCheck(){
 
 function initChain(CN,callback){
     utils.CERT_initCERT(CN,(DATA)=>{
-        console.log("A");
         el_request.request_initBlockchain(JSON.stringify({"CA":DATA.CA,"CN":CN,"PUBKEY":DATA.PUBKEY}),(result)=>{
 
             callback(result);
@@ -275,13 +274,14 @@ var os = require('os');
 var ip = os.networkInterfaces()//.address.split('.');
 
 var mac="te:st:te:st:te:st";
-
+var ipABC="192.168.0";
 //DEFAULT SETTING
 try {
 for(var i in ip){
     mac = ip[i][0].mac;
-    var ipABC = ip[i][0].address.split('.');
-    ipABC = ipABC[0] + "." + ipABC[1] + "." + ipABC[2];
+    var tmpIP = ip[i][0].address.split('.');
+    if(tmpIP[0]=="192" && tmpIP[1]=="168")
+        ipABC = tmpIP[0] + "." + tmpIP[1] + "." + tmpIP[2];
 }
 } catch (e){
     console.log(e);
